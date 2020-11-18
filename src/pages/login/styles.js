@@ -8,6 +8,7 @@ export default makeStyles(theme => ({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
+    overflowY: "auto",
     top: 0,
     left: 0,
   },
@@ -42,7 +43,6 @@ export default makeStyles(theme => ({
     width: "40%",
     height: "100%",
     display: "flex",
-    overflowY: "scroll",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
@@ -52,6 +52,7 @@ export default makeStyles(theme => ({
   },
   form: {
     width: 320,
+    marginTop:theme.spacing(4),
   },
   tab: {
     fontWeight: 400,
@@ -61,11 +62,14 @@ export default makeStyles(theme => ({
     fontWeight: 500,
     textAlign: "center",
     marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(8),
+
   },
   subGreeting: {
     fontWeight: 500,
     textAlign: "center",
     marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(5),
   },
   googleButton: {
     marginTop: theme.spacing(6),
@@ -128,7 +132,7 @@ export default makeStyles(theme => ({
     width: "100%",
     marginTop: theme.spacing(4),
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
   },
   forgetButton: {
@@ -141,9 +145,6 @@ export default makeStyles(theme => ({
   copyright: {
     marginTop: theme.spacing(4),
     whiteSpace: "nowrap",
-    [theme.breakpoints.up("md")]: {
-      position: "absolute",
-      bottom: theme.spacing(2),
-    },
+
   },
 }));

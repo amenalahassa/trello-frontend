@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 import {
   Grid,
   CircularProgress,
@@ -10,17 +10,17 @@ import {
   Fade,
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
-import classnames from "classnames";
+// import classnames from "classnames";
 
 // styles
 import useStyles from "./styles";
 
 // logo
-import logo from "./logo.svg";
-import google from "../../images/google.svg";
+import logo from "./logo.png";
+// import google from "../../images/google.svg";
 
 // context
-import { useUserDispatch, loginUser } from "../../context/UserContext";
+import { useUserDispatch, loginUser, registerUser } from "../../context/UserContext";
 
 function Login(props) {
   var classes = useStyles();
@@ -31,22 +31,23 @@ function Login(props) {
   // local
   var [isLoading, setIsLoading] = useState(false);
   var [error, setError] = useState(null);
+  var [errormsg, setErrormsg] = useState(null);
   var [activeTabId, setActiveTabId] = useState(0);
   var [nameValue, setNameValue] = useState("");
-  var [loginValue, setLoginValue] = useState("admin@flatlogic.com");
-  var [passwordValue, setPasswordValue] = useState("password");
+  var [loginValue, setLoginValue] = useState("");
+  var [passwordValue, setPasswordValue] = useState("");
 
   return (
     <Grid container className={classes.container}>
       <div className={classes.logotypeContainer}>
         <img src={logo} alt="logo" className={classes.logotypeImage} />
-        <Typography className={classes.logotypeText}>Material Admin</Typography>
+        <Typography className={classes.logotypeText}>Trello</Typography>
       </div>
       <div className={classes.formContainer}>
         <div className={classes.form}>
           <Tabs
             value={activeTabId}
-            onChange={(e, id) => setActiveTabId(id)}
+            onChange={(e, id) => {setActiveTabId(id); setError(null)}}
             indicatorColor="primary"
             textColor="primary"
             centered
@@ -56,21 +57,12 @@ function Login(props) {
           </Tabs>
           {activeTabId === 0 && (
             <React.Fragment>
-              <Typography variant="h1" className={classes.greeting}>
-                Good Morning, User
+              <Typography variant="h2" className={classes.greeting}>
+                Wellcome on Trello !
               </Typography>
-              <Button size="large" className={classes.googleButton}>
-                <img src={google} alt="google" className={classes.googleIcon} />
-                &nbsp;Sign in with Google
-              </Button>
-              <div className={classes.formDividerContainer}>
-                <div className={classes.formDivider} />
-                <Typography className={classes.formDividerWord}>or</Typography>
-                <div className={classes.formDivider} />
-              </div>
               <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
-                  Something is wrong with your login or password :(
+                  { errormsg === null ?  'Something is wrong with your login or password :(' : errormsg }
                 </Typography>
               </Fade>
               <TextField
@@ -118,37 +110,31 @@ function Login(props) {
                         passwordValue,
                         props.history,
                         setIsLoading,
-                        setError,
+                        setError, setErrormsg
                       )
                     }
                     variant="contained"
                     color="primary"
                     size="large"
+                    fullWidth
                   >
                     Login
                   </Button>
                 )}
-                <Button
-                  color="primary"
-                  size="large"
-                  className={classes.forgetButton}
-                >
-                  Forget Password
-                </Button>
               </div>
             </React.Fragment>
           )}
           {activeTabId === 1 && (
             <React.Fragment>
-              <Typography variant="h1" className={classes.greeting}>
-                Welcome!
+              <Typography variant="h2" className={classes.greeting}>
+                Welcome on Trello !
               </Typography>
-              <Typography variant="h2" className={classes.subGreeting}>
+              <Typography variant="h3" className={classes.subGreeting}>
                 Create your account
               </Typography>
               <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
-                  Something is wrong with your login or password :(
+                  { errormsg === null ?  'Something is wrong with your login or password :(' : errormsg }
                 </Typography>
               </Fade>
               <TextField
@@ -202,13 +188,13 @@ function Login(props) {
                 ) : (
                   <Button
                     onClick={() =>
-                      loginUser(
-                        userDispatch,
+                        registerUser(
+                        userDispatch, nameValue,
                         loginValue,
                         passwordValue,
                         props.history,
                         setIsLoading,
-                        setError,
+                        setError, setErrormsg
                       )
                     }
                     disabled={
@@ -226,21 +212,6 @@ function Login(props) {
                   </Button>
                 )}
               </div>
-              <div className={classes.formDividerContainer}>
-                <div className={classes.formDivider} />
-                <Typography className={classes.formDividerWord}>or</Typography>
-                <div className={classes.formDivider} />
-              </div>
-              <Button
-                size="large"
-                className={classnames(
-                  classes.googleButton,
-                  classes.googleButtonCreating,
-                )}
-              >
-                <img src={google} alt="google" className={classes.googleIcon} />
-                &nbsp;Sign in with Google
-              </Button>
             </React.Fragment>
           )}
         </div>

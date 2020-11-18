@@ -1,4 +1,6 @@
 import React from "react";
+import {login, logout, register} from "../context/AxiosContext";
+import { log  } from "../Module/biblio";
 
 var UserStateContext = React.createContext();
 var UserDispatchContext = React.createContext();
@@ -7,7 +9,13 @@ function userReducer(state, action) {
   switch (action.type) {
     case "LOGIN_SUCCESS":
       return { ...state, isAuthenticated: true };
+    case "REGISTER_SUCCESS":
+      return { ...state, isAuthenticated: true };
     case "SIGN_OUT_SUCCESS":
+      return { ...state, isAuthenticated: false };
+    case "LOGIN_FAILURE":
+      return { ...state, isAuthenticated: false };
+    case "REGISTER_FAILURE":
       return { ...state, isAuthenticated: false };
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -45,32 +53,37 @@ function useUserDispatch() {
   return context;
 }
 
-export { UserProvider, useUserState, useUserDispatch, loginUser, signOut };
+export { UserProvider, useUserState, useUserDispatch, loginUser, signOut , registerUser };
 
 // ###########################################################
 
-function loginUser(dispatch, login, password, history, setIsLoading, setError) {
+function loginUser(dispatch, email, password, history, setIsLoading, setError, setErrorMsg) {
   setError(false);
   setIsLoading(true);
 
-  if (!!login && !!password) {
-    setTimeout(() => {
-      localStorage.setItem('id_token', 1)
-      setError(null)
-      setIsLoading(false)
-      dispatch({ type: 'LOGIN_SUCCESS' })
-
-      history.push('/app/dashboard')
-    }, 2000);
+  if (!!email && !!password) {
+      login(email, password, dispatch , history, setIsLoading, setError, setErrorMsg)
   } else {
     dispatch({ type: "LOGIN_FAILURE" });
     setError(true);
+    setErrorMsg(null);
+    setIsLoading(false);
+  }
+}
+
+function registerUser(dispatch, namevalue, email, password, history, setIsLoading, setError, setErrorMsg) {
+  setError(false);
+  setIsLoading(true);
+  if (!!email && !!password && !!namevalue) {
+    register(namevalue, email, password, dispatch , history, setIsLoading, setError, setErrorMsg)
+  } else {
+    dispatch({ type: "REGISTER_FAILURE" });
+    setError(true);
+    setErrorMsg(null);
     setIsLoading(false);
   }
 }
 
 function signOut(dispatch, history) {
-  localStorage.removeItem("id_token");
-  dispatch({ type: "SIGN_OUT_SUCCESS" });
-  history.push("/login");
+  logout(dispatch, history)
 }
