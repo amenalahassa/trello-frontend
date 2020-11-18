@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import * as axios from "axios";
-import { log } from '../Module/biblio'
+import {delete_cookie, log} from '../Module/biblio'
 
 var AxiosContext = React.createContext();
 
@@ -10,7 +10,7 @@ const instance = axios.create({
 });
 
 function AxiosProvider({ children }) {
-  var [state, setstate] = useState(instance)
+  var [state, setstate] = useState({query : instance})
 
   return (
     <AxiosContext.Provider value={state}>
@@ -51,17 +51,17 @@ function login (email, password,  dispatch , history, setIsLoading, setError, se
         });
 }
 
-function register (name, email, password,  dispatch , history, setIsLoading, setError, setErrorMsg) {
+function register (name, email, password, password_confirmation,  dispatch , history, setIsLoading, setError, setErrorMsg) {
         instance.get('/sanctum/csrf-cookie').then(response => {
             instance.post('/api/register', {
                 name,
                 email,
                 password,
+                password_confirmation
             })
                 .then(function (response) {
                     setError(null)
                     setIsLoading(false)
-                    //  Get token as id_token
                     localStorage.setItem('id_token', response.data.token)
                     dispatch({ type: 'REGISTER_SUCCESS' })
                     history.push('/app/dashboard')
@@ -79,15 +79,15 @@ function logout(dispatch, history)
 {
   instance.get('/api/logout')
       .then(function (){
-        localStorage.removeItem("id_token")
-        dispatch({ type: "SIGN_OUT_SUCCESS" });
-        history.push("/login");
+          localStorage.removeItem("id_token")
+          delete_cookie('XSRF-TOKEN')
+          dispatch({ type: "SIGN_OUT_SUCCESS" });
+          history.push("/login");
       })
       .catch(function (error) {
         log(error)
       });
 }
-
 
 function catchError(error, setErrorMsg, setError, setIsLoading)
 {

@@ -36,6 +36,7 @@ function Login(props) {
   var [nameValue, setNameValue] = useState("");
   var [loginValue, setLoginValue] = useState("");
   var [passwordValue, setPasswordValue] = useState("");
+  var [passwordConfirmationValue, setPasswordConfirmationValue] = useState("");
 
   return (
     <Grid container className={classes.container}>
@@ -182,6 +183,21 @@ function Login(props) {
                 type="password"
                 fullWidth
               />
+              <TextField
+                  id="passwordConfirmation"
+                  InputProps={{
+                    classes: {
+                      underline: classes.textFieldUnderline,
+                      input: classes.textField,
+                    },
+                  }}
+                  value={passwordConfirmationValue}
+                  onChange={e => setPasswordConfirmationValue(e.target.value)}
+                  margin="normal"
+                  placeholder="Confirm your password"
+                  type="password"
+                  fullWidth
+                />
               <div className={classes.creatingButtonContainer}>
                 {isLoading ? (
                   <CircularProgress size={26} />
@@ -191,7 +207,7 @@ function Login(props) {
                         registerUser(
                         userDispatch, nameValue,
                         loginValue,
-                        passwordValue,
+                        passwordValue, passwordConfirmationValue,
                         props.history,
                         setIsLoading,
                         setError, setErrormsg
@@ -200,7 +216,8 @@ function Login(props) {
                     disabled={
                       loginValue.length === 0 ||
                       passwordValue.length === 0 ||
-                      nameValue.length === 0
+                      nameValue.length === 0 ||
+                      passwordValue !== passwordConfirmationValue
                     }
                     size="large"
                     variant="contained"

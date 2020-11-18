@@ -62,14 +62,14 @@ export default makeStyles(theme => ({
     fontWeight: 500,
     textAlign: "center",
     marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(8),
+    marginBottom: theme.spacing(4),
 
   },
   subGreeting: {
     fontWeight: 500,
     textAlign: "center",
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(5),
+    marginTop: theme.spacing(0),
+    marginBottom: theme.spacing(2),
   },
   googleButton: {
     marginTop: theme.spacing(6),

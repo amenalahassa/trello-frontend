@@ -71,11 +71,11 @@ function loginUser(dispatch, email, password, history, setIsLoading, setError, s
   }
 }
 
-function registerUser(dispatch, namevalue, email, password, history, setIsLoading, setError, setErrorMsg) {
+function registerUser(dispatch, namevalue, email, password, passwordConfirmationValue, history, setIsLoading, setError, setErrorMsg) {
   setError(false);
   setIsLoading(true);
-  if (!!email && !!password && !!namevalue) {
-    register(namevalue, email, password, dispatch , history, setIsLoading, setError, setErrorMsg)
+  if (!!email && !!password && !!namevalue && !!passwordConfirmationValue) {
+    register(namevalue, email, password,passwordConfirmationValue, dispatch ,  history, setIsLoading, setError, setErrorMsg)
   } else {
     dispatch({ type: "REGISTER_FAILURE" });
     setError(true);
