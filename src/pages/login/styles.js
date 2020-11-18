@@ -42,6 +42,7 @@ export default makeStyles(theme => ({
     width: "40%",
     height: "100%",
     display: "flex",
+    overflowY: "scroll",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
