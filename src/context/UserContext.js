@@ -11,6 +11,8 @@ function userReducer(state, action) {
       return { ...state, isAuthenticated: true };
     case "REGISTER_SUCCESS":
       return { ...state, isAuthenticated: true };
+    case "NETWORK_FAILURE":
+      return { ...state, isAuthenticated: false };
     case "SIGN_OUT_SUCCESS":
       return { ...state, isAuthenticated: false };
     case "LOGIN_FAILURE":

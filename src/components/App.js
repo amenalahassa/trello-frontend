@@ -9,10 +9,11 @@ import Error from "../pages/error";
 import Login from "../pages/login";
 
 // context
-import { useUserState } from "../context/UserContext";
+import {useUserDispatch, useUserState} from "../context/UserContext";
 import {useAxiosState} from "../context/AxiosContext";
 // import {log} from "../Module/biblio";
 import Loader from "./Loader";
+import CreateTeam from "../pages/createTeam";
 
 export default function App() {
   // global
@@ -31,7 +32,7 @@ export default function App() {
           <Route
               exact
               path="/creatTeam"
-              component={Error} />}
+              component={CreateTeam} />}
           />
         <PrivateRoute path="/app" component={Layout} />
         <PublicRoute path="/login" component={Login} />
@@ -64,7 +65,6 @@ export default function App() {
         );
     }
 
-
     function PublicRoute({ component, ...rest }) {
         return (
             <Route
@@ -84,17 +84,17 @@ export default function App() {
         );
     }
 
-
     function BeforeDashbord({ component, ...rest }) {
 
         const http = useAxiosState()
+        const userDispatch = useUserDispatch()
 
         const [isLoading, setLoading] = useState(true);
         const [hasTeam, setHasTeam] = useState(false);
         const [error, setError] = useState(null);
 
         useEffect(() => {
-            HasTeam(http, setLoading, setHasTeam, setError)
+            HasTeam(http, setLoading, setHasTeam, setError, userDispatch)
         }, []);
 
         if (isLoading) {
@@ -122,9 +122,7 @@ export default function App() {
         );
     }
 
-
-  function HasTeam (axios, setLoading, setHasTeam, setError)
-  {
+    function HasTeam (axios, setLoading, setHasTeam, setError, userDispatch) {
       axios.get("/api/hasTeam").then(response => {
          setTimeout(() => {
              setHasTeam(response.data.userHasTeam)
@@ -133,6 +131,8 @@ export default function App() {
       })
       .catch(function (error){
           setError("Check your connection and try again please.")
+          // Todo : Try to only dispatch user state only when the user request twice
+          // userDispatch({ type: "NETWORK_FAILURE" });
           console.log('Error', error.message)
       })
   }

@@ -113,7 +113,7 @@ function catchError(error, setErrorMsg, setError, setIsLoading)
         setError(true)
         setIsLoading(false)
     } else {
-        // Something happened in setting up the request that triggered an Error
+        // Something happened in setting up the request that triggered an CreateTeam
         let msg = "Try to reload the page please. See more in console."
         setErrorMsg(msg)
         log('Error', error.message);

@@ -41,7 +41,7 @@ We have implemented some basic pages, so you can see our template in action.
 - Icons
 - Maps
 - Login
-- Error
+- CreateTeam
 
 ## Quick Start
 
