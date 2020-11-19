@@ -1,6 +1,6 @@
 import React from "react";
 import {login, logout, register} from "../context/AxiosContext";
-import { log  } from "../Module/biblio";
+// import { log  } from "../Module/biblio";
 
 var UserStateContext = React.createContext();
 var UserDispatchContext = React.createContext();

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import {
   Grid,
   CircularProgress,
@@ -10,14 +10,13 @@ import {
   Fade,
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
-// import classnames from "classnames";
+
 
 // styles
 import useStyles from "./styles";
 
 // logo
 import logo from "./logo.png";
-// import google from "../../images/google.svg";
 
 // context
 import { useUserDispatch, loginUser, registerUser } from "../../context/UserContext";

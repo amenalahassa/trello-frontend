@@ -23,7 +23,7 @@ function useAxiosState() {
     if (context === undefined) {
         throw new Error("useAxiosState must be used within a AxiosProvider");
     }
-    return context;
+    return context.query;
 }
 
 
