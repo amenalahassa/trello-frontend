@@ -17,6 +17,7 @@ import {useAxiosState} from "../../context/AxiosContext";
 import "../../Module/notify"
 import $ from 'jquery';
 import {useUserTeamDispatch} from "../../context/UserTeamContext";
+import {log} from "../../Module/biblio";
 window.jQuery = $;
 window.$ = $;
 
@@ -39,9 +40,8 @@ export default function CreateTeam(props) {
 
     http.get('/api/ressources/category')
         .then((response) => {
-          //  tODO : get key and labels
+          setCategory(response.data[0].key)
           setCategoryList(response.data)
-          setCategory(response.data[0])
         })
         .catch(() => {
           $.notify("Check your connection and reload please.");
@@ -150,18 +150,18 @@ export default function CreateTeam(props) {
                 margin="normal"
                 select
                 value={category}
-                onChange={(event => setCategory(event.target.value))}
+                onChange={(event => {setCategory(event.target.value)})}
                 helperText="Required"
                 fullWidth
                 required
                 className={classes.textfielInput}
             >
-              <MenuItem value="" disabled>
+              <MenuItem value=""  disabled>
                 Your field of activity
               </MenuItem>
               {categoryList.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
+                  <MenuItem key={option.key} value={option.key}>
+                    {option.label}
                   </MenuItem>
               ))}
             </TextField>
@@ -221,4 +221,37 @@ export default function CreateTeam(props) {
       </Paper>
     </Grid>
   );
+}
+
+function catchError(error, setErrorMsg, setError, setIsLoading)
+{
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    const errors = error.response.data.errors
+    const keys = Object.keys(errors);
+    let msg = ""
+    keys.forEach((key, index) => {
+      // msg += `${key}: ${errors[key]}` If you need key errors
+      msg += `${errors[key]}`
+    });
+    setErrorMsg(msg)
+    setError(true)
+    setIsLoading(false)
+  } else if (error.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    let msg = "Check you connection and try again please."
+    setErrorMsg(msg)
+    setError(true)
+    setIsLoading(false)
+  } else {
+    // Something happened in setting up the request that triggered an CreateTeam
+    let msg = "Try to reload the page please. See more in console."
+    setErrorMsg(msg)
+    log('Error', error.message);
+    setError(true)
+    setIsLoading(false)
+  }
 }
