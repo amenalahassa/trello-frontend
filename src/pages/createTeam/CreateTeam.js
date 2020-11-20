@@ -11,8 +11,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TeamMemberList from "../../components/TeamMemberList";
 
 
-import { categories } from './categories'
-import {log} from "../../Module/biblio";
 import {sendTeam} from "../../Module/http";
 import {useAxiosState} from "../../context/AxiosContext";
 
@@ -29,7 +27,8 @@ export default function CreateTeam(props) {
 
   let classes = useStyles();
 
-  const [category, setCategory] = React.useState(categories[0].value)
+  const [category, setCategory] = React.useState("")
+  const [categoryList, setCategoryList] = React.useState([])
   const [chipData, setChipData] = React.useState([])
   const [name, setName] = React.useState("")
   const [email, setEmail] = React.useState("")
@@ -39,7 +38,13 @@ export default function CreateTeam(props) {
 
   useEffect(() => {
 
-    $.bootstrapGrowl("This is a test.");
+    http.get('/api/ressources/category')
+        .then((response) => {
+          setCategoryList(response.data)
+        })
+        .catch(() => {
+          $.notify("Check your connection and reload please.");
+        })
 
     return undefined
   }, [])
@@ -91,7 +96,7 @@ export default function CreateTeam(props) {
     }, next)
   }
 
-  const next = () => {
+  const next = (time) => {
     setTimeout(() => {
       setEmail("")
       setName("")
@@ -102,7 +107,7 @@ export default function CreateTeam(props) {
         type: "HAS_TEAM",
       })
       props.history.push('/app/dashboard')
-    }, 1000)
+    }, time)
   }
 
   return (
@@ -140,9 +145,9 @@ export default function CreateTeam(props) {
                 required
                 className={classes.textfielInput}
             >
-              {categories.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
+              {categoryList.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
                   </MenuItem>
               ))}
             </TextField>

@@ -1,4 +1,5 @@
 import {log} from "./biblio";
+import $ from "jquery";
 
 export function sendTeam(http, data, callback)
 {
@@ -15,15 +16,17 @@ export function sendTeam(http, data, callback)
                    members: data.members.map(a => a.label),
                })
                    .then(() => {
-                       callback()
+                       callback(1000)
                    })
                    .catch((err) => {
-                       log(err)
+                       // Todo : Test it
+                       $.notify("The sending of members's email failed. You can try again later. Check your connection please.");
+                       callback(3000)
                    })
            }
            else
            {
-               callback()
+               callback(1000)
            }
         })
         .catch((err) => {

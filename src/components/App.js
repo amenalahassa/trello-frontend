@@ -116,7 +116,7 @@ export default function App() {
                 })
                     .catch(function (error){
                         setError("Check your connection and try again please.")
-                        // Todo : Try, if it is possible, another solution to this case
+                        // Made better if you can
                         localStorage.removeItem('id_token')
                         console.log('Error', error.message)
                     })

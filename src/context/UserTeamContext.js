@@ -7,11 +7,11 @@ var UserTeamDispatchContext = React.createContext();
 function userTeamReducer(state, action) {
     switch (action.type) {
         case "HAS_NOT_TEAM":
-            return { ...state, hasTeam: true };
+            return { ...state, hasTeam: false };
         case "HAS_TEAM_UNDEFINED":
             return { ...state, hasTeam: undefined };
         case "HAS_TEAM":
-            return { ...state, hasTeam: false };
+            return { ...state, hasTeam: true };
         default: {
             throw new Error(`Unhandled action type: ${action.type}`);
         }
@@ -39,7 +39,7 @@ function useUserTeamState() {
     if (context === undefined) {
         throw new Error("useAxiosState must be used within a AxiosProvider");
     }
-    return context;
+    return context.hasTeam;
 }
 
 
