@@ -23,7 +23,6 @@ window.$ = $;
 
 export default function CreateTeam(props) {
 
-  //Todo: get all category on server side
 
   let classes = useStyles();
 
@@ -40,7 +39,9 @@ export default function CreateTeam(props) {
 
     http.get('/api/ressources/category')
         .then((response) => {
+          //  tODO : get key and labels
           setCategoryList(response.data)
+          setCategory(response.data[0])
         })
         .catch(() => {
           $.notify("Check your connection and reload please.");
@@ -123,10 +124,15 @@ export default function CreateTeam(props) {
           <div>
             <TextField
                 id="filled-helperText"
-                label="Required"
-                variant="filled"
-                helperText="Please enter your team's name"
-                placeholder="African Hero"
+                InputProps={{
+                  classes: {
+                    underline: classes.textFieldUnderline,
+                    input: classes.textField,
+                  },
+                }}
+                margin="normal"
+                helperText="Required"
+                placeholder="The name of your team"
                 value={name}
                 onChange={(event => setName(event.target.value))}
                 required
@@ -135,16 +141,24 @@ export default function CreateTeam(props) {
             />
             <TextField
                 id="filled-select-currency"
+                InputProps={{
+                  classes: {
+                    underline: classes.textFieldUnderline,
+                    input: classes.textField,
+                  },
+                }}
+                margin="normal"
                 select
                 value={category}
                 onChange={(event => setCategory(event.target.value))}
-                label="Required"
-                helperText="Please choose your field of activity"
-                variant="filled"
+                helperText="Required"
                 fullWidth
                 required
                 className={classes.textfielInput}
             >
+              <MenuItem value="" disabled>
+                Your field of activity
+              </MenuItem>
               {categoryList.map((option) => (
                   <MenuItem key={option} value={option}>
                     {option}
@@ -156,9 +170,15 @@ export default function CreateTeam(props) {
             <div>
               <TextField
                   id="filled-helperText"
-                  label="Add a member"
-                  helperText="Please enter email of a member to add (optinal)"
-                  variant="outlined"
+                  InputProps={{
+                    classes: {
+                      underline: classes.textFieldUnderline,
+                      input: classes.textField,
+                    },
+                  }}
+
+                  margin="normal"
+                  helperText="Optional"
                   placeholder="exemple@email.com"
                   className={classes.InputToGetMember}
                   value={email}
