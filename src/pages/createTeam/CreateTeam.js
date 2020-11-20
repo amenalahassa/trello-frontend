@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Grid, Paper, Typography, Button, CircularProgress, Fade} from "@material-ui/core";
 
 // styles
@@ -16,6 +16,13 @@ import {log} from "../../Module/biblio";
 import {sendTeam} from "../../Module/http";
 import {useAxiosState} from "../../context/AxiosContext";
 
+import "../../Module/notify"
+import $ from 'jquery';
+import {useUserTeamDispatch} from "../../context/UserTeamContext";
+window.jQuery = $;
+window.$ = $;
+
+
 export default function CreateTeam(props) {
 
   //Todo: get all category on server side
@@ -30,7 +37,16 @@ export default function CreateTeam(props) {
   const [isLoading, setLoading ] = React.useState(false)
 
 
+  useEffect(() => {
+
+    $.bootstrapGrowl("This is a test.");
+
+    return undefined
+  }, [])
+
   const http = useAxiosState()
+  const userTeamDispatch = useUserTeamDispatch()
+
 
   const handleKeyDown = (values) => {
     let invalide = false
@@ -68,8 +84,6 @@ export default function CreateTeam(props) {
 
   const saveTeam = () => {
     setLoading(true)
-
-    // Todo : send data to server
     sendTeam(http, {
       name,
       secteur : category,
@@ -84,7 +98,9 @@ export default function CreateTeam(props) {
       setIsInvalide(true)
       setChipData([])
       setLoading(false)
-      // Todo : Change user has team state
+      userTeamDispatch({
+        type: "HAS_TEAM",
+      })
       props.history.push('/app/dashboard')
     }, 1000)
   }

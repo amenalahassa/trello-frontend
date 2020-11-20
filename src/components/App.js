@@ -9,11 +9,12 @@ import Error from "../pages/error";
 import Login from "../pages/login";
 
 // context
-import { useUserState} from "../context/UserContext";
+import { useUserState} from "../context/UserAuthContext";
 import {useAxiosState} from "../context/AxiosContext";
 import Loader from "./Loader";
 import CreateTeam from "../pages/createTeam";
 import {log} from "../Module/biblio";
+import {useUserTeamDispatch, useUserTeamState} from "../context/UserTeamContext";
 
 export default function App() {
   // global
@@ -87,14 +88,44 @@ export default function App() {
     function BeforeDashbord({ component, ...rest }) {
 
         const http = useAxiosState()
+        const userTeam = useUserTeamState()
+        const userTeamDispatch = useUserTeamDispatch()
 
         const [isLoading, setLoading] = useState(true);
-        const [hasTeam, setHasTeam] = useState(false);
         const [error, setError] = useState(null);
 
         useEffect(() => {
-            // Todo : query once if user has team
-            HasTeam(http, setLoading, setHasTeam, setError)
+            if (userTeam === undefined)
+            {
+                http.get("/api/hasTeam").then(response => {
+                    setTimeout(() => {
+                        if (response.data.userHasTeam)
+                        {
+                            userTeamDispatch({
+                                type: "HAS_TEAM",
+                            })
+                        }
+                        else
+                        {
+                            userTeamDispatch({
+                                type: "HAS_NOT_TEAM",
+                            })
+                        }
+                        setLoading(false)
+                    }, 2000)
+                })
+                    .catch(function (error){
+                        setError("Check your connection and try again please.")
+                        // Todo : Try, if it is possible, another solution to this case
+                        localStorage.removeItem('id_token')
+                        console.log('Error', error.message)
+                    })
+            }
+            else
+            {
+                setLoading(false)
+            }
+            return undefined
         }, []);
 
         if (isLoading) {
@@ -105,7 +136,7 @@ export default function App() {
             <Route
                 {...rest}
                 render={props =>
-                    hasTeam ? (
+                    userTeam ? (
                         React.createElement(component, props)
                     ) : (
                         <Redirect
@@ -122,18 +153,4 @@ export default function App() {
         );
     }
 
-    function HasTeam (axios, setLoading, setHasTeam, setError) {
-      axios.get("/api/hasTeam").then(response => {
-         setTimeout(() => {
-             setHasTeam(response.data.userHasTeam)
-             setLoading(false)
-         }, 2000)
-      })
-      .catch(function (error){
-          setError("Check your connection and try again please.")
-          // Todo : Try, if it is possible, another solution to this case
-          localStorage.removeItem('id_token')
-          console.log('Error', error.message)
-      })
-  }
 }

@@ -7,17 +7,20 @@ import Themes from "./themes";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { LayoutProvider } from "./context/LayoutContext";
-import { UserProvider } from "./context/UserContext";
+import { UserProvider } from "./context/UserAuthContext";
+import { UserTeamProvider } from "./context/UserTeamContext";
 import { AxiosProvider } from "./context/AxiosContext";
 
 ReactDOM.render(
     <AxiosProvider>
         <LayoutProvider>
               <UserProvider>
-                  <ThemeProvider theme={Themes.default}>
-                    <CssBaseline />
-                    <App />
-                  </ThemeProvider>
+                  <UserTeamProvider>
+                      <ThemeProvider theme={Themes.default}>
+                        <CssBaseline />
+                        <App />
+                      </ThemeProvider>
+                  </UserTeamProvider>
               </UserProvider>
         </LayoutProvider>
     </AxiosProvider>,

@@ -19,7 +19,7 @@ import useStyles from "./styles";
 import logo from "./logo.png";
 
 // context
-import { useUserDispatch, loginUser, registerUser } from "../../context/UserContext";
+import { useUserDispatch, loginUser, registerUser } from "../../context/UserAuthContext";
 
 function Login(props) {
   var classes = useStyles();
