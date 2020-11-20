@@ -1,9 +1,8 @@
 import {log} from "./biblio";
 import $ from "jquery";
 
-export function sendTeam(http, data, callback)
+export function sendTeam(http, data, callback, catchError, setLoading, setError)
 {
-    // Todo : Gestion des cas d'erreurs
     http.post('/api/save/team', {
         name: data.name,
         secteur: data.secteur,
@@ -19,8 +18,7 @@ export function sendTeam(http, data, callback)
                        callback(1000)
                    })
                    .catch((err) => {
-                       // Todo : Test it
-                       $.notify("The sending of members's email failed. You can try again later. Check your connection please.");
+                       $.notify("<p>The sending of members's email failed. </p><p>You can try again later.</p> <p>Check your connection please</p>");
                        callback(3000)
                    })
            }
@@ -30,6 +28,6 @@ export function sendTeam(http, data, callback)
            }
         })
         .catch((err) => {
-            log(err)
+            catchError(err, setLoading, setError)
         })
 }

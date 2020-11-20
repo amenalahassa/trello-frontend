@@ -31,6 +31,7 @@ export default function CreateTeam(props) {
   const [categoryList, setCategoryList] = React.useState([])
   const [chipData, setChipData] = React.useState([])
   const [name, setName] = React.useState("")
+  const [error, setError] = React.useState({})
   const [email, setEmail] = React.useState("")
   const [isInvalide, setIsInvalide] = React.useState(true)
   const [isLoading, setLoading ] = React.useState(false)
@@ -94,7 +95,7 @@ export default function CreateTeam(props) {
       name,
       secteur : category,
       members : chipData
-    }, next)
+    }, next, catchError, setLoading, setError)
   }
 
   const next = (time) => {
@@ -124,6 +125,7 @@ export default function CreateTeam(props) {
           <div>
             <TextField
                 id="filled-helperText"
+                error={!!error.name}
                 InputProps={{
                   classes: {
                     underline: classes.textFieldUnderline,
@@ -131,16 +133,17 @@ export default function CreateTeam(props) {
                   },
                 }}
                 margin="normal"
-                helperText="Required"
+                helperText={!!error.name ? error.name : "Required"}
                 placeholder="The name of your team"
                 value={name}
-                onChange={(event => setName(event.target.value))}
+                onChange={(event => {setName(event.target.value); setError({})})}
                 required
                 fullWidth
                 className={classes.textfielInput}
             />
             <TextField
-                id="filled-select-currency"
+                id="filled-select-sector"
+                error={!!error.secteur}
                 InputProps={{
                   classes: {
                     underline: classes.textFieldUnderline,
@@ -150,8 +153,8 @@ export default function CreateTeam(props) {
                 margin="normal"
                 select
                 value={category}
-                onChange={(event => {setCategory(event.target.value)})}
-                helperText="Required"
+                onChange={(event => {setCategory(event.target.value); setError({})})}
+                helperText={!!error.secteur ? error.secteur : "Required"}
                 fullWidth
                 required
                 className={classes.textfielInput}
@@ -223,35 +226,17 @@ export default function CreateTeam(props) {
   );
 }
 
-function catchError(error, setErrorMsg, setError, setIsLoading)
+function catchError(error, setLoading, setError)
 {
   if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    const errors = error.response.data.errors
-    const keys = Object.keys(errors);
-    let msg = ""
-    keys.forEach((key, index) => {
-      // msg += `${key}: ${errors[key]}` If you need key errors
-      msg += `${errors[key]}`
-    });
-    setErrorMsg(msg)
-    setError(true)
-    setIsLoading(false)
+    setError(error.response.data.errors)
+    setLoading(false)
   } else if (error.request) {
-    // The request was made but no response was received
-    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-    // http.ClientRequest in node.js
-    let msg = "Check you connection and try again please."
-    setErrorMsg(msg)
-    setError(true)
-    setIsLoading(false)
+    $.notify("Check you connection and try again please.");
+    setLoading(false)
   } else {
-    // Something happened in setting up the request that triggered an CreateTeam
-    let msg = "Try to reload the page please. See more in console."
-    setErrorMsg(msg)
     log('Error', error.message);
-    setError(true)
-    setIsLoading(false)
+    $.notify("Try to reload the page please. See more in console.");
+    setLoading(false)
   }
 }
