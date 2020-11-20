@@ -32,34 +32,6 @@ export default makeStyles(theme => ({
     marginTop:theme.spacing(4),
     width:320,
   },
-  paperRoot: {
-    boxShadow: theme.customShadows.widgetDark,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-    paddingLeft: theme.spacing(6),
-    paddingRight: theme.spacing(6),
-    maxWidth: 404,
-  },
-  textRow: {
-    marginBottom: theme.spacing(10),
-    textAlign: "center",
-  },
-  errorCode: {
-    fontSize: 148,
-    fontWeight: 600,
-  },
-  safetyText: {
-    fontWeight: 300,
-    color: theme.palette.text.hint,
-  },
-  backButton: {
-    boxShadow: theme.customShadows.widget,
-    textTransform: "none",
-    fontSize: 22,
-  },
   root: {
     marginTop: theme.spacing(8),
     marginBottom: theme.spacing(1),

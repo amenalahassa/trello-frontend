@@ -15,15 +15,12 @@ import {sendTeam} from "../../Module/http";
 import {useAxiosState} from "../../context/AxiosContext";
 
 import "../../Module/notify"
-import $ from 'jquery';
 import {useUserTeamDispatch} from "../../context/UserTeamContext";
-import {log} from "../../Module/biblio";
-window.jQuery = $;
-window.$ = $;
+import {log, showNotification} from "../../Module/biblio";
+
 
 
 export default function CreateTeam(props) {
-
 
   let classes = useStyles();
 
@@ -36,6 +33,8 @@ export default function CreateTeam(props) {
   const [isInvalide, setIsInvalide] = React.useState(true)
   const [isLoading, setLoading ] = React.useState(false)
 
+  const http = useAxiosState()
+  const userTeamDispatch = useUserTeamDispatch()
 
   useEffect(() => {
 
@@ -45,14 +44,11 @@ export default function CreateTeam(props) {
           setCategoryList(response.data)
         })
         .catch(() => {
-          $.notify("Check your connection and reload please.");
+          showNotification("danger","Check your connection and reload please." )
         })
 
     return undefined
-  }, [])
-
-  const http = useAxiosState()
-  const userTeamDispatch = useUserTeamDispatch()
+  }, [http])
 
 
   const handleKeyDown = (values) => {
@@ -179,7 +175,6 @@ export default function CreateTeam(props) {
                       input: classes.textField,
                     },
                   }}
-
                   margin="normal"
                   helperText="Optional"
                   placeholder="exemple@email.com"
@@ -232,11 +227,13 @@ function catchError(error, setLoading, setError)
     setError(error.response.data.errors)
     setLoading(false)
   } else if (error.request) {
-    $.notify("Check you connection and try again please.");
+    showNotification("danger","Check you connection and try again please." )
     setLoading(false)
   } else {
     log('Error', error.message);
-    $.notify("Try to reload the page please. See more in console.");
+    showNotification("danger","Try to reload the page please. See more in console." )
     setLoading(false)
   }
 }
+
+

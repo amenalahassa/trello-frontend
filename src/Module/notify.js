@@ -1,4 +1,3 @@
-import jQuery from 'jquery';
 /*
 * Project: Bootstrap Notify = v3.1.5
 * Description: Turns standard Bootstrap alerts into "Growl-like" notifications.

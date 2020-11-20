@@ -126,7 +126,7 @@ export default function App() {
                 setLoading(false)
             }
             return undefined
-        }, []);
+        }, [http, userTeam, userTeamDispatch]);
 
         if (isLoading) {
             return <Loader onError = { error } /> ;
