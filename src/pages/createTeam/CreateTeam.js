@@ -13,15 +13,24 @@ import TeamMemberList from "../../components/TeamMemberList";
 
 import { categories } from './categories'
 import {log} from "../../Module/biblio";
+import {sendTeam} from "../../Module/http";
+import {useAxiosState} from "../../context/AxiosContext";
 
-export default function CreateTeam() {
+export default function CreateTeam(props) {
+
+  //Todo: get all category on server side
+
   let classes = useStyles();
+
   const [category, setCategory] = React.useState(categories[0].value)
   const [chipData, setChipData] = React.useState([])
   const [name, setName] = React.useState("")
   const [email, setEmail] = React.useState("")
   const [isInvalide, setIsInvalide] = React.useState(true)
   const [isLoading, setLoading ] = React.useState(false)
+
+
+  const http = useAxiosState()
 
   const handleKeyDown = (values) => {
     let invalide = false
@@ -57,17 +66,27 @@ export default function CreateTeam() {
     setEmail("")
   }
 
-  function saveTeam() {
+  const saveTeam = () => {
     setLoading(true)
 
     // Todo : send data to server
+    sendTeam(http, {
+      name,
+      secteur : category,
+      members : chipData
+    }, next)
+  }
+
+  const next = () => {
     setTimeout(() => {
       setEmail("")
       setName("")
       setIsInvalide(true)
       setChipData([])
       setLoading(false)
-    }, 2000)
+      // Todo : Change user has team state
+      props.history.push('/app/dashboard')
+    }, 1000)
   }
 
   return (

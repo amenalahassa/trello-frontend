@@ -9,11 +9,11 @@ import Error from "../pages/error";
 import Login from "../pages/login";
 
 // context
-import {useUserDispatch, useUserState} from "../context/UserContext";
+import { useUserState} from "../context/UserContext";
 import {useAxiosState} from "../context/AxiosContext";
-// import {log} from "../Module/biblio";
 import Loader from "./Loader";
 import CreateTeam from "../pages/createTeam";
+import {log} from "../Module/biblio";
 
 export default function App() {
   // global
@@ -87,14 +87,14 @@ export default function App() {
     function BeforeDashbord({ component, ...rest }) {
 
         const http = useAxiosState()
-        const userDispatch = useUserDispatch()
 
         const [isLoading, setLoading] = useState(true);
         const [hasTeam, setHasTeam] = useState(false);
         const [error, setError] = useState(null);
 
         useEffect(() => {
-            HasTeam(http, setLoading, setHasTeam, setError, userDispatch)
+            // Todo : query once if user has team
+            HasTeam(http, setLoading, setHasTeam, setError)
         }, []);
 
         if (isLoading) {
@@ -122,7 +122,7 @@ export default function App() {
         );
     }
 
-    function HasTeam (axios, setLoading, setHasTeam, setError, userDispatch) {
+    function HasTeam (axios, setLoading, setHasTeam, setError) {
       axios.get("/api/hasTeam").then(response => {
          setTimeout(() => {
              setHasTeam(response.data.userHasTeam)
@@ -131,8 +131,8 @@ export default function App() {
       })
       .catch(function (error){
           setError("Check your connection and try again please.")
-          // Todo : Try to only dispatch user state only when the user request twice
-          // userDispatch({ type: "NETWORK_FAILURE" });
+          // Todo : Try, if it is possible, another solution to this case
+          localStorage.removeItem('id_token')
           console.log('Error', error.message)
       })
   }

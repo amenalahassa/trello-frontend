@@ -26,7 +26,6 @@ function useAxiosState() {
     return context.query;
 }
 
-
 export { login, AxiosProvider, useAxiosState,  logout, register};
 
 function login (email, password,  dispatch , history, setIsLoading, setError, setErrorMsg) {
