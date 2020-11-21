@@ -4,8 +4,7 @@ import { fade } from "@material-ui/core/styles/colorManipulator";
 export default makeStyles(theme => ({
   logotype: {
     color: "white",
-    marginLeft: theme.spacing(0.6),
-    paddingTop: theme.spacing(0.9),
+    marginLeft: theme.spacing(2.5),
     marginRight: theme.spacing(2.5),
     fontWeight: 500,
     fontSize: 18,
@@ -15,12 +14,12 @@ export default makeStyles(theme => ({
     },
   },
   appBar: {
-    flexGrow: 1,
+    width: "100vw",
+    zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: "#faa043",
   },
   toolbar: {
     paddingLeft: theme.spacing(2),
@@ -31,8 +30,6 @@ export default makeStyles(theme => ({
   },
   grow: {
     flexGrow: 1,
-    display: "flex",
-    justifyContent:"center"
   },
   search: {
     position: "relative",
@@ -112,7 +109,7 @@ export default makeStyles(theme => ({
   },
   headerIcon: {
     fontSize: 28,
-    color: "rgba(255, 255, 255, 0.6)",
+    color: "rgba(255, 255, 255, 0.35)",
   },
   headerIconCollapse: {
     color: "white",
@@ -141,10 +138,6 @@ export default makeStyles(theme => ({
     "&:hover": {
       cursor: "pointer",
     },
-  },
-  profileMenuEmail: {
-    fontSize: 12,
-    textDecoration: "none",
   },
   messageNotification: {
     height: "auto",
@@ -178,21 +171,5 @@ export default makeStyles(theme => ({
       display: 'none'
     },
     marginRight: theme.spacing(3)
-  },
-  headerMenuAddButton: {
-    marginLeft: theme.spacing(2),
-    padding: theme.spacing(0.5),
-    backgroundColor: "#DB7723",
-  },
-  headerMenuAddButtonIcon: {
-    fontSize: 28,
-    color: "rgba(255, 255, 255, 1)",
-  },
-  buttonBoard: {
-    color: "white",
-    backgroundColor: "#DB7723",
-    '&:hover': {
-      backgroundColor: "rgba(219, 112, 24, 0.35)",
-    }
   }
 }));
