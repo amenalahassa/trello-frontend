@@ -7,6 +7,8 @@ import useStyles from "./styles";
 // components
 import { Typography } from "../Wrappers";
 
+// Todo : use this to show avatar when user don't have a image
+
 export default function UserAvatar({ color = "primary", ...props }) {
   var classes = useStyles();
   var theme = useTheme();

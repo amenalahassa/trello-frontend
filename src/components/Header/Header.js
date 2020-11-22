@@ -26,10 +26,10 @@ import logo from "./trello.png"
 // context
 
 import Avatar from "@material-ui/core/Avatar";
-import MenuProfil from "../MenuProfil";
-import MenuAddElement from "../MenuAddElement";
-import MenuBoard from "../MenuBoard";
-import MenuNotification from "../MenuNotification";
+import MenuProfil from "../SmallComponent/MenuProfil";
+import MenuAddElement from "../SmallComponent/MenuAddElement";
+import MenuBoard from "../SmallComponent/MenuBoard";
+import MenuNotification from "../SmallComponent/MenuNotification";
 
 
 const notifications = [
@@ -62,7 +62,7 @@ export default function Header(props) {
             color="primary"
             size="medium"
             disableElevation
-            startIcon={<DashboardIcon />}
+            startIcon={<DashboardIcon className={classes.buttonBoardIcon}/>}
             className={classes.buttonBoard}
             aria-controls="board-menu"
             onClick={e => setBoardMenu(e.currentTarget)}

@@ -116,7 +116,7 @@ export default function App() {
                 })
                     .catch(function (error){
                         setError("Check your connection and try again please.")
-                        // Made better if you can
+                        // Todo : Get message of error, if anauthorized, remove the key
                         localStorage.removeItem('id_token')
                         console.log('Error', error.message)
                     })

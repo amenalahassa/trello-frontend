@@ -14,17 +14,25 @@ export default makeStyles(theme => ({
       display: "none",
     },
   },
+  buttonBoardIcon: {
+    [theme.breakpoints.down("xs")]: {
+      display: "none",
+    },
+  },
   appBar: {
-    flexGrow: 1,
     transition: theme.transitions.create(["margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: "#faa043",
+    minHeight:48,
+    // backgroundColor: "#faa043",
+    backgroundColor:"#ffffff61"
+    // backgroundColor:"#ffffff6b"
   },
   toolbar: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    minHeight:48,
   },
   hide: {
     display: "none",
@@ -84,7 +92,8 @@ export default makeStyles(theme => ({
     flexDirection: "column",
   },
   headerMenu: {
-    marginTop: theme.spacing(7),
+    marginTop: theme.spacing(4.5),
+    width: 500,
   },
   headerMenuList: {
     display: "flex",
@@ -93,7 +102,6 @@ export default makeStyles(theme => ({
   headerMenuItem: {
     "&:hover, &:focus": {
       backgroundColor: theme.palette.background.light,
-      // color: "white",
     },
   },
   headerMenuButton: {
@@ -112,13 +120,14 @@ export default makeStyles(theme => ({
   },
   headerIcon: {
     fontSize: 28,
-    color: "rgba(255, 255, 255, 0.6)",
+    color: "rgba(255, 255, 255, 1)",
   },
   headerIconCollapse: {
     color: "white",
   },
   profileMenu: {
     minWidth: 265,
+    boxShadow:"unset"
   },
   profileMenuUser: {
     display: "flex",
@@ -183,6 +192,7 @@ export default makeStyles(theme => ({
     marginLeft: theme.spacing(2),
     padding: theme.spacing(0.5),
     backgroundColor: "#DB7723",
+
   },
   headerMenuAddButtonIcon: {
     fontSize: 28,

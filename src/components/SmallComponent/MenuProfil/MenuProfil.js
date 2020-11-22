@@ -5,7 +5,7 @@ import {Menu, MenuItem, Typography} from '@material-ui/core'
 
 import classNames from "classnames";
 import {Person as AccountIcon} from "@material-ui/icons";
-import {signOut, useUserDispatch} from "../../context/UserAuthContext";
+import {signOut, useUserDispatch} from "../../../context/UserAuthContext";
 
 
 

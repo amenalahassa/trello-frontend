@@ -3,7 +3,7 @@ import React from "react";
 import {Menu} from '@material-ui/core'
 
 
-import {Dashboard as DashboardIcon, People as PeopleIcon, Person as AccountIcon} from "@material-ui/icons";
+import {Dashboard as DashboardIcon} from "@material-ui/icons";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -28,9 +28,9 @@ function MenuBoard(props) {
         >
             <List
                 component="nav"
-                aria-labelledby="nested-list-subheader"
+                aria-labelledby="nested-list-personal"
                 subheader={
-                    <ListSubheader component="div" id="nested-list-subheader">
+                    <ListSubheader component="div" id="nested-list-personal">
                         Your personal board
                     </ListSubheader>
                 }
@@ -45,9 +45,9 @@ function MenuBoard(props) {
             </List>
             <List
                 component="nav"
-                aria-labelledby="nested-list-subheader"
+                aria-labelledby="nested-list-team"
                 subheader={
-                    <ListSubheader component="div" id="nested-list-subheader">
+                    <ListSubheader component="div" id="nested-list-team">
                         Your team board
                     </ListSubheader>
                 }

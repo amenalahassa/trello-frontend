@@ -1,119 +1,65 @@
 import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles(theme => ({
-  card: {
-    minHeight: "100%",
-    display: "flex",
-    flexDirection: "column",
+  gridBar:{
+   flexGrow:0,
+    backgroundColor:"transparent",
   },
-  visitsNumberContainer: {
-    display: "flex",
-    alignItems: "center",
-    flexGrow: 1,
-    paddingBottom: theme.spacing(1),
+  gridContainer:{
+    flexGrow:1,
+    color:"#fff",
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
   },
-  progressSection: {
-    marginBottom: theme.spacing(1),
+  gridParent:{
+    display:"flex",
+    flexGrow:1,
+    flexDirection:"column"
   },
-  progressTitle: {
-    marginBottom: theme.spacing(2),
+  paper:{
+    height:"100%",
   },
-  progress: {
-    marginBottom: theme.spacing(1),
-    backgroundColor: 'rgb(236, 236, 236)',
+  hearderRoot:{
+    backgroundColor:"transparent",
+    minHeight:48,
   },
-  pieChartLegendWrapper: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-end",
-    marginRight: theme.spacing(1),
+  toolbar:{
+    minHeight:48,
+    marginTop:theme.spacing(1)
   },
-  legendItemContainer: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: theme.spacing(1),
-  },
-  fullHeightBody: {
-    display: "flex",
-    flexGrow: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
-  tableWidget: {
-    overflowX: "auto",
-  },
-  progressBarPrimary: {
-    backgroundColor: theme.palette.primary.main,
-  },
-  progressBarWarning: {
-    backgroundColor: theme.palette.warning.main,
-  },
-  performanceLegendWrapper: {
-    display: "flex",
-    flexGrow: 1,
-    alignItems: "center",
-    marginBottom: theme.spacing(1),
-  },
-  legendElement: {
-    display: "flex",
-    alignItems: "center",
+  divider: {
+    marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    backgroundColor:"#fff",
+
   },
-  legendElementText: {
-    marginLeft: theme.spacing(1),
+  buttonBoard: {
+    color: "white",
+    backgroundColor: "#ffffff6b",
+    '&:hover': {
+      backgroundColor: "#ffffff61",
+    }
   },
-  serverOverviewElement: {
-    display: "flex",
-    alignItems: "center",
-    maxWidth: "100%",
+  team:{
+    flexGrow:1,
+    display: "flex"
   },
-  serverOverviewElementText: {
-    minWidth: 145,
-    paddingRight: theme.spacing(2),
+  teamAvatar:{
+    marginRight:theme.spacing(2)
   },
-  serverOverviewElementChartWrapper: {
-    width: "100%",
+  headerMenu: {
+    marginTop: theme.spacing(10),
+    width: 500,
   },
-  mainChartBody: {
-    overflowX: "auto",
+  profileMenu: {
+    minWidth: 265,
+    boxShadow:"unset"
   },
-  mainChartHeader: {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    [theme.breakpoints.only("xs")]: {
-      flexWrap: "wrap",
-    },
-  },
-  mainChartHeaderLabels: {
-    display: "flex",
-    alignItems: "center",
-    [theme.breakpoints.only("xs")]: {
-      order: 3,
-      width: "100%",
-      justifyContent: "center",
-      marginTop: theme.spacing(3),
-      marginBottom: theme.spacing(2),
-    },
-  },
-  mainChartHeaderLabel: {
-    display: "flex",
-    alignItems: "center",
-    marginLeft: theme.spacing(3),
-  },
-  mainChartSelectRoot: {
-    borderColor: theme.palette.text.hint + "80 !important",
-  },
-  mainChartSelect: {
-    padding: 10,
-    paddingRight: 25,
-  },
-  mainChartLegentElement: {
-    fontSize: "18px !important",
-    marginLeft: theme.spacing(1),
+  boardName:{
+    fontWeight:600,
   },
   success: {
     backgroundColor: theme.palette.success.main,

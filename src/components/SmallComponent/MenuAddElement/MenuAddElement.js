@@ -9,6 +9,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
+import {Typography} from "../../Wrappers";
 
 
 
@@ -33,7 +34,7 @@ function MenuAddElement(props) {
                             <DashboardIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary="Add a board" secondary="Description of a board" />
+                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a board</Typography>} secondary="A board is made up of cards ordered on lists. Use it to manage projects, track information, or organize anything." />
                 </ListItem>
                 <ListItem button>
                     <ListItemAvatar>
@@ -41,7 +42,7 @@ function MenuAddElement(props) {
                             <PeopleIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary="Add a team" secondary="Description of a team" />
+                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a Team</Typography>} secondary="A team is a group of boards and people. Use it to organize your company, side hustle, family, or friends." />
                 </ListItem>
             </List>
         </Menu>

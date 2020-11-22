@@ -15,7 +15,7 @@ import useStyles from "./styles";
 
 
 // pages
-import Dashboard from "../../pages/dashboard";
+import Dashboard from "../../pages/dashboard/Dashboard";
 
 // context
 

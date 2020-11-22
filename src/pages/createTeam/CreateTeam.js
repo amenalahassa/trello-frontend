@@ -8,7 +8,7 @@ import useStyles from "./styles";
 import logo from "./logo.png";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
-import TeamMemberList from "../../components/TeamMemberList";
+import TeamMemberList from "../../components/SmallComponent/TeamMemberList";
 
 
 import {sendTeam} from "../../Module/http";
