@@ -35,6 +35,7 @@ export default function App() {
               path="/creatTeam"
               component={CreateTeam} />}
           />
+
         <PrivateRoute path="/app" component={Layout} />
         <PublicRoute path="/login" component={Login} />
         <Route component={Error} />
@@ -95,11 +96,12 @@ export default function App() {
         const [error, setError] = useState(null);
 
         useEffect(() => {
+            log()
             if (userTeam === undefined)
             {
                 http.get("/api/hasTeam").then(response => {
                     setTimeout(() => {
-                        if (response.data.userHasTeam)
+                        if (response.data.userHashttpTeam)
                         {
                             userTeamDispatch({
                                 type: "HAS_TEAM",

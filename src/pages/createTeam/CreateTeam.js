@@ -11,7 +11,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TeamMemberList from "../../components/SmallComponent/TeamMemberList";
 
 
-import {sendTeam} from "../../Module/http";
+import {deleteMember, sendTeam} from "./Modules";
 import {useAxiosState} from "../../context/AxiosContext";
 
 import "../../Module/notify"
@@ -26,7 +26,7 @@ export default function CreateTeam(props) {
 
   const [category, setCategory] = React.useState("")
   const [categoryList, setCategoryList] = React.useState([])
-  const [chipData, setChipData] = React.useState([])
+  const [members, setMember] = React.useState([])
   const [name, setName] = React.useState("")
   const [error, setError] = React.useState({})
   const [email, setEmail] = React.useState("")
@@ -56,7 +56,7 @@ export default function CreateTeam(props) {
     const emailExp = /^[^\s()<>@,;:\/]+@\w[\w\.-]+\.[a-z]{2,}$/i;
     if (emailExp.test(values)) {
       invalide = false
-      for (const chipDatum of chipData) {
+      for (const chipDatum of members) {
         if (chipDatum.label === values)
         {
           invalide = true
@@ -72,7 +72,7 @@ export default function CreateTeam(props) {
   }
 
   const handleDeleteChip = (chipToDelete) => () => {
-    setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+    setMember(deleteMember(chipToDelete));
   };
 
   const addMember = () => {
@@ -80,17 +80,17 @@ export default function CreateTeam(props) {
       key: Date.now() / (Math.random() * 10),
       label: email,
     }
-    setChipData([member, ...chipData])
+    setMember([member, ...members])
     setIsInvalide(true)
     setEmail("")
   }
 
-  const saveTeam = () => {
+  const save = () => {
     setLoading(true)
-    sendTeam(http, {
+    sendTeam({
       name,
       secteur : category,
-      members : chipData
+      members,
     }, next, catchError, setLoading, setError)
   }
 
@@ -99,7 +99,7 @@ export default function CreateTeam(props) {
       setEmail("")
       setName("")
       setIsInvalide(true)
-      setChipData([])
+      setMember([])
       setLoading(false)
       userTeamDispatch({
         type: "HAS_TEAM",
@@ -191,7 +191,7 @@ export default function CreateTeam(props) {
                 Add
               </Button>
             </div>
-            {chipData.length !== 0 && <TeamMemberList chipData = {chipData} handleDeleteChip = {handleDeleteChip} />}
+            {members.length !== 0 && <TeamMemberList members = {members} handleDeleteChip = {handleDeleteChip} />}
           </div>
           <div className={classes.saveButtonContainer}>
             {isLoading ? (
@@ -204,7 +204,7 @@ export default function CreateTeam(props) {
                           size="large"
                           fullWidth
                           className={classes.buttonSave}
-                          onClick={() => saveTeam()}
+                          onClick={() => save()}
                           disabled={
                             name.length === 0 ||
                             category.length === 0

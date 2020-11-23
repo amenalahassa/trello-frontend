@@ -9,7 +9,7 @@ import {Typography} from "@material-ui/core";
 
 function TeamMemberList(props) {
     var classes = useStyles();
-    const { chipData, handleDeleteChip } = props
+    const { members, handleDeleteChip } = props
 
     return (
         <>
@@ -17,7 +17,7 @@ function TeamMemberList(props) {
                 Your teammates
             </Typography>
             <Paper className={classes.root} elevation={2}>
-                {chipData.map((data) => {
+                {members.map((data) => {
                     return (
                         <li key={data.key}>
                             <Chip
