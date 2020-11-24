@@ -39,6 +39,8 @@ const notifications = [
   }
 ];
 
+//Todo : Set a placeholder when the data is loading
+
 
 export default function Header(props) {
   var classes = useStyles();
@@ -90,7 +92,7 @@ export default function Header(props) {
             aria-controls="add-menu"
             onClick={e => setAddMenu(e.currentTarget)}
         >
-          <Add classes={classes.headerMenuAddButtonIcon } />
+          <Add className={classes.headerMenuAddButtonIcon } />
         </IconButton>
         <IconButton
           aria-haspopup="true"

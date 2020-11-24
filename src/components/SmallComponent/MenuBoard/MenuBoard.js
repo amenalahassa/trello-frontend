@@ -31,7 +31,7 @@ function MenuBoard(props) {
                 aria-labelledby="nested-list-personal"
                 subheader={
                     <ListSubheader component="div" id="nested-list-personal">
-                        Your personal board
+                        Current board
                     </ListSubheader>
                 }
                 className={classes.root}
@@ -48,7 +48,7 @@ function MenuBoard(props) {
                 aria-labelledby="nested-list-team"
                 subheader={
                     <ListSubheader component="div" id="nested-list-team">
-                        Your team board
+                        Your boards
                     </ListSubheader>
                 }
                 className={classes.root}

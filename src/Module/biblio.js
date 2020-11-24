@@ -50,3 +50,11 @@ export function viewportSize(){
 
     return dims;
 }
+
+export function isOutdated(before, after)
+{
+    before = Math.floor(before / 1000)
+    after = Math.floor(after / 1000)
+    let time = after - before
+    return time > (3600 * 3);
+}

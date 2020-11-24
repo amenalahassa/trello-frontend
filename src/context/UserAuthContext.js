@@ -1,5 +1,5 @@
 import React from "react";
-import {delete_cookie, log} from "../Module/biblio";
+import {delete_cookie, isOutdated, log} from "../Module/biblio";
 
 var UserStateContext = React.createContext();
 var UserDispatchContext = React.createContext();
@@ -26,11 +26,12 @@ function userReducer(state, action) {
 
 function UserProvider({ children }) {
 
-  // Todo Verify before all if the session till valide
-
-  var [state, dispatch] = React.useReducer(userReducer, {
-    isAuthenticated: !!localStorage.getItem("id_token"),
-  });
+    let now = Date.now()
+    let before = JSON.parse(localStorage.getItem('expire_date'))
+    let isAuth = isOutdated(before, now) === true ? false : !!localStorage.getItem("id_token")
+    var [state, dispatch] = React.useReducer(userReducer, {
+        isAuthenticated: isAuth,
+      });
 
   return (
     <UserStateContext.Provider value={state}>
@@ -102,6 +103,7 @@ function login (http, email, password,  dispatchAuth, dispatchHasTeam , history,
                     setError(null)
                     setIsLoading(false)
                     localStorage.setItem('id_token', response.data.token)
+                    localStorage.setItem('expire_date', JSON.stringify(Date.now()))
                     toogleHasTeamDispatch(dispatchHasTeam, response.data.ifHasTeam)
                     dispatchAuth({ type: 'LOGIN_SUCCESS' })
                     history.push('/app/dashboard')
@@ -127,6 +129,7 @@ function register (http, name, email, password, password_confirmation, dispatchA
                     setError(null)
                     setIsLoading(false)
                     localStorage.setItem('id_token', response.data.token)
+                    localStorage.setItem('expire_date', JSON.stringify(Date.now()))
                     toogleHasTeamDispatch(dispatchHasTeam, response.data.ifHasTeam)
                     dispatchAuth({ type: 'REGISTER_SUCCESS' })
                     history.push('/app/dashboard')
@@ -145,6 +148,7 @@ function logout(http, dispatch, history)
   http.get('/api/logout')
       .then(function (){
           localStorage.removeItem("id_token")
+          localStorage.removeItem('expire_date')
           delete_cookie('XSRF-TOKEN')
           dispatch({ type: "SIGN_OUT_SUCCESS" });
           history.push("/login");
