@@ -15,7 +15,7 @@ import {deleteMember, sendTeam} from "./Modules";
 import {useAxiosState} from "../../context/AxiosContext";
 
 import "../../Module/notify"
-import {useUserTeamDispatch} from "../../context/UserTeamContext";
+import {toggleHasTeam, useUserTeamDispatch} from "../../context/UserTeamContext";
 import {log, showNotification} from "../../Module/biblio";
 
 
@@ -36,19 +36,20 @@ export default function CreateTeam(props) {
   const http = useAxiosState()
   const userTeamDispatch = useUserTeamDispatch()
 
+
   useEffect(() => {
 
     http.get('/api/ressources/category')
         .then((response) => {
-          setCategory(response.data[0].key)
           setCategoryList(response.data)
+          setCategory(response.data[0].key)
         })
         .catch(() => {
           showNotification("danger","Check your connection and reload please." )
         })
 
     return undefined
-  }, [http])
+  }, [])
 
 
   const handleKeyDown = (values) => {
@@ -87,7 +88,7 @@ export default function CreateTeam(props) {
 
   const save = () => {
     setLoading(true)
-    sendTeam({
+    sendTeam(http, {
       name,
       secteur : category,
       members,
@@ -101,10 +102,8 @@ export default function CreateTeam(props) {
       setIsInvalide(true)
       setMember([])
       setLoading(false)
-      userTeamDispatch({
-        type: "HAS_TEAM",
-      })
-      props.history.push('/app/dashboard')
+      toggleHasTeam(userTeamDispatch)
+      props.history.push('/')
     }, time)
   }
 

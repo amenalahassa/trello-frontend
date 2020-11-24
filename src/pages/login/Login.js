@@ -20,12 +20,17 @@ import logo from "./logo.png";
 
 // context
 import { useUserDispatch, loginUser, registerUser } from "../../context/UserAuthContext";
+import {useAxiosState} from "../../context/AxiosContext";
+import {useUserTeamDispatch} from "../../context/UserTeamContext";
 
 function Login(props) {
   var classes = useStyles();
 
   // global
-  var userDispatch = useUserDispatch();
+  var userAuthDispatch = useUserDispatch();
+  var userHasTeamDispatch = useUserTeamDispatch();
+  let axiosInstance = useAxiosState()
+
 
   // local
   var [isLoading, setIsLoading] = useState(false);
@@ -104,8 +109,9 @@ function Login(props) {
                       loginValue.length === 0 || passwordValue.length === 0
                     }
                     onClick={() =>
-                      loginUser(
-                        userDispatch,
+                      loginUser(axiosInstance,
+                        userAuthDispatch,
+                        userHasTeamDispatch,
                         loginValue,
                         passwordValue,
                         props.history,
@@ -203,8 +209,9 @@ function Login(props) {
                 ) : (
                   <Button
                     onClick={() =>
-                        registerUser(
-                        userDispatch, nameValue,
+                        registerUser(axiosInstance,
+                         userAuthDispatch,
+                        userHasTeamDispatch, nameValue,
                         loginValue,
                         passwordValue, passwordConfirmationValue,
                         props.history,

@@ -6,13 +6,15 @@ import {Menu, MenuItem, Typography} from '@material-ui/core'
 import classNames from "classnames";
 import {Person as AccountIcon} from "@material-ui/icons";
 import {signOut, useUserDispatch} from "../../../context/UserAuthContext";
+import {useAxiosState} from "../../../context/AxiosContext";
 
 
 
 function MenuProfil(props) {
 
-    let { profileMenu, setProfileMenu, classes } = props
+    let { profileMenu, setProfileMenu, classes, history } = props
     var userDispatch = useUserDispatch();
+    let axiosInstance = useAxiosState()
 
     return (
       <Menu
@@ -55,7 +57,7 @@ function MenuProfil(props) {
               <Typography
                   className={classes.profileMenuLink}
                   color="primary"
-                  onClick={() => signOut(userDispatch, props.history)}
+                  onClick={() => signOut(axiosInstance, userDispatch, history)}
               >
                   Sign Out
               </Typography>

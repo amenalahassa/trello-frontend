@@ -10,15 +10,14 @@ import Login from "../pages/login";
 
 // context
 import { useUserState} from "../context/UserAuthContext";
-import {useAxiosState} from "../context/AxiosContext";
-import Loader from "./Loader";
 import CreateTeam from "../pages/createTeam";
 import {log} from "../Module/biblio";
-import {useUserTeamDispatch, useUserTeamState} from "../context/UserTeamContext";
+import { useUserTeamState} from "../context/UserTeamContext";
 
 export default function App() {
   // global
   var { isAuthenticated } = useUserState();
+  var { ifHasTeam } = useUserTeamState();
 
   // Todo : Modifier la page d'erreur
   return (
@@ -30,12 +29,6 @@ export default function App() {
           path="/app"
           render={() => <Redirect to="/app/dashboard" />}
         />
-          <Route
-              exact
-              path="/creatTeam"
-              component={CreateTeam} />}
-          />
-
         <PrivateRoute path="/app" component={Layout} />
         <PublicRoute path="/login" component={Login} />
         <Route component={Error} />
@@ -45,14 +38,18 @@ export default function App() {
 
   // #######################################################################
 
-    function PrivateRoute({ component, ...rest }) {
+    function PrivateRoute({component, ...rest }) {
+        if (ifHasTeam === false)
+        {
+            component = CreateTeam
+        }
         return (
             <Route
                 {...rest}
                 render={props =>
                     isAuthenticated ? (
-                        <BeforeDashbord path="/app" component={Layout} />
-                    ) : (
+                            React.createElement(component, props)
+                        ) : (
                         <Redirect
                             to={{
                                 pathname: "/login",
@@ -66,7 +63,6 @@ export default function App() {
             />
         );
     }
-
     function PublicRoute({ component, ...rest }) {
         return (
             <Route
@@ -80,75 +76,6 @@ export default function App() {
                         />
                     ) : (
                         React.createElement(component, props)
-                    )
-                }
-            />
-        );
-    }
-
-    function BeforeDashbord({ component, ...rest }) {
-
-        const http = useAxiosState()
-        const userTeam = useUserTeamState()
-        const userTeamDispatch = useUserTeamDispatch()
-
-        const [isLoading, setLoading] = useState(true);
-        const [error, setError] = useState(null);
-
-        useEffect(() => {
-            log()
-            if (userTeam === undefined)
-            {
-                http.get("/api/hasTeam").then(response => {
-                    setTimeout(() => {
-                        if (response.data.userHashttpTeam)
-                        {
-                            userTeamDispatch({
-                                type: "HAS_TEAM",
-                            })
-                        }
-                        else
-                        {
-                            userTeamDispatch({
-                                type: "HAS_NOT_TEAM",
-                            })
-                        }
-                        setLoading(false)
-                    }, 2000)
-                })
-                    .catch(function (error){
-                        setError("Check your connection and try again please.")
-                        // Todo : Get message of error, if anauthorized, remove the key
-                        localStorage.removeItem('id_token')
-                        console.log('Error', error.message)
-                    })
-            }
-            else
-            {
-                setLoading(false)
-            }
-            return undefined
-        }, [http, userTeam, userTeamDispatch]);
-
-        if (isLoading) {
-            return <Loader onError = { error } /> ;
-        }
-
-        return (
-            <Route
-                {...rest}
-                render={props =>
-                    userTeam ? (
-                        React.createElement(component, props)
-                    ) : (
-                        <Redirect
-                            to={{
-                                pathname: "/creatTeam",
-                                state: {
-                                    from: props.location,
-                                },
-                            }}
-                        />
                     )
                 }
             />

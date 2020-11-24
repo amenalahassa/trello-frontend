@@ -133,7 +133,7 @@ export default function Header(props) {
         <MenuBoard classes={classes} boardMenu={boardMenu} setBoardMenu={setBoardMenu} />
         <MenuAddElement  classes={classes} addMenu={addMenu} setAddMenu={setAddMenu} />
         <MenuNotification  classes={classes} notifications={notifications} mailMenu={mailMenu} setMailMenu={setMailMenu} />
-        <MenuProfil classes={ classes} profileMenu={profileMenu} setProfileMenu={setProfileMenu}/>
+        <MenuProfil classes={ classes} profileMenu={profileMenu} setProfileMenu={setProfileMenu} history={props.history}/>
       </Toolbar>
     </AppBar>
   );

@@ -1,6 +1,5 @@
 import React from "react";
-import {login, logout, register} from "../context/AxiosContext";
-// import { log  } from "../Module/biblio";
+import {delete_cookie, log} from "../Module/biblio";
 
 var UserStateContext = React.createContext();
 var UserDispatchContext = React.createContext();
@@ -26,6 +25,9 @@ function userReducer(state, action) {
 }
 
 function UserProvider({ children }) {
+
+  // Todo Verify before all if the session till valide
+
   var [state, dispatch] = React.useReducer(userReducer, {
     isAuthenticated: !!localStorage.getItem("id_token"),
   });
@@ -59,33 +61,140 @@ export { UserProvider, useUserState, useUserDispatch, loginUser, signOut , regis
 
 // ###########################################################
 
-function loginUser(dispatch, email, password, history, setIsLoading, setError, setErrorMsg) {
+function loginUser(axios, dispatchAuth, dispatchHasTeam , email, password, history, setIsLoading, setError, setErrorMsg) {
   setError(false);
   setIsLoading(true);
 
   if (!!email && !!password) {
-      login(email, password, dispatch , history, setIsLoading, setError, setErrorMsg)
+      login(axios, email, password, dispatchAuth, dispatchHasTeam , history, setIsLoading, setError, setErrorMsg)
   } else {
-    dispatch({ type: "LOGIN_FAILURE" });
+    dispatchAuth({ type: "LOGIN_FAILURE" });
     setError(true);
     setErrorMsg(null);
     setIsLoading(false);
   }
 }
 
-function registerUser(dispatch, namevalue, email, password, passwordConfirmationValue, history, setIsLoading, setError, setErrorMsg) {
+function registerUser(axios,dispatchAuth, dispatchHasTeam , namevalue, email, password, passwordConfirmationValue, history, setIsLoading, setError, setErrorMsg) {
   setError(false);
   setIsLoading(true);
   if (!!email && !!password && !!namevalue && !!passwordConfirmationValue) {
-    register(namevalue, email, password,passwordConfirmationValue, dispatch ,  history, setIsLoading, setError, setErrorMsg)
+    register(axios, namevalue, email, password,passwordConfirmationValue, dispatchAuth, dispatchHasTeam ,  history, setIsLoading, setError, setErrorMsg)
   } else {
-    dispatch({ type: "REGISTER_FAILURE" });
+    dispatchAuth({ type: "REGISTER_FAILURE" });
     setError(true);
     setErrorMsg(null);
     setIsLoading(false);
   }
 }
 
-function signOut(dispatch, history) {
-  logout(dispatch, history)
+function signOut(axios, dispatch, history) {
+  logout(axios, dispatch, history)
+}
+
+function login (http, email, password,  dispatchAuth, dispatchHasTeam , history, setIsLoading, setError, setErrorMsg) {
+    http.get('/sanctum/csrf-cookie').then(response => {
+            http.post('/api/login', {
+                email,
+                password,
+            })
+                .then(function (response) {
+                    setError(null)
+                    setIsLoading(false)
+                    localStorage.setItem('id_token', response.data.token)
+                    toogleHasTeamDispatch(dispatchHasTeam, response.data.ifHasTeam)
+                    dispatchAuth({ type: 'LOGIN_SUCCESS' })
+                    history.push('/app/dashboard')
+                })
+                .catch(function (error) {
+                    catchError(error, setErrorMsg, setError, setIsLoading)
+                });
+        })
+        .catch(function (error) {
+            catchError(error, setErrorMsg, setError, setIsLoading)
+        });
+}
+
+function register (http, name, email, password, password_confirmation, dispatchAuth, dispatchHasTeam , history, setIsLoading, setError, setErrorMsg) {
+        http.get('/sanctum/csrf-cookie').then(response => {
+            http.post('/api/register', {
+                name,
+                email,
+                password,
+                password_confirmation
+            })
+                .then(function (response) {
+                    setError(null)
+                    setIsLoading(false)
+                    localStorage.setItem('id_token', response.data.token)
+                    toogleHasTeamDispatch(dispatchHasTeam, response.data.ifHasTeam)
+                    dispatchAuth({ type: 'REGISTER_SUCCESS' })
+                    history.push('/app/dashboard')
+                })
+                .catch(function (error) {
+                    catchError(error, setErrorMsg, setError, setIsLoading)
+                });
+        })
+        .catch(function (error) {
+            catchError(error, setErrorMsg, setError, setIsLoading)
+        });
+}
+
+function logout(http, dispatch, history)
+{
+  http.get('/api/logout')
+      .then(function (){
+          localStorage.removeItem("id_token")
+          delete_cookie('XSRF-TOKEN')
+          dispatch({ type: "SIGN_OUT_SUCCESS" });
+          history.push("/login");
+      })
+      .catch(function (error) {
+        log(error)
+      });
+}
+
+function catchError(error, setErrorMsg, setError, setIsLoading)
+{
+    if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        const errors = error.response.data.errors
+        const keys = Object.keys(errors);
+        let msg = ""
+        keys.forEach((key, index) => {
+            // msg += `${key}: ${errors[key]}` If you need key errors
+            msg += `${errors[key]}`
+        });
+        setErrorMsg(msg)
+        setError(true)
+        setIsLoading(false)
+    } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        let msg = "Check you connection and try again please."
+        setErrorMsg(msg)
+        setError(true)
+        setIsLoading(false)
+    } else {
+        // Something happened in setting up the request that triggered an CreateTeam
+        let msg = "Try to reload the page please. See more in console."
+        setErrorMsg(msg)
+        log('Error', error.message);
+        setError(true)
+        setIsLoading(false)
+    }
+}
+
+function toogleHasTeamDispatch(dispatch, state)
+{
+    if (state === true)
+    {
+        dispatch({type : "HAS_TEAM"})
+    }
+    else
+    {
+        dispatch({type : "HAS_NOT_TEAM"})
+    }
 }
