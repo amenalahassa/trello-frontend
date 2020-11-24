@@ -14,7 +14,7 @@ export default makeStyles(theme => ({
       display: "none",
     },
   },
-  buttonBoardIcon: {
+  buttonIcon: {
     [theme.breakpoints.down("xs")]: {
       display: "none",
     },
@@ -93,7 +93,6 @@ export default makeStyles(theme => ({
   },
   headerMenu: {
     marginTop: theme.spacing(4.5),
-    width: 500,
   },
   headerMenuList: {
     display: "flex",
@@ -192,13 +191,20 @@ export default makeStyles(theme => ({
     marginLeft: theme.spacing(2),
     padding: theme.spacing(0.5),
     backgroundColor: "#DB7723",
-
   },
   headerMenuAddButtonIcon: {
     fontSize: 28,
     color: "rgba(255, 255, 255, 1)",
   },
   buttonBoard: {
+    color: "white",
+    backgroundColor: "#DB7723",
+    '&:hover': {
+      backgroundColor: "rgba(219, 112, 24, 0.35)",
+    }
+  },
+  buttonTeam: {
+    marginLeft: theme.spacing(2),
     color: "white",
     backgroundColor: "#DB7723",
     '&:hover': {

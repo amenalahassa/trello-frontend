@@ -3,24 +3,21 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  InputBase,
   Button
 } from "@material-ui/core";
 
 import {
   Add,
-  NotificationsNone as NotificationsIcon,
   Dashboard as DashboardIcon,
-  Search as SearchIcon
+    People as PeopleIcon,
 } from "@material-ui/icons";
 
-import classNames from "classnames";
 
 // styles
 import useStyles from "./styles";
 
 // components
-import {Badge, Typography} from "../Wrappers";
+import {Typography} from "../Wrappers";
 import logo from "./trello.png"
 
 // context
@@ -29,7 +26,7 @@ import Avatar from "@material-ui/core/Avatar";
 import MenuProfil from "../SmallComponent/MenuProfil";
 import MenuAddElement from "../SmallComponent/MenuAddElement";
 import MenuBoard from "../SmallComponent/MenuBoard";
-import MenuNotification from "../SmallComponent/MenuNotification";
+import MenuTeam from "../SmallComponent/MenuTeam/MenuTeam";
 
 
 const notifications = [
@@ -48,11 +45,10 @@ export default function Header(props) {
 
 
   // local
-  var [mailMenu, setMailMenu] = useState(null);
+  var [teamMenu, setTeamMenu] = useState(null);
   var [addMenu, setAddMenu] = useState(null);
   var [boardMenu, setBoardMenu] = useState(null);
   var [profileMenu, setProfileMenu] = useState(null);
-  var [isSearchOpen, setSearchOpen] = useState(false);
 
   return (
     <AppBar elevation={0} position="static" className={classes.appBar}>
@@ -62,13 +58,31 @@ export default function Header(props) {
             color="primary"
             size="medium"
             disableElevation
-            startIcon={<DashboardIcon className={classes.buttonBoardIcon}/>}
+            startIcon={<DashboardIcon className={classes.buttonIcon}/>}
             className={classes.buttonBoard}
             aria-controls="board-menu"
             onClick={e => setBoardMenu(e.currentTarget)}
         >
           Boards
         </Button>
+                <Button
+            variant="contained"
+            color="primary"
+            size="medium"
+            disableElevation
+            startIcon={<PeopleIcon className={classes.buttonIcon}/>}
+            className={classes.buttonTeam}
+            aria-controls="team-menu"
+            onClick={e => setTeamMenu(e.currentTarget)}
+        >
+          Teams
+        </Button>
+        <div className={classes.grow} >
+          <Avatar alt="Remy Sharp" src={logo} />
+          <Typography variant="h6" weight="medium" className={classes.logotype}>
+            Trello
+          </Typography>
+        </div>
         <IconButton
             aria-haspopup="true"
             color="inherit"
@@ -76,50 +90,7 @@ export default function Header(props) {
             aria-controls="add-menu"
             onClick={e => setAddMenu(e.currentTarget)}
         >
-          <Add classes={{ root: classes.headerMenuAddButtonIcon }} />
-        </IconButton>
-        <div className={classes.grow} >
-          <Avatar alt="Remy Sharp" src={logo} />
-          <Typography variant="h6" weight="medium" className={classes.logotype}>
-            Trello
-          </Typography>
-        </div>
-        <div
-          className={classNames(classes.search, {
-            [classes.searchFocused]: isSearchOpen,
-          })}
-        >
-          <div
-            className={classNames(classes.searchIcon, {
-              [classes.searchIconOpened]: isSearchOpen,
-            })}
-            onClick={() => setSearchOpen(!isSearchOpen)}
-          >
-            <SearchIcon classes={{ root: classes.headerIcon }} />
-          </div>
-          <InputBase
-            placeholder="Search…"
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-          />
-        </div>
-        <IconButton
-            color="inherit"
-            aria-haspopup="true"
-            aria-controls="mail-menu"
-            onClick={e => {
-              setMailMenu(e.currentTarget);
-            }}
-            className={classes.headerMenuButton}
-        >
-          <Badge
-              badgeContent={ notifications.length }
-              color="warning"
-          >
-            <NotificationsIcon classes={{ root: classes.headerIcon }} />
-          </Badge>
+          <Add classes={classes.headerMenuAddButtonIcon } />
         </IconButton>
         <IconButton
           aria-haspopup="true"
@@ -131,8 +102,8 @@ export default function Header(props) {
           <Avatar alt="Remy Sharp">JS</Avatar>
         </IconButton>
         <MenuBoard classes={classes} boardMenu={boardMenu} setBoardMenu={setBoardMenu} />
+        <MenuTeam  classes={classes} teamMenu={teamMenu} setTeamMenu={setTeamMenu} />
         <MenuAddElement  classes={classes} addMenu={addMenu} setAddMenu={setAddMenu} />
-        <MenuNotification  classes={classes} notifications={notifications} mailMenu={mailMenu} setMailMenu={setMailMenu} />
         <MenuProfil classes={ classes} profileMenu={profileMenu} setProfileMenu={setProfileMenu} history={props.history}/>
       </Toolbar>
     </AppBar>

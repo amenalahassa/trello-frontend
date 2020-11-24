@@ -3,7 +3,7 @@ import React from "react";
 import {Menu} from '@material-ui/core'
 
 
-import {Dashboard as DashboardIcon, People as PeopleIcon, Person as AccountIcon} from "@material-ui/icons";
+import {Dashboard as DashboardIcon, People as PeopleIcon} from "@material-ui/icons";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -27,14 +27,14 @@ function MenuAddElement(props) {
             classes={{ paper: classes.profileMenu }}
             disableAutoFocusItem
         >
-            <List className={classes.root}>
+            <List >
                 <ListItem button>
                     <ListItemAvatar>
                         <Avatar>
                             <DashboardIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a board</Typography>} secondary="A board is made up of cards ordered on lists. Use it to manage projects, track information, or organize anything." />
+                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a board</Typography>} secondary={ <div> <Typography>A board is made up of cards ordered on lists. </Typography> <Typography>Use it to manage projects, track information, or organize anything.</Typography></div>} />
                 </ListItem>
                 <ListItem button>
                     <ListItemAvatar>
@@ -42,7 +42,7 @@ function MenuAddElement(props) {
                             <PeopleIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a Team</Typography>} secondary="A team is a group of boards and people. Use it to organize your company, side hustle, family, or friends." />
+                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a Team</Typography>} secondary={<div><Typography>A team is a group of boards and people.</Typography><Typography>Use it to organize your company, side hustle, family, or friends.</Typography></div>} />
                 </ListItem>
             </List>
         </Menu>

@@ -8,7 +8,7 @@ import classNames from "classnames";
 
 import Grid from "@material-ui/core/Grid";
 import useStyles from "./styles";
-import {Dashboard as DashboardIcon, MoreVert as MenuIcon} from "@material-ui/icons";
+import { MoreVert as MenuIcon} from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
 import SubBoardMenu from "../../components/SmallComponent/SubBoardMenu";
 import GroupAvatars from "../../components/TiniComponents/GroupAvatars";
