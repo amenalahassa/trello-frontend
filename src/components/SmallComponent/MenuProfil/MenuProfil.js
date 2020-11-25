@@ -12,7 +12,7 @@ import {useAxiosState} from "../../../context/AxiosContext";
 
 function MenuProfil(props) {
 
-    let { profileMenu, setProfileMenu, classes, history } = props
+    let {userEmail, userName, profileMenu, setProfileMenu, classes, history } = props
     var userDispatch = useUserDispatch();
     let axiosInstance = useAxiosState()
 
@@ -28,13 +28,13 @@ function MenuProfil(props) {
       >
           <div className={classes.profileMenuUser}>
               <Typography variant="h4" weight="medium">
-                  John Smith
+                  {userName}
               </Typography>
               <Typography
                   className={classes.profileMenuEmail}
                   color="primary"
               >
-                  exemple@gmail.com
+                  {userEmail}
               </Typography>
           </div>
           <MenuItem

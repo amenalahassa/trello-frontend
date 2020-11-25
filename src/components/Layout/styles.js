@@ -13,7 +13,8 @@ export default makeStyles(theme => ({
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     height:"100vh",
-    backgroundImage: `url(${image})`
+    backgroundImage: `url(${image})`,
+    backgroundColor: "rgb(27 19 19 / 65%)",
 },
   content: {
     flexGrow: 1,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   AppBar,
   Toolbar,
@@ -27,6 +27,9 @@ import MenuProfil from "../SmallComponent/MenuProfil";
 import MenuAddElement from "../SmallComponent/MenuAddElement";
 import MenuBoard from "../SmallComponent/MenuBoard";
 import MenuTeam from "../SmallComponent/MenuTeam/MenuTeam";
+import {useAxiosState} from "../../context/AxiosContext";
+import {log} from "../../Module/biblio";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 
 const notifications = [
@@ -51,34 +54,54 @@ export default function Header(props) {
   var [addMenu, setAddMenu] = useState(null);
   var [boardMenu, setBoardMenu] = useState(null);
   var [profileMenu, setProfileMenu] = useState(null);
+  var [isLoading, setLoading] = useState(true);
+  var [user, setUser] = useState({});
+  let http = useAxiosState()
+
+  useEffect(() => {
+    http.get('/api/user/info')
+        .then((response) => {
+         setTimeout(() => {
+           setUser(response.data.user)
+           log(response.data.user)
+           setLoading(false)
+         }, 1000)
+        })
+        .catch((err) => {
+          // Todo: Gerer le cas d'erreur au chargement
+          log(err)
+        })
+  }, [])
 
   return (
     <AppBar elevation={0} position="static" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
-        <Button
-            variant="contained"
-            color="primary"
-            size="medium"
-            disableElevation
-            startIcon={<DashboardIcon className={classes.buttonIcon}/>}
-            className={classes.buttonBoard}
-            aria-controls="board-menu"
-            onClick={e => setBoardMenu(e.currentTarget)}
-        >
-          Boards
-        </Button>
-                <Button
-            variant="contained"
-            color="primary"
-            size="medium"
-            disableElevation
-            startIcon={<PeopleIcon className={classes.buttonIcon}/>}
-            className={classes.buttonTeam}
-            aria-controls="team-menu"
-            onClick={e => setTeamMenu(e.currentTarget)}
-        >
-          Teams
-        </Button>
+          <Button
+              variant="contained"
+              color="primary"
+              size="medium"
+              disableElevation
+              disabled={isLoading}
+              startIcon={<DashboardIcon className={classes.buttonIcon}/>}
+              className={classes.buttonBoard}
+              aria-controls="board-menu"
+              onClick={e => setBoardMenu(e.currentTarget)}
+          >
+            Boards
+          </Button>
+          <Button
+              variant="contained"
+              color="primary"
+              size="medium"
+              disableElevation
+              disabled={isLoading}
+              startIcon={<PeopleIcon className={classes.buttonIcon}/>}
+              className={classes.buttonTeam}
+              aria-controls="team-menu"
+              onClick={e => setTeamMenu(e.currentTarget)}
+          >
+            Teams
+          </Button>
         <div className={classes.grow} >
           <Avatar alt="Remy Sharp" src={logo} />
           <Typography variant="h6" weight="medium" className={classes.logotype}>
@@ -90,23 +113,28 @@ export default function Header(props) {
             color="inherit"
             className={classes.headerMenuAddButton}
             aria-controls="add-menu"
+            disabled={isLoading}
             onClick={e => setAddMenu(e.currentTarget)}
         >
           <Add className={classes.headerMenuAddButtonIcon } />
         </IconButton>
-        <IconButton
-          aria-haspopup="true"
-          color="inherit"
-          className={classes.headerMenuButton}
-          aria-controls="profile-menu"
-          onClick={e => setProfileMenu(e.currentTarget)}
-        >
-          <Avatar alt="Remy Sharp">JS</Avatar>
-        </IconButton>
-        <MenuBoard classes={classes} boardMenu={boardMenu} setBoardMenu={setBoardMenu} />
-        <MenuTeam  classes={classes} teamMenu={teamMenu} setTeamMenu={setTeamMenu} />
+        {isLoading ?
+            <Skeleton variant="circle" className={classes.avatarSquelon}><Avatar></Avatar></Skeleton>
+            :
+            <IconButton
+                aria-haspopup="true"
+                color="inherit"
+                className={classes.headerMenuButton}
+                aria-controls="profile-menu"
+                onClick={e => setProfileMenu(e.currentTarget)}
+            >
+              <Avatar alt="Remy Sharp">JS</Avatar>
+            </IconButton>
+        }
+        <MenuBoard  boards = { user.boards } teams = {user.teams} classes={classes} boardMenu={boardMenu} setBoardMenu={setBoardMenu} />
+        <MenuTeam teams = {user.teams}  classes={classes} teamMenu={teamMenu} setTeamMenu={setTeamMenu} />
         <MenuAddElement  classes={classes} addMenu={addMenu} setAddMenu={setAddMenu} />
-        <MenuProfil classes={ classes} profileMenu={profileMenu} setProfileMenu={setProfileMenu} history={props.history}/>
+        <MenuProfil userEmail = {user.email} userName={user.name} classes={ classes} profileMenu={profileMenu} setProfileMenu={setProfileMenu} history={props.history}/>
       </Toolbar>
     </AppBar>
   );

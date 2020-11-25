@@ -7,20 +7,13 @@ export function sendTeam(http, data, callback, catchError, setLoading, setError)
         secteur: data.secteur,
     })
         .then((response) => {
-           if (data.members.length !== 0)
-           {
-                sendMembers(http,{
-                   team_id: response.data.team_id,
-                   memberrs: data.members.map(a => a.label),
-               },
-                    callback,
-                    "warning",
-                    "<p>The sending of members's email failed. </p><p>You can try again later.</p> <p>Check your connection please.</p>" )
-           }
-           else
-           {
-               callback(1000)
-           }
+            sendMembers(http,{
+               team_id: response.data.team_id,
+               members: data.members.map(a => a.label),
+            },
+            callback,
+            "warning",
+            "<p>The sending of members's email failed. </p><p>You can try again later.</p> <p>Check your connection please.</p>" )
         })
         .catch((err) => {
             catchError(err, setLoading, setError)

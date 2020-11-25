@@ -107,15 +107,8 @@ export default makeStyles(theme => ({
     marginLeft: theme.spacing(2),
     padding: theme.spacing(0.5),
   },
-  headerMenuButtonSandwich: {
-    marginLeft: 9,
-    [theme.breakpoints.down("sm")]: {
-      marginLeft: 0
-    },
-    padding: theme.spacing(0.5),
-  },
-  headerMenuButtonCollapse: {
-    marginRight: theme.spacing(2),
+  avatarSquelon: {
+    marginLeft: theme.spacing(2),
   },
   headerIcon: {
     fontSize: 28,
@@ -210,5 +203,23 @@ export default makeStyles(theme => ({
     '&:hover': {
       backgroundColor: "rgba(219, 112, 24, 0.35)",
     }
+  },
+  textDescTeam:{
+    fontSize:12,
+  },
+  card: {
+    maxWidth: 230,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+  },
+  media: {
+    height: 190,
+    maxWidth: 200,
+    marginLeft: theme.spacing(3),
+    marginRight: theme.spacing(1),
+  },
+  buttonAddBoard: {
+    marginTop: theme.spacing(2),
+
   }
 }));
