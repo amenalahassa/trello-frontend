@@ -11,6 +11,9 @@ import { UserProvider } from "./context/UserAuthContext";
 import { UserTeamProvider } from "./context/UserTeamContext";
 import { AxiosProvider } from "./context/AxiosContext";
 
+// Todo: Switch to prod at end
+// Todo : For Unsplash
+
 ReactDOM.render(
     <AxiosProvider>
         <LayoutProvider>

@@ -13,6 +13,9 @@ import Divider from "@material-ui/core/Divider";
 import SubBoardMenu from "../../components/SmallComponent/SubBoardMenu";
 import GroupAvatars from "../../components/TiniComponents/GroupAvatars";
 
+
+// Todo: Use an sidebar for show menu board
+
 export default function Dashboard(props) {
     var classes = useStyles();
     var [aboutMenu, setAboutMenu] = useState(null);

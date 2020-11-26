@@ -11,6 +11,7 @@ export function delete_cookie(name) {
     document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
+// Todo : change the notification component, use Snackbar
 export function showNotification (type = "info", message) {
     let title = ""
     if (type === "warning")

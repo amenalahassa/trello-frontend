@@ -21,6 +21,8 @@ import Dashboard from "../../pages/dashboard/Dashboard";
 
 import Header from "../Header/Header";
 
+// Todo : Back sidebar for responsive site
+
 function Layout(props) {
   var classes = useStyles();
 

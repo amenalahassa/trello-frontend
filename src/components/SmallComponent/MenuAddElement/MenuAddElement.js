@@ -15,7 +15,7 @@ import {Typography} from "../../Wrappers";
 
 function MenuAddElement(props) {
 
-    let { addMenu, setAddMenu, classes } = props
+    let { methode, addMenu, setAddMenu, classes } = props
 
     return (
         <Menu
@@ -28,25 +28,32 @@ function MenuAddElement(props) {
             disableAutoFocusItem
         >
             <List >
-                <ListItem button>
+                <ListItem button onClick={() => exec(methode.handleClickOpen)}>
                     <ListItemAvatar>
                         <Avatar>
                             <DashboardIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a board</Typography>} secondary={ <div> <Typography>A board is made up of cards ordered on lists. </Typography> <Typography>Use it to manage projects, track information, or organize anything.</Typography></div>} />
+                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a board</Typography>} secondary={ <span> <Typography variant="caption" display="block"  >A board is made up of cards ordered on lists. </Typography> <Typography variant="caption" display="block" >Use it to manage projects, track information, or organize anything.</Typography></span>} />
                 </ListItem>
-                <ListItem button>
+                <ListItem button >
                     <ListItemAvatar>
                         <Avatar>
                             <PeopleIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a Team</Typography>} secondary={<div><Typography>A team is a group of boards and people.</Typography><Typography>Use it to organize your company, side hustle, family, or friends.</Typography></div>} />
+                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a Team</Typography>} secondary={<span><Typography variant="caption" display="block" >A team is a group of boards and people.</Typography><Typography variant="caption" display="block" >Use it to organize your company, side hustle, family, or friends.</Typography></span>} />
                 </ListItem>
             </List>
         </Menu>
   );
+
+    function exec(methode)
+    {
+        setAddMenu(null)
+        methode()
+    }
 }
 
 export default MenuAddElement;
+

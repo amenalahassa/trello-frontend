@@ -19,6 +19,10 @@ import {toggleHasTeam, useUserTeamDispatch} from "../../context/UserTeamContext"
 import {log, showNotification} from "../../Module/biblio";
 
 
+// UI :
+// Todo : change the background, chose an image, and an undraw image for icon.
+// Todo: Use Backdrop component, for loading
+
 
 export default function CreateTeam(props) {
 
