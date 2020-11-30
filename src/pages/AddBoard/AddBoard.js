@@ -4,13 +4,20 @@ import React from "react";
 import useStyles from "./styles";
 import Modal from "../../components/Modal";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import ImageGridList from "./Components/Components";
-import {Typography} from "@material-ui/core";
+import {CircularProgress, Fade, Typography} from "@material-ui/core";
+import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext";
+import {toggleAddBoardModal, useModalDispatch} from "../../context/ModalContext";
+import {useAxiosState} from "../../context/AxiosContext";
+import {log, showNotification} from "../../Module/biblio";
+import MenuItem from "@material-ui/core/MenuItem";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Radio from "@material-ui/core/Radio";
 
 //Own components
 
@@ -20,14 +27,56 @@ import {Typography} from "@material-ui/core";
 
 function AddBoard(props) {
     let classes = useStyles();
-    let {boardsImages, handleClose} = props
+
+    let boardsImages = useDashboard().board_background
+
+    let modalDispatch = useModalDispatch()
+    let http = useAxiosState()
+    let setDatas = useDashboardDispatch()
+    let userData =  useDashboard().user
+    let teams = userData ? userData.teams : []
+
 
     const [error, setError] = React.useState({})
     const [name, setName] = React.useState("")
+    const [team, setTeam] = React.useState(1)
+    const [selectedImage, setSelectedImage] = React.useState("")
+    const [isLoading, setLoading] = React.useState(false)
+    const [ownerValue, setOwnerValue] = React.useState('')
+
+    const handleRadioChange = (event) => {
+        setOwnerValue(event.target.value);
+        setError({});
+    };
 
     const cancel = () => {
-        // Todo : Reset all input
-        handleClose()
+        reset()
+        toggleAddBoardModal(modalDispatch, false)
+    }
+
+    const reset = () => {
+        setName("")
+        setSelectedImage('')
+        setOwnerValue('')
+        setTeam(1)
+        setLoading(false)
+    }
+
+    function save() {
+        setLoading(true)
+        http.post('/api/save/board', {
+            name,
+            backgroundImage: selectedImage,
+            owner: ownerValue === "team" ? team : 0,
+        })
+            .then((response) => {
+                setDatas(response.data)
+                log(response.data)
+                cancel()
+            })
+            .catch((err) => {
+                catchError(err, setLoading, setError)
+            })
     }
 
     return (
@@ -54,21 +103,87 @@ function AddBoard(props) {
                           fullWidth
                           className={classes.textfielInput}
                       />
-                      <Typography > Choose your board background (optional) </Typography>
-                      <ImageGridList images = {boardsImages} />
+                      <div className={classes.inputSelect}>
+                          <Typography > Choose your the owner (requires) </Typography>
+                          <RadioGroup aria-label="board-owner" name="board-owner" value={ownerValue} onChange={handleRadioChange}>
+                              <FormControlLabel value="personal" control={<Radio />} label="Your personal board" />
+                              <FormControlLabel value="team" control={<Radio />} label="A team board" />
+                          </RadioGroup>
+                          {ownerValue !== "team" ? '' :
+                              <TextField
+                                  id="filled-select-sector"
+                                  error={!!error.owner}
+                                  InputProps={{
+                                      classes: {
+                                          underline: classes.textFieldUnderline,
+                                          input: classes.textField,
+                                      },
+                                  }}
+                                  margin="normal"
+                                  select
+                                  value={team}
+                                  onChange={(event => {setTeam(event.target.value); setError({})})}
+                                  helperText={!!error.owner ? "The provided value are incorrect" : "Required"}
+                                  fullWidth
+                                  required
+                                  className={classes.textfielInput}
+                              >
+                                  <MenuItem value=""  disabled>
+                                      Choose a team
+                                  </MenuItem>
+                                  {teams && teams.map((option) => (
+                                      <MenuItem key={option.id} value={option.id}>
+                                          {option.name}
+                                      </MenuItem>
+                                  ))}
+                              </TextField>
+                          }
+                      </div>
+                      <div>
+                          <Typography > Choose your board background (optional) </Typography>
+                          <ImageGridList images = {boardsImages} setSelectedImage={setSelectedImage} />
+                          <Typography hidden={!!error.backgroundImage} variant="caption" display="block">{!!error.backgroundImage ? error.backgroundImage : ""}</Typography>
+                      </div>
                   </DialogContent>
                   <DialogActions className={classes.button}>
-                      <Button autoFocus onClick={handleClose} color="primary" >
-                          Disagree
+                      <Button autoFocus onClick={() => cancel()} color="primary" >
+                          Cancel
                       </Button>
-                      <Button onClick={handleClose} color="primary" autoFocus variant="contained">
-                          Agree
-                      </Button>
+                      <div className={classes.saveButtonContainer}>
+                          {isLoading ? (
+                                  <Fade in={isLoading}>
+                                      <CircularProgress size={26} color="secondary"/>
+                                  </Fade>
+                              ) :
+                              <Fade in={!isLoading}>
+                                  <Button disabled={name.length === 0 || selectedImage.length === 0 || ownerValue.length === 0} onClick={() => save()} color="primary" autoFocus variant="contained">
+                                      Save
+                                  </Button>
+                              </Fade>
+                          }
+                      </div>
                   </DialogActions>
               </div>
           </Modal>
       </div>
   )
+    function catchError(error, setLoading, setError)
+    {
+        if (error.response) {
+            setError(error.response.data.errors)
+            setLoading(false)
+        } else if (error.request) {
+            cancel()
+            showNotification("danger","Check you connection and try again please." )
+            setLoading(false)
+        } else {
+            cancel()
+            log('Error', error.message);
+            showNotification("danger","Try to reload the page please. See more in console." )
+            setLoading(false)
+        }
+    }
+
 }
 
 export default  AddBoard;

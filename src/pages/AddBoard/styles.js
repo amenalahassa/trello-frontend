@@ -16,11 +16,21 @@ export default makeStyles(theme => ({
         borderBottomColor: theme.palette.background.light,
     },
     textfielInput : {
-        marginTop:0,
+        marginBottom:theme.spacing(2),
     },
     button:{
         marginTop:theme.spacing(2),
         marginBottom:theme.spacing(4),
         marginRight:theme.spacing(2),
     },
+    saveButtonContainer: {
+        display:"flex",
+        justifyContent: "center",
+        alignItems:"center",
+        width: 68,
+    },
+    inputSelect: {
+        marginBottom: theme.spacing(2),
+        marginTop: theme.spacing(2),
+    }
 }));

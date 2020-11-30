@@ -3,7 +3,7 @@ import {viewportSize} from "../../Module/biblio";
 
 let image = "https://source.unsplash.com/" + viewportSize().width + "x" + viewportSize().height + "/?africa,evening,smile,joy,world"
 
-export default makeStyles(theme => ({
+export default makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection:"column",
@@ -13,7 +13,7 @@ export default makeStyles(theme => ({
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     height:"100vh",
-    backgroundImage: `url(${image})`,
+    backgroundImage: props => props.backgroundImage,
     backgroundColor: "rgb(27 19 19 / 65%)",
 },
   content: {

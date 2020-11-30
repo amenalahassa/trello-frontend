@@ -35,7 +35,7 @@ function UserTeamProvider({ children }) {
 function useUserTeamState() {
     var context = React.useContext(UserTeamStateContext);
     if (context === undefined) {
-        throw new Error("useAxiosState must be used within a AxiosProvider");
+        throw new Error("useUserTeamState must be used within a UserTeamProvider");
     }
     return context;
 }
@@ -44,7 +44,7 @@ function useUserTeamState() {
 function useUserTeamDispatch() {
     var context = React.useContext(UserTeamDispatchContext);
     if (context === undefined) {
-        throw new Error("useUserDispatch must be used within a UserProvider");
+        throw new Error("useUserTeamDispatch must be used within a UserTeamProvider");
     }
     return context;
 }

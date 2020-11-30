@@ -7,14 +7,17 @@ import classNames from "classnames";
 import {Person as AccountIcon} from "@material-ui/icons";
 import {signOut, useUserDispatch} from "../../../context/UserAuthContext";
 import {useAxiosState} from "../../../context/AxiosContext";
+import {useDashboard} from "../../../context/DashboardContext";
 
 
 
 function MenuProfil(props) {
 
-    let {userEmail, userName, profileMenu, setProfileMenu, classes, history } = props
+    let { profileMenu, setProfileMenu, classes, history } = props
     var userDispatch = useUserDispatch();
     let axiosInstance = useAxiosState()
+    let user =  useDashboard().user
+
 
     return (
       <Menu
@@ -28,13 +31,13 @@ function MenuProfil(props) {
       >
           <div className={classes.profileMenuUser}>
               <Typography variant="h4" weight="medium">
-                  {userName}
+                  { user && user.name}
               </Typography>
               <Typography
                   className={classes.profileMenuEmail}
                   color="primary"
               >
-                  {userEmail}
+                  {user && user.email}
               </Typography>
           </div>
           <MenuItem

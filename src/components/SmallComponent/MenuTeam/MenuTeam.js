@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 import {Menu} from '@material-ui/core'
 
@@ -10,13 +10,24 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
+import {useDashboard} from "../../../context/DashboardContext";
+import {log} from "../../../Module/biblio";
 
 
 // Todo : Show the correct value of a category, not his key
 
 function MenuTeam(props) {
 
-    let {teams, teamMenu, setTeamMenu, classes } = props
+    let { teamMenu, setTeamMenu, classes } = props
+    let userData =  useDashboard().user
+    let  [teams, setTeams] = useState([])
+
+    useEffect(() => {
+       if (userData !== undefined)
+       {
+           setTeams(userData.teams)
+       }
+    }, [userData])
 
     return (
         <Menu
@@ -29,7 +40,7 @@ function MenuTeam(props) {
             classes={{ paper: classes.profileMenu }}
             disableAutoFocusItem
         >
-            {teams && teams.map((val, key) => {
+            {teams.map((val, key) => {
                return <TeamItem val={val} key={key} classes={classes} />
             })}
         </Menu>

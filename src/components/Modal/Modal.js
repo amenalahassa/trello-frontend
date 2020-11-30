@@ -16,7 +16,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 function Modal(props) {
   var classes = useStyles();
-  let {handleClose, open , children} = props
+  let { handleClose, open , children} = props
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 

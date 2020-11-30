@@ -10,12 +10,14 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Typography} from "../../Wrappers";
+import {toggleAddBoardModal, useModalDispatch} from "../../../context/ModalContext";
 
 
 
 function MenuAddElement(props) {
 
-    let { methode, addMenu, setAddMenu, classes } = props
+    let { addMenu, setAddMenu, classes } = props
+    let modalDispatch = useModalDispatch()
 
     return (
         <Menu
@@ -28,7 +30,7 @@ function MenuAddElement(props) {
             disableAutoFocusItem
         >
             <List >
-                <ListItem button onClick={() => exec(methode.handleClickOpen)}>
+                <ListItem button onClick={() => showModal()}>
                     <ListItemAvatar>
                         <Avatar>
                             <DashboardIcon />
@@ -48,10 +50,10 @@ function MenuAddElement(props) {
         </Menu>
   );
 
-    function exec(methode)
+    function showModal()
     {
         setAddMenu(null)
-        methode()
+        toggleAddBoardModal(modalDispatch, true)
     }
 }
 

@@ -6,10 +6,11 @@ import useStyles from './style'
 import ListSubheader from "@material-ui/core/ListSubheader";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 
+//Todo : Make open in another page, the image author link
 
 export default function ImageGridList(props) {
     const classes = useStyles();
-    let {images} = props
+    let {images, setSelectedImage} = props
     let [grid, setGrid] = useState([])
 
     useEffect(() => {
@@ -77,7 +78,17 @@ export default function ImageGridList(props) {
         grid.forEach((val) => {
             if (val.id === id)
             {
-                newGrid.push({...val, state: !val.state})
+                let currentState = !val.state
+                if (currentState === true)
+                {
+                    setSelectedImage(val.link)
+                }
+                else
+                {
+                    setSelectedImage('')
+                }
+                newGrid.push({...val, state: currentState})
+
             }
             else
             {

@@ -59,3 +59,15 @@ export function isOutdated(before, after)
     let time = after - before
     return time > (3600 * 3);
 }
+
+export function getFromLocalStorage(key)
+{
+    if(typeof localStorage!='undefined') {
+        return JSON.parse(localStorage.getItem(key))
+    }
+}
+
+export function setItemInLocalStorage(key, val)
+{
+   localStorage.setItem(key, JSON.stringify(val))
+}

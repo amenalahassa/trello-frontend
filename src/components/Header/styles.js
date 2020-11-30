@@ -93,6 +93,7 @@ export default makeStyles(theme => ({
   },
   headerMenu: {
     marginTop: theme.spacing(4.5),
+    height: 500,
   },
   headerMenuList: {
     display: "flex",
@@ -221,5 +222,8 @@ export default makeStyles(theme => ({
   buttonAddBoard: {
     marginTop: theme.spacing(2),
 
+  },
+  sousMenuSubHeader:{
+    backgroundColor : "#fff"
   }
 }));

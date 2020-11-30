@@ -27,11 +27,7 @@ import MenuProfil from "../SmallComponent/MenuProfil";
 import MenuAddElement from "../SmallComponent/MenuAddElement";
 import MenuBoard from "../SmallComponent/MenuBoard";
 import MenuTeam from "../SmallComponent/MenuTeam/MenuTeam";
-import {useAxiosState} from "../../context/AxiosContext";
-import {log} from "../../Module/biblio";
 import Skeleton from "@material-ui/lab/Skeleton";
-import Modal from "../Modal";
-import AddBoard from "../../pages/AddBoard";
 
 
 const notifications = [
@@ -48,47 +44,23 @@ const notifications = [
 
 
 export default function Header(props) {
-  var classes = useStyles();
-    let http = useAxiosState()
+    const classes = useStyles();
+
+    // local
+    const [teamMenu, setTeamMenu] = useState(null);
+    const [addMenu, setAddMenu] = useState(null);
+    const [boardMenu, setBoardMenu] = useState(null);
+    const [profileMenu, setProfileMenu] = useState(null);
 
 
-  // local
-  var [teamMenu, setTeamMenu] = useState(null);
-  var [addMenu, setAddMenu] = useState(null);
-  var [boardMenu, setBoardMenu] = useState(null);
-  var [profileMenu, setProfileMenu] = useState(null);
-  var [isLoading, setLoading] = useState(true);
-  var [user, setUser] = useState({});
-  var [images, setImages] = useState([]);
-    const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-  useEffect(() => {
-    http.get('/api/user/info')
-        .then((response) => {
-         setTimeout(() => {
-           setUser(response.data.user)
-             setImages(response.data.board_background)
-           setLoading(false)
-         }, 1000)
-        })
-        .catch((err) => {
-          // Todo: Gerer le cas d'erreur au chargement
-          log(err)
-        })
-  }, [])
+  const { isLoading, setBackgroundImage } = props
 
   return (
     <div>
-        <div><AppBar elevation={0} position="static" className={classes.appBar}>
-            <Toolbar className={classes.toolbar}>
+        <div>
+            <AppBar elevation={0} position="static" className={classes.appBar}>
+                <Toolbar className={classes.toolbar}>
                 <Button
                     variant="contained"
                     color="primary"
@@ -144,21 +116,18 @@ export default function Header(props) {
                         <Avatar alt="Remy Sharp">JS</Avatar>
                     </IconButton>
                 }
-                <MenuBoard  boards = { user.boards } teams = {user.teams} classes={classes} boardMenu={boardMenu} setBoardMenu={setBoardMenu} />
-                <MenuTeam teams = {user.teams}  classes={classes} teamMenu={teamMenu} setTeamMenu={setTeamMenu} />
+                <MenuBoard  setBackgroundImage={setBackgroundImage} classes={classes} boardMenu={boardMenu} setBoardMenu={setBoardMenu} />
+                <MenuTeam  classes={classes} teamMenu={teamMenu} setTeamMenu={setTeamMenu} />
                 <MenuAddElement
-                    classes={classes}
+                     classes={classes}
                      addMenu={addMenu}
                      setAddMenu={setAddMenu}
-                     methode={{handleClickOpen}}
-
                 />
-                <MenuProfil userEmail = {user.email} userName={user.name} classes={ classes} profileMenu={profileMenu} setProfileMenu={setProfileMenu} history={props.history}/>
+                <MenuProfil classes={ classes} profileMenu={profileMenu} setProfileMenu={setProfileMenu} history={props.history}/>
             </Toolbar>
-        </AppBar></div>
-        <div>
-            <AddBoard  boardsImages = {images} open={open} handleClose={handleClose}/>
+            </AppBar>
         </div>
+
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import {delete_cookie, isOutdated, log} from "../Module/biblio";
+import {delete_cookie, getFromLocalStorage, isOutdated, log} from "../Module/biblio";
 
 var UserStateContext = React.createContext();
 var UserDispatchContext = React.createContext();
@@ -27,7 +27,7 @@ function userReducer(state, action) {
 function UserProvider({ children }) {
 
     let now = Date.now()
-    let before = JSON.parse(localStorage.getItem('expire_date'))
+    let before = getFromLocalStorage('expire_date')
     let isAuth = isOutdated(before, now) === true ? false : !!localStorage.getItem("id_token")
     var [state, dispatch] = React.useReducer(userReducer, {
         isAuthenticated: isAuth,
