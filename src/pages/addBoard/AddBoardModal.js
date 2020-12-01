@@ -25,7 +25,7 @@ import Radio from "@material-ui/core/Radio";
 
 // Todo : Very the responsively of this component
 
-function AddBoard(props) {
+function AddBoardModal(props) {
     let classes = useStyles();
 
     let boardsImages = useDashboard().board_background
@@ -186,6 +186,6 @@ function AddBoard(props) {
 
 }
 
-export default  AddBoard;
+export default  AddBoardModal;
 
 

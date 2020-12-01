@@ -10,7 +10,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Typography} from "../../Wrappers";
-import {toggleAddBoardModal, useModalDispatch} from "../../../context/ModalContext";
+import {toggleAddBoardModal, toggleAddTeamModal, useModalDispatch} from "../../../context/ModalContext";
 
 
 
@@ -30,7 +30,7 @@ function MenuAddElement(props) {
             disableAutoFocusItem
         >
             <List >
-                <ListItem button onClick={() => showModal()}>
+                <ListItem button onClick={() => showAddBoardModal()}>
                     <ListItemAvatar>
                         <Avatar>
                             <DashboardIcon />
@@ -38,7 +38,7 @@ function MenuAddElement(props) {
                     </ListItemAvatar>
                     <ListItemText primary={<Typography variant="h6" weight="medium" >Add a board</Typography>} secondary={ <span> <Typography variant="caption" display="block"  >A board is made up of cards ordered on lists. </Typography> <Typography variant="caption" display="block" >Use it to manage projects, track information, or organize anything.</Typography></span>} />
                 </ListItem>
-                <ListItem button >
+                <ListItem button onClick={() => showAddTeamModal()} >
                     <ListItemAvatar>
                         <Avatar>
                             <PeopleIcon />
@@ -50,10 +50,16 @@ function MenuAddElement(props) {
         </Menu>
   );
 
-    function showModal()
+    function showAddBoardModal()
     {
         setAddMenu(null)
         toggleAddBoardModal(modalDispatch, true)
+    }
+
+    function showAddTeamModal()
+    {
+        setAddMenu(null)
+        toggleAddTeamModal(modalDispatch, true)
     }
 }
 

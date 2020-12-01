@@ -40,9 +40,11 @@ function MenuTeam(props) {
             classes={{ paper: classes.profileMenu }}
             disableAutoFocusItem
         >
-            {teams.map((val, key) => {
-               return <TeamItem val={val} key={key} classes={classes} />
-            })}
+           <div>
+               {teams.map((val, key) => {
+                   return <TeamItem val={val} key={key} classes={classes} />
+               })}
+           </div>
         </Menu>
   );
 }

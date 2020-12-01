@@ -22,7 +22,8 @@ import {log, showNotification, viewportSize} from "../../Module/biblio";
 import {useDashboardDispatch} from "../../context/DashboardContext";
 import {useModalState} from "../../context/ModalContext";
 import {useAxiosState} from "../../context/AxiosContext";
-import AddBoard from "../../pages/AddBoard";
+import AddTeamModal from "../../pages/addTeam/AddTeamModal";
+import AddBoardModal from "../../pages/addBoard/AddBoardModal";
 
 // Todo : Back sidebar for responsive site
 
@@ -64,7 +65,8 @@ function Layout(props) {
               </Switch>
             </div>
             <div>
-              <AddBoard  open={ modalState.addBoard } />
+              <AddBoardModal  open={ modalState.addBoard } />
+              <AddTeamModal  open={ modalState.addTeam } />
             </div>
         </>
     </div>

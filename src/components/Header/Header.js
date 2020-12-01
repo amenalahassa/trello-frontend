@@ -30,16 +30,6 @@ import MenuTeam from "../SmallComponent/MenuTeam/MenuTeam";
 import Skeleton from "@material-ui/lab/Skeleton";
 
 
-const notifications = [
-  {
-    id: 0,
-    variant: "warning",
-    name: "Jane Hew",
-    message: "Hey! How is it going?",
-    time: "9:32",
-  }
-];
-
 //Todo : Set a placeholder when the data is loading
 
 

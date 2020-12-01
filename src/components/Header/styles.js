@@ -120,7 +120,7 @@ export default makeStyles(theme => ({
   },
   profileMenu: {
     minWidth: 265,
-    boxShadow:"unset"
+    boxShadow: " 0 0 4px 0 black"
   },
   profileMenuUser: {
     display: "flex",

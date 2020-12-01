@@ -71,3 +71,23 @@ export function setItemInLocalStorage(key, val)
 {
    localStorage.setItem(key, JSON.stringify(val))
 }
+
+export function checkIfMemberEmailIsValide(values,members )
+{
+    let invalide = false
+    const emailExp = /^[^\s()<>@,;:\/]+@\w[\w\.-]+\.[a-z]{2,}$/i;
+    if (emailExp.test(values)) {
+        invalide = false
+        for (const chipDatum of members) {
+            if (chipDatum.label === values)
+            {
+                invalide = true
+                break
+            }
+        }
+    }
+    else {
+        invalide = true
+    }
+    return invalide
+}

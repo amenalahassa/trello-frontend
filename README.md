@@ -1,4 +1,4 @@
-# React Material Admin — Material-UI Dashboard AddBoard
+# React Material Admin — Material-UI Dashboard AddTeamModal
 
 Built with [React](https://facebook.github.io/react/), [Material-UI](https://material-ui.com), [React Router](https://reacttraining.com/react-router/).
 **No jQuery and Bootstrap!**
