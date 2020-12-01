@@ -54,7 +54,7 @@ export default function Header(props) {
 
 
 
-  const { isLoading, setBackgroundImage } = props
+  const { isLoading, setCurrentBoard } = props
 
   return (
     <div>
@@ -116,7 +116,7 @@ export default function Header(props) {
                         <Avatar alt="Remy Sharp">JS</Avatar>
                     </IconButton>
                 }
-                <MenuBoard  setBackgroundImage={setBackgroundImage} classes={classes} boardMenu={boardMenu} setBoardMenu={setBoardMenu} />
+                <MenuBoard setDashboardBoard={setCurrentBoard} classes={classes} boardMenu={boardMenu} setBoardMenu={setBoardMenu} />
                 <MenuTeam  classes={classes} teamMenu={teamMenu} setTeamMenu={setTeamMenu} />
                 <MenuAddElement
                      classes={classes}

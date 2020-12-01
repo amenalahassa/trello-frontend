@@ -12,19 +12,22 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import boardLogo from './board.svg'
-import {useDashboard} from "../../../context/DashboardContext";
+import boardLogo from '../../../images/board.svg'
+import {useDashboard, useDashboardDispatch} from "../../../context/DashboardContext";
 import {getFromLocalStorage, log, setItemInLocalStorage} from "../../../Module/biblio";
+import {toggleAddBoardModal, useModalDispatch} from "../../../context/ModalContext";
 
 
 function MenuBoard(props) {
 
-    let  { boardMenu, setBoardMenu, classes, setBackgroundImage } = props
-    let  showPlaceholder = false
-    let  userData =  useDashboard().user
+    let  { boardMenu, setBoardMenu, classes, setDashboardBoard } = props
+
+    let  [showPlaceholder, setPlaceholder] = useState(true)
     let  [boardTeams, setBoardTeams] = useState([])
     let  [boards, setBoards] = useState([])
     let  [currentBoard, setCurrentBoard] = useState(null)
+
+    let  userData =  useDashboard().user
 
 
     useEffect(() => {
@@ -36,15 +39,10 @@ function MenuBoard(props) {
 
             setBoardTeams(boardOfTeams)
             setBoards(mineBoard)
-            setBackgroundImage(currentBoard === null ? null : currentBoard.image )
+
             setCurrentBoard(currentBoard)
-
-            showPlaceholder = true
-
-            if (boards.length !== 0 && boardTeams.length !== 0)
-            {
-                showPlaceholder = false
-            }
+            setDashboardBoard(currentBoard)
+            setPlaceholder(mineBoard.length === 0 && boardOfTeams.length === 0);
 
         }
     }, [userData])
@@ -54,24 +52,20 @@ function MenuBoard(props) {
         if (type === 'personal')
         {
             next = {
-                id: current.id,
-                name: current.name,
-                image: current.image,
                 desc: "Personal board",
+                ...current
             }
         }
         else
         {
             next = {
-                id: current.id,
-                name: current.name,
-                image: current.image,
                 desc: current.team_name + " board",
+                ...current
             }
         }
         setItemInLocalStorage('currentBoard', next)
-        setBackgroundImage( next.image )
         setCurrentBoard(next)
+        setDashboardBoard(next)
         setBoardMenu(null)
     }
 
@@ -86,7 +80,7 @@ function MenuBoard(props) {
             disableAutoFocusItem
         >
             {showPlaceholder === true ?
-                <Placeholder classes={classes}/>
+                <div><Placeholder classes={classes} setBoardMenu={setBoardMenu}/></div>
                 :
                 <div>
                     {currentBoard !== null &&
@@ -145,7 +139,7 @@ function MenuBoard(props) {
                                     <ListItemIcon>
                                         <DashboardIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={val.name} />
+                                    <ListItemText primary={val.name} secondary={val.team_name + ' board'} />
                                 </ListItem>
                             )}
                         </List>
@@ -199,29 +193,40 @@ function MenuBoard(props) {
 
 export default MenuBoard;
 
-function Placeholder(props)
+function Placeholder({ classes, setBoardMenu })
 {
-    let { classes } = props
-    return  <div className={classes.card}>
-        <CardMedia
-            className={classes.media}
-            image={boardLogo}
-            title="Ted talk"
-        />
-        <CardContent>
-            <Typography variant="body2" color="textSecondary" component="p">
-                {
-                    "A board is made up of cards ordered on lists. Use it to manage projects, track information, or organize anything."
-                }
-            </Typography>
-            <Button variant="contained"
-                    color="primary"
-                    size="large"
-                    fullWidth
-                    className={classes.buttonAddBoard}
-            >Add a board</Button>
-        </CardContent>
-    </div>
+
+    let modalDispatch = useModalDispatch()
+
+    return  (
+        <div className={classes.card}>
+            <CardMedia
+                className={classes.media}
+                image={boardLogo}
+                title="Ted talk"
+            />
+            <CardContent>
+                <Typography variant="body2" color="textSecondary" component="p">
+                    {
+                        "A board is made up of cards ordered on lists. Use it to manage projects, track information, or organize anything."
+                    }
+                </Typography>
+                <Button variant="contained"
+                        color="primary"
+                        size="large"
+                        fullWidth
+                        className={classes.buttonAddBoard}
+                        onClick={() => showModal()}
+                >Add a board</Button>
+            </CardContent>
+        </div>
+    )
+
+    function showModal()
+    {
+        setBoardMenu(null)
+        toggleAddBoardModal(modalDispatch, true)
+    }
 
 }
 

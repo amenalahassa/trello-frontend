@@ -23,14 +23,14 @@ import {useDashboardDispatch} from "../../context/DashboardContext";
 import {useModalState} from "../../context/ModalContext";
 import {useAxiosState} from "../../context/AxiosContext";
 import AddBoard from "../../pages/AddBoard";
+
 // Todo : Back sidebar for responsive site
 
 function Layout(props) {
 
     const [isLoading, setLoading] = useState(true);
-    const [backgroundImage, setBackgroundImage] = useState(null)
-
-    const classes = useStyles( { backgroundImage : getResizeBackgroundImage(backgroundImage)});
+    let  [currentBoard, setCurrentBoard] = useState(null)
+    const classes = useStyles( { backgroundImage : getResizeBackgroundImage(currentBoard)});
 
 
   const modalState = useModalState()
@@ -55,12 +55,12 @@ function Layout(props) {
   return (
     <div className={classes.root}>
         <>
-            <Header history={props.history} isLoading={isLoading} setBackgroundImage={setBackgroundImage}  />
+            <Header history={props.history} isLoading={isLoading} setCurrentBoard={setCurrentBoard} />
             <div
               className={classnames(classes.content)}
             >
               <Switch>
-                <Route path="/app/dashboard" component={Dashboard}  />
+                <Route path="/app/dashboard"  render={() => <Dashboard isLoading={isLoading} currentBoard={currentBoard} />} />
               </Switch>
             </div>
             <div>
@@ -72,17 +72,13 @@ function Layout(props) {
 
   function getResizeBackgroundImage(link)
   {
-      let image = ''
-      if (link === null)
+      if (link !== null)
       {
-          image =  "https://source.unsplash.com/" + viewportSize().width + "x" + viewportSize().height + "/?africa,evening,smile,joy,world"
+          let image = link.image  + "&w=" + viewportSize().width + "&h=" + viewportSize().height +"&fm=jpg&fit=crop"
+          return `url(${image})`
       }
-      else
-      {
-          image = link  + "&w=" + viewportSize().width + "&h=" + viewportSize().height +"&fm=jpg&fit=crop"
-      }
+      let image = "https://source.unsplash.com/" + viewportSize().width + "x" + viewportSize().height + "/?africa,evening,smile,joy,world"
       return  `url(${image})`
-
   }
 }
 

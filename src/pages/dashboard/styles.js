@@ -1,6 +1,13 @@
 import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles(theme => ({
+  root:{
+    width: "100%",
+    height: "100%",
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
+  },
   gridBar:{
    flexGrow:0,
     backgroundColor:"transparent",
@@ -72,5 +79,37 @@ export default makeStyles(theme => ({
   secondary: {
     backgroundColor: theme.palette.secondary.main,
     color: '#fff',
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+  placeholderRoot:{
+    height: "100%",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: '#fff',
+
+  },
+  card: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+  },
+  media: {
+    height: 190,
+    marginRight: 45,
+  },
+  buttonAddBoard: {
+    marginTop: theme.spacing(2),
+
+  },
+  cardHeader:{
+    marginBottom: theme.spacing(4),
+  },
+  cardContent:{
+    marginTop: theme.spacing(4),
+    maxWidth: 400,
   }
 }));
