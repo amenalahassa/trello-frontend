@@ -58,7 +58,7 @@ function ShowInfo(props)
 {
     let { val } = props
     let categoryList = useDashboard().team_category
-    return <><Typography display="block" variant="caption" size="xm" >{getCategoryLabelByKey(categoryList, val.secteur)}</Typography><Typography variant="caption" display="block" size="xm">{val.user_count + " Members | " + val.boards_count + " Boards"}</Typography></>
+    return <><Typography display="block" variant="caption" size="xm" >{getCategoryLabelByKey(categoryList, val.secteur)}</Typography><Typography variant="caption" display="block" size="xm">{(val.user_count + val.invited_count) + " Members | " + val.boards_count + " Boards"}</Typography></>
 }
 
 function TeamItem({val})
