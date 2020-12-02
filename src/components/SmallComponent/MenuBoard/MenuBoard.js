@@ -38,18 +38,38 @@ function MenuBoard(props) {
             let boardOfTeams = getBoardOfTeams(userData.teams)
             let mineBoard = userData.boards
             let currentBoard = getCurrentBoard(mineBoard, boardOfTeams)
+            let toShowPlaceholder = mineBoard.length === 0 && boardOfTeams.length === 0
+
+            if (toShowPlaceholder === false && currentBoard === null)
+            {
+                let next
+                if ( mineBoard.length > 0) next = createCurrentBoard(mineBoard[0], "personal")
+                else  next = createCurrentBoard(mineBoard[0], "team")
+                setItemInLocalStorage('currentBoard', next)
+                setCurrentBoard(next)
+                setDashboardBoard(next)
+            }
+            else {
+                setCurrentBoard(currentBoard)
+                setDashboardBoard(currentBoard)
+            }
 
             setBoardTeams(boardOfTeams)
             setBoards(mineBoard)
-
-            setCurrentBoard(currentBoard)
-            setDashboardBoard(currentBoard)
-            setPlaceholder(mineBoard.length === 0 && boardOfTeams.length === 0);
+            setPlaceholder(toShowPlaceholder);
 
         }
     }, [userData])
 
     const changeCurrentBoard = (current, type) => {
+        let next = createCurrentBoard(current, type)
+        setItemInLocalStorage('currentBoard', next)
+        setCurrentBoard(next)
+        setDashboardBoard(next)
+        setBoardMenu(null)
+    }
+
+    const createCurrentBoard = (current, type) => {
         let next
         if (type === 'personal')
         {
@@ -65,10 +85,7 @@ function MenuBoard(props) {
                 ...current
             }
         }
-        setItemInLocalStorage('currentBoard', next)
-        setCurrentBoard(next)
-        setDashboardBoard(next)
-        setBoardMenu(null)
+        return next
     }
 
     return (

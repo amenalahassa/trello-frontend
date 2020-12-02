@@ -26,7 +26,7 @@ import AddTeamModal from "../../pages/addTeam/AddTeamModal";
 import AddBoardModal from "../../pages/addBoard/AddBoardModal";
 import {DisplayNotification} from "../TiniComponents/Notifications";
 import Modal from "../Modal";
-import {useNotification} from "../../context/GlobalContext";
+import {useIsMountedRef, useNotification} from "../../context/GlobalContext";
 
 // Todo : Back sidebar for responsive site
 
@@ -39,16 +39,20 @@ function Layout(props) {
     const classes = useStyles( { backgroundImage : getResizeBackgroundImage(currentBoard)});
 
 
-  const modalState = useModalState()
-  const setDatas = useDashboardDispatch()
-  const http = useAxiosState()
+    const modalState = useModalState()
+    const setDatas = useDashboardDispatch()
+    const http = useAxiosState()
+    const isMountedRef = useIsMountedRef();
 
 
   useEffect(() => {
     http.get('/api/dashboard/info')
         .then((response) => {
-            setDatas(response.data)
-            setLoading(false)
+            if (isMountedRef.current)
+            {
+                setDatas(response.data)
+                setLoading(false)
+            }
         })
         .catch((error) => {
             log('Error', error.message);

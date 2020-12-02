@@ -39,7 +39,7 @@ function AddBoardModal(props) {
 
     const [error, setError] = React.useState({})
     const [name, setName] = React.useState("")
-    const [team, setTeam] = React.useState(1)
+    const [team, setTeam] = React.useState("")
     const [selectedImage, setSelectedImage] = React.useState("")
     const [isLoading, setLoading] = React.useState(false)
     const [ownerValue, setOwnerValue] = React.useState('')
@@ -71,7 +71,6 @@ function AddBoardModal(props) {
         })
             .then((response) => {
                 setDatas(response.data)
-                log(response.data)
                 cancel()
             })
             .catch((err) => {

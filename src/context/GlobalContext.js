@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 
 function useNotification()
 {
@@ -24,4 +24,13 @@ function useNotification()
     return [ notification, displayNotification, resetNotification ]
 }
 
-export { useNotification };
+
+function useIsMountedRef(){
+    const isMountedRef = useRef(null);
+    useEffect(() => {
+        isMountedRef.current = true;
+        return () => isMountedRef.current = false;
+    });
+    return isMountedRef;
+}
+export { useNotification, useIsMountedRef };
