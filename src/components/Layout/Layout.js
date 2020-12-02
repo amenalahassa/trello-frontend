@@ -24,6 +24,9 @@ import {useModalState} from "../../context/ModalContext";
 import {useAxiosState} from "../../context/AxiosContext";
 import AddTeamModal from "../../pages/addTeam/AddTeamModal";
 import AddBoardModal from "../../pages/addBoard/AddBoardModal";
+import {DisplayNotification} from "../TiniComponents/Notifications";
+import Modal from "../Modal";
+import {useNotification} from "../../context/GlobalContext";
 
 // Todo : Back sidebar for responsive site
 
@@ -31,6 +34,8 @@ function Layout(props) {
 
     const [isLoading, setLoading] = useState(true);
     let  [currentBoard, setCurrentBoard] = useState(null)
+    const [ notification, displayNotification, resetNotification ] = useNotification()
+
     const classes = useStyles( { backgroundImage : getResizeBackgroundImage(currentBoard)});
 
 
@@ -42,20 +47,19 @@ function Layout(props) {
   useEffect(() => {
     http.get('/api/dashboard/info')
         .then((response) => {
-          setTimeout(() => {
             setDatas(response.data)
             setLoading(false)
-          }, 1000)
         })
         .catch((error) => {
             log('Error', error.message);
-            showNotification("danger","Check you connection and reload the page please." )
+            displayNotification("Check you connection and reload the page please.")
         })
   }, [])
 
   return (
     <div className={classes.root}>
         <>
+            <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
             <Header history={props.history} isLoading={isLoading} setCurrentBoard={setCurrentBoard} />
             <div
               className={classnames(classes.content)}

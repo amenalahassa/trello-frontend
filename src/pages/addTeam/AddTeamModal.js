@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "../../components/Modal";
-import {Button, CircularProgress, Fade, Grid, Typography} from "@material-ui/core";
+import {Button, CircularProgress, Fade, Typography} from "@material-ui/core";
 
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -13,7 +13,6 @@ import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
 import {useNotification} from "../../context/GlobalContext";
 import {sendTeam} from "../../Module/http";
-import {log} from "../../Module/biblio";
 
 
 
