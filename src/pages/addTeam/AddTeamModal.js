@@ -9,7 +9,7 @@ import useStyles from "../addTeam/styles";
 import AddTeam from "../../components/SmallComponent/AddTeam";
 import DialogContent from "@material-ui/core/DialogContent";
 import {useAxiosState} from "../../context/AxiosContext";
-import {useDashboard} from "../../context/DashboardContext";
+import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext";
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
 import {useNotification} from "../../context/GlobalContext";
 import {sendTeam} from "../../Module/http";
@@ -23,6 +23,7 @@ function AddTeamModal(props) {
     let classes = useStyles();
 
     let modalDispatch = useModalDispatch()
+    let setDatas = useDashboardDispatch()
     const http = useAxiosState()
     let categoryList = useDashboard().team_category
 
@@ -52,9 +53,9 @@ function AddTeamModal(props) {
         }, next, displayNotification, setLoading, setError)
     }
 
-    const next = () => {
+    const next = (response) => {
+        setDatas(response)
         cancel()
-        console.log('good')
     }
 
     return (

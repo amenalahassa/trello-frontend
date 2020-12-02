@@ -15,7 +15,7 @@ export function sendTeam(url, http, data, callback, displayNotification, setLoad
             sendMembers(http,{
                 team_id: response.data.team_id,
                 members: data.members.map(a => a.label),
-            },callback, displayNotification )
+            },callback, displayNotification, setLoading, setError, )
 
         })
         .catch((err) => {
@@ -23,16 +23,14 @@ export function sendTeam(url, http, data, callback, displayNotification, setLoad
         })
 }
 
-export function sendMembers(http, datas, callback, displayNotification)
+export function sendMembers(http, datas, callback, displayNotification, setLoading, setError,)
 {
     http.post( link + '/member', datas)
-        .then(() => {
-            callback()
+        .then((response) => {
+            callback(response.data)
         })
         .catch((err) => {
-            // Todo change the callback function, the sending member's mail can only failed because of bad datas
-            displayNotification('The sending of members\'s email failed. Check your connection please.')
-            // callback()
+            catchError(err, setLoading, setError, displayNotification)
         })
 }
 

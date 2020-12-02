@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 
-import {Button} from '@material-ui/core'
+import {Button, Typography} from '@material-ui/core'
 
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -116,6 +116,7 @@ function AddTeam(props) {
                         </Button>
                     </div>
                     {members.length !== 0 && <TeamMemberList members = {members} handleDeleteChip = {handleDeleteChip} />}
+                    <Typography hidden={!!props.error.members} variant="caption" color="secondary" display="block">{!!props.error.members ? props.error.members : ""}</Typography>
                 </div>
             </div>
         </form>

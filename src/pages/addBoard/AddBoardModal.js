@@ -142,7 +142,7 @@ function AddBoardModal(props) {
                       <div>
                           <Typography > Choose your board background (optional) </Typography>
                           <ImageGridList images = {boardsImages} setSelectedImage={setSelectedImage} />
-                          <Typography hidden={!!error.backgroundImage} variant="caption" display="block">{!!error.backgroundImage ? error.backgroundImage : ""}</Typography>
+                          <Typography hidden={!!error.backgroundImage} variant="caption" color="secondary" display="block">{!!error.backgroundImage ? error.backgroundImage : ""}</Typography>
                       </div>
                   </DialogContent>
                   <DialogActions className={classes.button}>
