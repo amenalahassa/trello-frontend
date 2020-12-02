@@ -12,6 +12,13 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import {useDashboard} from "../../../context/DashboardContext";
 import {getCategoryLabelByKey, log} from "../../../Module/biblio";
+import UpdateTeamModal from "../../../pages/UpdateTeam/UpdateTeamModal";
+import {toggleAddTeamModal, useModalDispatch, useModalState} from "../../../context/ModalContext";
+import {useNotification} from "../../../context/GlobalContext";
+import {DisplayNotification} from "../../TiniComponents/Notifications";
+import Modal from "../../Modal";
+import {useAxiosState} from "../../../context/AxiosContext";
+import {URLS} from "../../../Module/http";
 
 
 // Todo : Show the correct value of a category, not his key
@@ -19,10 +26,16 @@ import {getCategoryLabelByKey, log} from "../../../Module/biblio";
 function MenuTeam(props) {
 
     let { teamMenu, setTeamMenu, classes } = props
+    const http = useAxiosState()
 
-    let  [teams, setTeams] = useState([])
+    const  [teams, setTeams] = useState([])
+    const  [current, setCurrent] = useState(null)
+    const [ notification, displayNotification, resetNotification ] = useNotification()
 
     let userData =  useDashboard().user
+    let modalState = useModalState()
+    let modalDispatch = useModalDispatch()
+
 
     useEffect(() => {
        if (userData !== undefined)
@@ -30,6 +43,21 @@ function MenuTeam(props) {
            setTeams(userData.teams)
        }
     }, [userData])
+
+    const showTeam = (id) =>
+    {
+        http.post( URLS.updateTeam, {
+            id,
+        })
+            .then((response) => {
+                setCurrent(response.data)
+                console.log(response.data)
+                showAddTeamModal()
+            })
+            .catch((error) => {
+                displayNotification(error.message)
+            })
+    }
 
     return (
         <Menu
@@ -43,12 +71,24 @@ function MenuTeam(props) {
             disableAutoFocusItem
         >
            <div>
-               {teams.map((val, key) => {
-                   return <TeamItem val={val} key={key} />
-               })}
+               <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
+               <div>
+                   {teams.map((val, key) => {
+                       return <TeamItem val={val} key={key} show={showTeam}  />
+                   })}
+               </div>
+               <div>
+                   <UpdateTeamModal open={ modalState.updateTeam } current={current} />
+               </div>
            </div>
         </Menu>
   );
+
+    function showAddTeamModal()
+    {
+        setTeamMenu(null)
+        toggleAddTeamModal(modalDispatch, true)
+    }
 }
 
 export default MenuTeam;
@@ -61,9 +101,9 @@ function ShowInfo(props)
     return <><Typography display="block" variant="caption" size="xm" >{getCategoryLabelByKey(categoryList, val.secteur)}</Typography><Typography variant="caption" display="block" size="xm">{(val.user_count + val.invited_count) + " Members | " + val.boards_count + " Boards"}</Typography></>
 }
 
-function TeamItem({val})
+function TeamItem({val, show})
 {
-    return <ListItem button>
+    return <ListItem button onClick={() => show(val.id)} >
         <ListItemAvatar>
             <Avatar>
                 <GroupWorkIcon />

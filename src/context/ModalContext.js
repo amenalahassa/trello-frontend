@@ -6,12 +6,14 @@ var ModalDispatchContext = React.createContext();
 
 function ModalReducer(state, action) {
     switch (action.type) {
+        case "UPDATE_TEAM":
+            return { ...state, updateTeam : action.open };
         case "ADD_BOARD":
             return { ...state, addBoard : action.open };
         case "ADD_TEAM":
             return { ...state, addTeam : action.open };
         case "CLOSE_ALL":
-            return { addBoard: false , addTeam: false};
+            return { addBoard: false , addTeam: false, updateTeam: false};
         default: {
             throw new Error(`Unhandled action type: ${action.type}`);
         }
@@ -23,6 +25,7 @@ function ModalProvider({ children }) {
     var [state, dispatch] = React.useReducer(ModalReducer, {
         addBoard : false ,
         addTeam: false,
+        updateTeam: false,
     });
 
     return (
@@ -53,7 +56,7 @@ function useModalDispatch() {
 }
 
 
-export { useModalDispatch, useModalState, ModalProvider, toggleAddBoardModal, toggleAddTeamModal};
+export { useModalDispatch, useModalState, ModalProvider, toggleAddBoardModal, toggleAddTeamModal, toggleUpdateTeamModal};
 
 function toggleAddBoardModal(dispatch, open) {
      dispatch({
@@ -63,5 +66,11 @@ function toggleAddBoardModal(dispatch, open) {
 function toggleAddTeamModal(dispatch, open) {
     dispatch({
         type: "ADD_TEAM", open
+    })
+}
+
+function toggleUpdateTeamModal(dispatch, open) {
+    dispatch({
+        type: "UPDATE_TEAM", open
     })
 }

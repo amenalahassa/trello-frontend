@@ -3,6 +3,8 @@ import {log} from "./biblio";
 const api = '/api'
 let link = null
 
+// Todo for debug, show the defaul error.message in a notif for user
+
 export function sendTeam(url, http, data, callback, displayNotification, setLoading, setError)
 {
     link = api + url
@@ -48,4 +50,9 @@ function catchError(error, setLoading, setError, displayNotification)
         displayNotification("Try to reload the page please. See more in console.")
         setLoading(false)
     }
+}
+
+// Todo populate this constante where you make a request
+export const URLS = {
+    updateTeam :  api + '/dashboard/team/about',
 }
