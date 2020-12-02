@@ -96,3 +96,16 @@ export function deleteMember(chipToDelete)
 {
     return ((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
 };
+
+export function getCategoryLabelByKey(list, key)
+{
+    let label = null
+    for (const listElement of list) {
+        if (listElement.key === key)
+        {
+            label = listElement.label
+            break
+        }
+    }
+    return label
+}

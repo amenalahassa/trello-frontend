@@ -11,7 +11,7 @@ import Avatar from "@material-ui/core/Avatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import {useDashboard} from "../../../context/DashboardContext";
-import {log} from "../../../Module/biblio";
+import {getCategoryLabelByKey, log} from "../../../Module/biblio";
 
 
 // Todo : Show the correct value of a category, not his key
@@ -19,8 +19,10 @@ import {log} from "../../../Module/biblio";
 function MenuTeam(props) {
 
     let { teamMenu, setTeamMenu, classes } = props
-    let userData =  useDashboard().user
+
     let  [teams, setTeams] = useState([])
+
+    let userData =  useDashboard().user
 
     useEffect(() => {
        if (userData !== undefined)
@@ -42,7 +44,7 @@ function MenuTeam(props) {
         >
            <div>
                {teams.map((val, key) => {
-                   return <TeamItem val={val} key={key} classes={classes} />
+                   return <TeamItem val={val} key={key} />
                })}
            </div>
         </Menu>
@@ -52,12 +54,14 @@ function MenuTeam(props) {
 export default MenuTeam;
 
 
-function showInfo(classes, secteur, people, board)
+function ShowInfo(props)
 {
-    return <div><Typography size="sm" >{secteur}</Typography><Typography size="sm">{people + " Members | " + board + " Boards"}</Typography></div>
+    let { val } = props
+    let categoryList = useDashboard().team_category
+    return <><Typography display="block" variant="caption" size="xm" >{getCategoryLabelByKey(categoryList, val.secteur)}</Typography><Typography variant="caption" display="block" size="xm">{val.user_count + " Members | " + val.boards_count + " Boards"}</Typography></>
 }
 
-function TeamItem({val, classes})
+function TeamItem({val})
 {
     return <ListItem button>
         <ListItemAvatar>
@@ -66,13 +70,9 @@ function TeamItem({val, classes})
             </Avatar>
         </ListItemAvatar>
         <ListItemText
-            primary={val.name}
-            secondary={showInfo(classes.textDescTeam, val.secteur,val.user_count, val.boards_count)}
+            primary={<Typography variant="h6">{val.name}</Typography>}
+            secondary={<ShowInfo  val={val}/>}
         />
-        <ListItemSecondaryAction>
-            <IconButton edge="end" aria-label="delete">
-                <DeleteIcon />
-            </IconButton>
-        </ListItemSecondaryAction>
     </ListItem>
 }
+

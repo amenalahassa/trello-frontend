@@ -149,6 +149,9 @@ function getFontSize(size, variant = "", theme) {
     case "sm":
       multiplier = 0.8;
       break;
+    case "xm":
+      multiplier = 1;
+      break;
     case "md":
       multiplier = 1.5;
       break;
