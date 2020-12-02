@@ -64,7 +64,7 @@ function AddBoardModal(props) {
 
     function save() {
         setLoading(true)
-        http.post('/api/save/board', {
+        http.post('/api/dashboard/save/board', {
             name,
             backgroundImage: selectedImage,
             owner: ownerValue === "team" ? team : 0,
@@ -75,7 +75,7 @@ function AddBoardModal(props) {
                 cancel()
             })
             .catch((err) => {
-                catchError(err, setLoading, setError)
+                catchError(err)
             })
     }
 
@@ -167,7 +167,7 @@ function AddBoardModal(props) {
           </Modal>
       </div>
   )
-    function catchError(error, setLoading, setError)
+    function catchError(error)
     {
         if (error.response) {
             setError(error.response.data.errors)

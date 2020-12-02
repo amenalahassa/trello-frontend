@@ -18,6 +18,8 @@ import {getFromLocalStorage, log, setItemInLocalStorage} from "../../../Module/b
 import {toggleAddBoardModal, useModalDispatch} from "../../../context/ModalContext";
 
 
+// Todo set on start up, the current default board to the first
+
 function MenuBoard(props) {
 
     let  { boardMenu, setBoardMenu, classes, setDashboardBoard } = props

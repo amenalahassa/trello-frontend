@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "../../components/Modal";
-import {Button, CircularProgress, Fade, Typography} from "@material-ui/core";
+import {Button, CircularProgress, Fade, Grid, Typography} from "@material-ui/core";
 
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -10,6 +10,10 @@ import AddTeam from "../../components/SmallComponent/AddTeam";
 import DialogContent from "@material-ui/core/DialogContent";
 import {useAxiosState} from "../../context/AxiosContext";
 import {useDashboard} from "../../context/DashboardContext";
+import {DisplayNotification} from "../../components/TiniComponents/Notifications";
+import {useNotification} from "../../context/GlobalContext";
+import {sendTeam} from "../../Module/http";
+import {log} from "../../Module/biblio";
 
 
 
@@ -28,19 +32,36 @@ function AddTeamModal(props) {
     const [error, setError] = React.useState({})
     const [category, setCategory] = React.useState("")
     const [email, setEmail] = React.useState("")
+    const [ notification, displayNotification, resetNotification ] = useNotification()
 
 
     const cancel = () => {
+        setEmail("")
+        setName("")
+        setMember([])
+        setLoading(false)
         toggleAddTeamModal(modalDispatch, false)
     }
-    const next = (time) => {
+
+    const save = () => {
+        setLoading(true)
+        sendTeam('/dashboard/save', http, {
+            name,
+            secteur : category,
+            members,
+        }, next, displayNotification, setLoading, setError)
+    }
+
+    const next = () => {
+        cancel()
         console.log('good')
     }
 
     return (
         <div>
             <Modal {...props}>
-               <div>
+                <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
+                <div>
                    <DialogTitle disableTypography id="responsive-dialog-title">{<Typography  variant="h4">Add a Team</Typography>}</DialogTitle>
                    <DialogContent>
                     <AddTeam
@@ -64,7 +85,7 @@ function AddTeamModal(props) {
                                    </Fade>
                                ) :
                                <Fade in={!isLoading}>
-                                   <Button   color="primary" autoFocus variant="contained">
+                                   <Button onClick={() => save()}  color="primary" autoFocus variant="contained">
                                        Save
                                    </Button>
                                </Fade>

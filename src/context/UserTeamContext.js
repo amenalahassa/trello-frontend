@@ -1,4 +1,5 @@
 import React from "react";
+import {getFromLocalStorage} from "../Module/biblio";
 
 var UserTeamStateContext = React.createContext();
 var UserTeamDispatchContext = React.createContext();
@@ -19,7 +20,7 @@ function userTeamReducer(state, action) {
 
 function UserTeamProvider({ children }) {
     var [state, dispatch] = React.useReducer(userTeamReducer, {
-        ifHasTeam : null ,
+        ifHasTeam : getFromLocalStorage('ifHasTeam') ,
     });
 
     return (

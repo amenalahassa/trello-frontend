@@ -62,6 +62,8 @@ export { UserProvider, useUserState, useUserDispatch, loginUser, signOut , regis
 
 // ###########################################################
 
+// Todo Reduce number of parameters of each function
+
 function loginUser(axios, dispatchAuth, dispatchHasTeam , email, password, history, setIsLoading, setError, setErrorMsg) {
   setError(false);
   setIsLoading(true);
@@ -104,6 +106,7 @@ function login (http, email, password,  dispatchAuth, dispatchHasTeam , history,
                     setIsLoading(false)
                     localStorage.setItem('id_token', response.data.token)
                     localStorage.setItem('expire_date', JSON.stringify(Date.now()))
+                    localStorage.setItem('ifHasTeam',  response.data.ifHasTeam)
                     toogleHasTeamDispatch(dispatchHasTeam, response.data.ifHasTeam)
                     dispatchAuth({ type: 'LOGIN_SUCCESS' })
                     history.push('/app/dashboard')
@@ -130,6 +133,7 @@ function register (http, name, email, password, password_confirmation, dispatchA
                     setIsLoading(false)
                     localStorage.setItem('id_token', response.data.token)
                     localStorage.setItem('expire_date', JSON.stringify(Date.now()))
+                    localStorage.setItem('ifHasTeam',  response.data.ifHasTeam)
                     toogleHasTeamDispatch(dispatchHasTeam, response.data.ifHasTeam)
                     dispatchAuth({ type: 'REGISTER_SUCCESS' })
                     history.push('/app/dashboard')
@@ -149,6 +153,7 @@ function logout(http, dispatch, history)
       .then(function (){
           localStorage.removeItem("id_token")
           localStorage.removeItem('expire_date')
+          localStorage.removeItem('ifHasTeam')
           delete_cookie('XSRF-TOKEN')
           dispatch({ type: "SIGN_OUT_SUCCESS" });
           history.push("/login");

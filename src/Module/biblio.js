@@ -91,3 +91,8 @@ export function checkIfMemberEmailIsValide(values,members )
     }
     return invalide
 }
+
+export function deleteMember(chipToDelete)
+{
+    return ((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+};

@@ -6,7 +6,6 @@ import useStyles from './style'
 import ListSubheader from "@material-ui/core/ListSubheader";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 
-//Todo : Make open in another page, the image author link
 
 export default function ImageGridList(props) {
     const classes = useStyles();
@@ -52,6 +51,7 @@ export default function ImageGridList(props) {
                         <GridListTileBar
                             className={classes.titleBar}
                             subtitle={<span>by: <a className={classes.titleLink}
+                                                   target="_blank"
                                                    href={tile.authorLink + "?utm_source=trello&utm_medium=referral"}>{tile.authorName}</a></span>}
                         />
                     </GridListTile>

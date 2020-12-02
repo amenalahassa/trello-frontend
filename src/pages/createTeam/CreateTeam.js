@@ -6,23 +6,19 @@ import useStyles from "./styles";
 
 // logo
 import logo from "../../images/logo.png";
-import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
-import TeamMemberList from "../../components/SmallComponent/TeamMemberList";
 
-
-import {deleteMember, sendTeam} from "./Modules";
 import {useAxiosState} from "../../context/AxiosContext";
-
 import "../../Module/notify"
 import {toggleHasTeam, useUserTeamDispatch} from "../../context/UserTeamContext";
-import {checkIfMemberEmailIsValide, log, showNotification} from "../../Module/biblio";
+import {log} from "../../Module/biblio";
 import AddTeam from "../../components/SmallComponent/AddTeam";
+import {DisplayNotification} from "../../components/TiniComponents/Notifications";
+import {useNotification} from "../../context/GlobalContext";
+import {sendTeam} from "../../Module/http";
 
 
 // UI :
 // Todo : change the background, chose an image, and an undraw image for icon.
-//        Todo : just get the category constant to client, in use map to display it
 
 
 export default function CreateTeam(props) {
@@ -36,7 +32,7 @@ export default function CreateTeam(props) {
   const [error, setError] = React.useState({})
   const [email, setEmail] = React.useState("")
   const [isLoading, setLoading ] = React.useState(false)
-
+  const [ notification, displayNotification, resetNotification ] = useNotification()
   const http = useAxiosState()
   const userTeamDispatch = useUserTeamDispatch()
 
@@ -47,32 +43,32 @@ export default function CreateTeam(props) {
           setCategoryList(response.data)
         })
         .catch(() => {
-          showNotification("danger","Check your connection and reload please." )
+          displayNotification("danger","Check your connection and reload please." )
         })
   }, [])
 
   const save = () => {
     setLoading(true)
-    sendTeam(http, {
+    sendTeam('/save', http, {
       name,
       secteur : category,
       members,
-    }, next, catchError, setLoading, setError)
+    }, next, displayNotification, setLoading, setError)
   }
 
-  const next = (time) => {
-    setTimeout(() => {
-      setEmail("")
-      setName("")
-      setMember([])
-      setLoading(false)
-      toggleHasTeam(userTeamDispatch)
-      props.history.push('/')
-    }, time)
+  const next = () => {
+    setEmail("")
+    setName("")
+    setMember([])
+    setLoading(false)
+    toggleHasTeam(userTeamDispatch)
+    props.history.push('/')
   }
+
 
   return (
     <Grid container className={classes.container}>
+      <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
       <Paper className={classes.root} elevation={3}>
         <div className={classes.logotype}>
           <img className={classes.logotypeIcon} src={logo} alt="logo" />
@@ -116,21 +112,9 @@ export default function CreateTeam(props) {
       </Paper>
     </Grid>
   );
+
 }
 
-function catchError(error, setLoading, setError)
-{
-  if (error.response) {
-    setError(error.response.data.errors)
-    setLoading(false)
-  } else if (error.request) {
-    showNotification("danger","Check you connection and try again please." )
-    setLoading(false)
-  } else {
-    log('Error', error.message);
-    showNotification("danger","Try to reload the page please. See more in console." )
-    setLoading(false)
-  }
-}
+
 
 

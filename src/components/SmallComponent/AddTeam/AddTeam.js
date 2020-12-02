@@ -5,8 +5,7 @@ import {Button} from '@material-ui/core'
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import TeamMemberList from "../TeamMemberList";
-import {checkIfMemberEmailIsValide } from "../../../Module/biblio";
-import {deleteMember} from "../../../pages/createTeam/Modules";
+import {checkIfMemberEmailIsValide, deleteMember} from "../../../Module/biblio";
 
 
 
