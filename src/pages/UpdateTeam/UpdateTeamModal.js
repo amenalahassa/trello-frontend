@@ -1,18 +1,22 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Modal from "../../components/Modal";
 import {Button, CircularProgress, Fade, Typography} from "@material-ui/core";
 
-import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
-import {toggleAddTeamModal, toggleUpdateTeamModal, useModalDispatch} from "../../context/ModalContext";
+import {toggleUpdateTeamModal, useModalDispatch} from "../../context/ModalContext";
 import useStyles from "../addTeam/styles";
-import AddTeam from "../../components/SmallComponent/AddTeam";
 import DialogContent from "@material-ui/core/DialogContent";
 import {useAxiosState} from "../../context/AxiosContext";
 import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext";
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
-import {useNotification} from "../../context/GlobalContext";
-import {sendTeam} from "../../Module/http";
+import {useNotification, useTeamToUpdateEffect} from "../../context/GlobalContext";
+import CardHeader from "@material-ui/core/CardHeader";
+import IconButton from "@material-ui/core/IconButton";
+import {Delete} from "@material-ui/icons";
+import UpdateTeam from "../../components/SmallComponent/UpdateTeam";
+import { checkIfDataChanged} from "../../Module/biblio";
+import {updateTeam} from "../../Module/http";
+
 
 
 
@@ -26,15 +30,17 @@ function UpdateTeamModal(props) {
     const http = useAxiosState()
     let categoryList = useDashboard().team_category
 
-    let { current } = props
+    const [current, setCurrent] = useState({})
     const [isLoading, setLoading] = React.useState(false)
     const [members, setMember] = React.useState([])
+    const [membersList, setMemberList] = React.useState([])
     const [name, setName] = React.useState("")
     const [error, setError] = React.useState({})
     const [category, setCategory] = React.useState("")
     const [email, setEmail] = React.useState("")
     const [ notification, displayNotification, resetNotification ] = useNotification()
 
+    useTeamToUpdateEffect(setCurrent, undefined, undefined, setMemberList)
 
     const cancel = () => {
         setEmail("")
@@ -46,7 +52,39 @@ function UpdateTeamModal(props) {
 
     const save = () => {
         setLoading(true)
-        cancel()
+        let [newMember, oldMember] = getMember()
+        const validated = {
+            id: current.id,
+            name : checkIfDataChanged(current.name, name),
+            secteur: checkIfDataChanged(current.secteur, category),
+            newMember: newMember,
+            oldMember: getOldMember(oldMember),
+        }
+        updateTeam(http,validated, onSuccess, onError)
+    }
+
+    const getMember = () => {
+        let newMember = []
+        let oldMember = []
+        for (const member of members) {
+            if (member.type === "new") newMember.push(member)
+            else oldMember.push(member)
+        }
+        return [newMember, oldMember]
+    }
+
+    const getOldMember = (old) => {
+        let oldMember = []
+        membersList.forEach((member) => {
+            let contains = false
+            old.forEach((el) => {
+                if (el.email === member.email) {
+                    contains = true
+                }
+            })
+            if (contains === false) oldMember.push(member)
+        })
+        return oldMember
     }
 
 
@@ -55,9 +93,17 @@ function UpdateTeamModal(props) {
             <Modal {...props}>
                 <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
                 <div>
-                   <DialogTitle disableTypography id="responsive-dialog-title">{<Typography  variant="h4">Add a Team</Typography>}</DialogTitle>
+                    <CardHeader
+                        action={
+                            <IconButton aria-label="settings">
+                                <Delete />
+                            </IconButton>
+                        }
+                        title={<Typography  variant="h4">{current.name}</Typography>}
+                        subheader={boardCount(current.boards_count)}
+                    />
                    <DialogContent>
-                    <AddTeam
+                    <UpdateTeam
                         classes={classes}
                         categoryList={categoryList}
                         members={members} setMember={setMember}
@@ -90,6 +136,24 @@ function UpdateTeamModal(props) {
         </div>
     )
 
+    function boardCount(count)
+    {
+        if (count === 0) return "This team don't have board yet."
+        if (count === 1) return "This team has one board."
+        if (count > 1) return `This team have ${count} boards.`
+    }
+
+    function onSuccess(response)
+    {
+        setDatas(response)
+        cancel()
+    }
+
+    function onError (message)
+    {
+        displayNotification(message)
+        setLoading(false)
+    }
 }
 
 export default  UpdateTeamModal;

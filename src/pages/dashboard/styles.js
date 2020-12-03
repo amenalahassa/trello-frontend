@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/styles";
+import image from "../../images/board.svg";
 
 export default makeStyles(theme => ({
   root:{
@@ -91,11 +92,14 @@ export default makeStyles(theme => ({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: '#fff',
+    backgroundImage: `url(${image})`,
 
   },
   card: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
+    backgroundColor: '#fff',
+    textAlign: "center",
   },
   media: {
     height: 190,
@@ -103,13 +107,11 @@ export default makeStyles(theme => ({
   },
   buttonAddBoard: {
     marginTop: theme.spacing(2),
-
   },
-  cardHeader:{
-    marginBottom: theme.spacing(4),
+  cardText:{
+    marginBottom: theme.spacing(2.3),
   },
   cardContent:{
-    marginTop: theme.spacing(4),
     maxWidth: 400,
   }
 }));

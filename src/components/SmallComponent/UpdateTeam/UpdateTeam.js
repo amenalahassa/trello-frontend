@@ -1,29 +1,41 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 
 import {Button, Typography} from '@material-ui/core'
 
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
-import TeamMemberList from "../TeamMemberList";
-import {checkIfMemberEmailIsValide, deleteMember} from "../../../Module/biblio";
+import {
+    checkIfMemberEmailIsValide,
+    deleteMember,
+ returnStringIfUndefined,
+} from "../../../Module/biblio";
+import {useTeamToUpdateEffect} from "../../../context/GlobalContext";
+import useStyles from "./style";
+import Paper from "@material-ui/core/Paper";
+import Chip from "@material-ui/core/Chip";
+import IconButton from "@material-ui/core/IconButton";
+import CardHeader from "@material-ui/core/CardHeader";
+import {Delete} from "@material-ui/icons";
 
 
 
-function AddTeam(props) {
+function UpdateTeam(props) {
 
-    let { classes , categoryList , setMember ,members} = props
+    let { classes , categoryList , setMember , members } = props
+    const [current, setCurrent] = useState({})
+    const [isChanged, setChanged] = useState({
+        name: false,
+        secteur: false,
+        members:false,
+    })
+    const [emailValidated, validateEmail] = React.useState(true)
 
-    const [isInvalide, setIsInvalide] = React.useState(true)
 
-    useEffect(() => {
-        if (categoryList !== undefined)
-        {
-            props.setCategory(categoryList[0].key)
-        }
-    }, [categoryList])
+    useTeamToUpdateEffect(undefined, props.setName , props.setCategory, setMember)
+
 
     const handleKeyDown = (values) => {
-        setIsInvalide(checkIfMemberEmailIsValide(values, members))
+        validateEmail(checkIfMemberEmailIsValide(values, members))
         props.setEmail(values)
     }
 
@@ -31,15 +43,17 @@ function AddTeam(props) {
         let member = {
             key: Date.now() / (Math.random() * 10),
             email: props.email,
+            type: "new",
         }
         setMember([member, ...members])
-        setIsInvalide(true)
+        validateEmail(true)
         props.setEmail("")
     }
 
     const handleDeleteChip = (chipToDelete) => () => {
         setMember(deleteMember(chipToDelete));
     }
+
 
     return (
         <form  noValidate autoComplete="off">
@@ -56,7 +70,7 @@ function AddTeam(props) {
                     margin="normal"
                     helperText={!!props.error.name ? props.error.name : "Required"}
                     placeholder="The name of your team"
-                    value={props.name}
+                    value={returnStringIfUndefined(props.name)}
                     onChange={(event => {props.setName(event.target.value); props.setError({})})}
                     required
                     fullWidth
@@ -73,7 +87,7 @@ function AddTeam(props) {
                     }}
                     margin="normal"
                     select
-                    value={props.category}
+                    value={returnStringIfUndefined(props.category)}
                     onChange={(event => {props.setCategory(event.target.value); props.setError({})})}
                     helperText={!!props.error.secteur ? props.error.secteur : "Required"}
                     fullWidth
@@ -109,21 +123,74 @@ function AddTeam(props) {
                         <Button variant="contained" color="secondary"
                                 size="large"
                                 className={classes.button}
-                                disabled={isInvalide === true}
+                                disabled={emailValidated === true}
                                 onClick={() => addMember()}
                         >
                             Add
                         </Button>
                     </div>
-                    {members.length !== 0 && <TeamMemberList members = {members} handleDeleteChip = {handleDeleteChip} />}
+                    {members.length !== 0 &&
+                    <TeamUserList
+                        list={members}
+                        handleDeleteChip = {handleDeleteChip}
+                    />}
                     <Typography hidden={!!props.error.members} variant="caption" color="secondary" display="block">{!!props.error.members ? props.error.members : ""}</Typography>
                 </div>
             </div>
         </form>
   );
 
-
 }
 
-export default AddTeam;
+export default UpdateTeam;
 
+function TeamUserList(props) {
+    var classes = useStyles();
+    const {  handleDeleteChip , list } = props
+
+    return (
+        <>
+            <CardHeader
+                action={
+                    <IconButton aria-label="settings">
+                        <Delete />
+                    </IconButton>
+                }
+                title={<Typography  variant="subtitle2"> Members</Typography>}
+            />
+            <Paper className={classes.root} elevation={2}>
+                {list.map((data) => {
+                    if (data.type !== "user") return (<InvitedChip data={data} key={data.key}/>)
+                    return (<UserChip data={data} key={data.key}/>)
+                })}
+            </Paper>
+        </>
+    );
+
+    function UserChip ({ data })
+    {
+        return (
+            <li>
+                <Chip
+                    label={data.name}
+                    avatar={data.photo}
+                    onDelete={handleDeleteChip(data)}
+                    className={classes.chip}
+                />
+            </li>
+        )
+    }
+
+    function InvitedChip ({ data })
+    {
+        return (
+            <li >
+                <Chip
+                    label={data.email}
+                    onDelete={handleDeleteChip(data)}
+                    className={classes.chip}
+                />
+            </li>
+        )
+    }
+}

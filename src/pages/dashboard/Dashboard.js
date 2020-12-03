@@ -101,15 +101,9 @@ function Placeholder({ classes })
         <div className={classes.card}>
             <CardHeader
                 title="To start, you need a board."
-                className={classes.cardHeader}
-            />
-            <CardMedia
-                className={classes.media}
-                image={boardLogo}
-                title="Ted talk"
             />
             <CardContent className={classes.cardContent}>
-                <Typography variant="body2" color="textSecondary" component="p">
+                <Typography variant="body2" color="textSecondary" component="p" className={classes.cardText}>
                     {
                         "A board is made up of cards ordered on lists. Use it to manage projects, track information, or organize anything."
                     }

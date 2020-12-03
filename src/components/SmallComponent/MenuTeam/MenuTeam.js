@@ -1,24 +1,26 @@
 import React, {useEffect, useState} from "react";
 
 import {Menu} from '@material-ui/core'
-
 import {Typography} from "../../Wrappers";
-import {GroupWork as GroupWorkIcon, Delete as DeleteIcon} from '@material-ui/icons'
+import {GroupWork as GroupWorkIcon} from '@material-ui/icons'
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import IconButton from "@material-ui/core/IconButton";
+
 import {useDashboard} from "../../../context/DashboardContext";
-import {getCategoryLabelByKey, log} from "../../../Module/biblio";
+import {displayBaseOnNumber, getCategoryLabelByKey} from "../../../Module/biblio";
 import UpdateTeamModal from "../../../pages/UpdateTeam/UpdateTeamModal";
-import {toggleAddTeamModal, useModalDispatch, useModalState} from "../../../context/ModalContext";
+import {
+    toggleUpdateTeamModal,
+    useModalDispatch,
+    useModalState
+} from "../../../context/ModalContext";
 import {useNotification} from "../../../context/GlobalContext";
 import {DisplayNotification} from "../../TiniComponents/Notifications";
-import Modal from "../../Modal";
 import {useAxiosState} from "../../../context/AxiosContext";
 import {URLS} from "../../../Module/http";
+import {useSetTeamToUpdate} from "../../../context/TeamToUpdateContext";
 
 
 // Todo : Show the correct value of a category, not his key
@@ -29,12 +31,12 @@ function MenuTeam(props) {
     const http = useAxiosState()
 
     const  [teams, setTeams] = useState([])
-    const  [current, setCurrent] = useState(null)
     const [ notification, displayNotification, resetNotification ] = useNotification()
 
     let userData =  useDashboard().user
     let modalState = useModalState()
     let modalDispatch = useModalDispatch()
+    let setTeamToUpdate = useSetTeamToUpdate()
 
 
     useEffect(() => {
@@ -46,19 +48,23 @@ function MenuTeam(props) {
 
     const showTeam = (id) =>
     {
-        http.post( URLS.updateTeam, {
+        http.post( URLS.aboutTeam, {
             id,
         })
             .then((response) => {
-                setCurrent(response.data)
-                console.log(response.data)
-                showAddTeamModal()
+                setTeamToUpdate(response.data.team)
+                showUpdateTeamModal()
             })
             .catch((error) => {
                 displayNotification(error.message)
             })
     }
 
+    const showUpdateTeamModal = () =>
+    {
+        setTeamMenu(null)
+        toggleUpdateTeamModal(modalDispatch, true)
+    }
     return (
         <Menu
             id="team-menu"
@@ -78,17 +84,11 @@ function MenuTeam(props) {
                    })}
                </div>
                <div>
-                   <UpdateTeamModal open={ modalState.updateTeam } current={current} />
                </div>
            </div>
         </Menu>
   );
 
-    function showAddTeamModal()
-    {
-        setTeamMenu(null)
-        toggleAddTeamModal(modalDispatch, true)
-    }
 }
 
 export default MenuTeam;
@@ -98,7 +98,7 @@ function ShowInfo(props)
 {
     let { val } = props
     let categoryList = useDashboard().team_category
-    return <><Typography display="block" variant="caption" size="xm" >{getCategoryLabelByKey(categoryList, val.secteur)}</Typography><Typography variant="caption" display="block" size="xm">{(val.user_count + val.invited_count) + " Members | " + val.boards_count + " Boards"}</Typography></>
+    return <><Typography display="block" variant="caption" size="xm" >{getCategoryLabelByKey(categoryList, val.secteur)}</Typography><Typography variant="caption" display="block" size="xm">{(val.user_count + val.invited_count) + " Members" + displayBaseOnNumber(val.boards_count, 'Board') }</Typography></>
 }
 
 function TeamItem({val, show})

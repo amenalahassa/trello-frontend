@@ -16,7 +16,7 @@ export function sendTeam(url, http, data, callback, displayNotification, setLoad
 
             sendMembers(http,{
                 team_id: response.data.team_id,
-                members: data.members.map(a => a.label),
+                members: data.members.map(a => a.email),
             },callback, displayNotification, setLoading, setError, )
 
         })
@@ -52,7 +52,35 @@ function catchError(error, setLoading, setError, displayNotification)
     }
 }
 
+export function updateTeam(http, validated, success, error)
+{
+    let datas = {}
+    datas.id = validated.id
+    if (validated.name !== false)
+    {
+        datas.name = validated.name
+    }
+    if (validated.secteur !== false)
+    {
+        datas.secteur = validated.secteur
+    }
+    let members = [...validated.newMember, ...validated.oldMember]
+    if (members.length > 0)
+    {
+        datas.members = members.map((v) => v.email)
+    }
+    console.log(datas)
+    http.post(URLS.updateTeam, datas)
+        .then((response) => {
+            success(response.data)
+        })
+        .catch((err) => {
+            error(err.message)
+        })
+}
+
 // Todo populate this constante where you make a request
 export const URLS = {
-    updateTeam :  api + '/dashboard/team/about',
+    updateTeam :  api + '/dashboard/team/update',
+    aboutTeam :  api + '/dashboard/team/about',
 }

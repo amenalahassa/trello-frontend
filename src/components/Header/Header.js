@@ -42,8 +42,6 @@ export default function Header(props) {
     const [boardMenu, setBoardMenu] = useState(null);
     const [profileMenu, setProfileMenu] = useState(null);
 
-
-
   const { isLoading, setCurrentBoard } = props
 
   return (

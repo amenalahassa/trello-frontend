@@ -27,6 +27,8 @@ import AddBoardModal from "../../pages/addBoard/AddBoardModal";
 import {DisplayNotification} from "../TiniComponents/Notifications";
 import Modal from "../Modal";
 import {useIsMountedRef, useNotification} from "../../context/GlobalContext";
+import {TeamToUpdateProvider} from "../../context/TeamToUpdateContext";
+import UpdateTeamModal from "../../pages/UpdateTeam/UpdateTeamModal";
 
 // Todo : Back sidebar for responsive site
 
@@ -64,18 +66,21 @@ function Layout(props) {
     <div className={classes.root}>
         <>
             <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
-            <Header history={props.history} isLoading={isLoading} setCurrentBoard={setCurrentBoard} />
-            <div
-              className={classnames(classes.content)}
-            >
-              <Switch>
-                <Route path="/app/dashboard"  render={() => <Dashboard isLoading={isLoading} currentBoard={currentBoard} />} />
-              </Switch>
-            </div>
-            <div>
-              <AddBoardModal  open={ modalState.addBoard } />
-              <AddTeamModal  open={ modalState.addTeam } />
-            </div>
+            <TeamToUpdateProvider>
+                <Header history={props.history} isLoading={isLoading} setCurrentBoard={setCurrentBoard} />
+                <div
+                    className={classnames(classes.content)}
+                >
+                    <Switch>
+                        <Route path="/app/dashboard"  render={() => <Dashboard isLoading={isLoading} currentBoard={currentBoard} />} />
+                    </Switch>
+                </div>
+                <div>
+                    <AddBoardModal  open={ modalState.addBoard } />
+                    <AddTeamModal  open={ modalState.addTeam } />
+                    <UpdateTeamModal open={ modalState.updateTeam } />
+                </div>
+            </TeamToUpdateProvider>
         </>
     </div>
   );

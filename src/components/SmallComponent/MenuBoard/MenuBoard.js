@@ -44,7 +44,7 @@ function MenuBoard(props) {
             {
                 let next
                 if ( mineBoard.length > 0) next = createCurrentBoard(mineBoard[0], "personal")
-                else  next = createCurrentBoard(mineBoard[0], "team")
+                else  next = createCurrentBoard(boardOfTeams[0], "team")
                 setItemInLocalStorage('currentBoard', next)
                 setCurrentBoard(next)
                 setDashboardBoard(next)
@@ -222,7 +222,8 @@ function Placeholder({ classes, setBoardMenu })
             <CardMedia
                 className={classes.media}
                 image={boardLogo}
-                title="Ted talk"
+                title="A board"
+                component="img"
             />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">

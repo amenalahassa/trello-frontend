@@ -18,7 +18,7 @@ function Modal(props) {
   var classes = useStyles();
   let { handleClose, open , children} = props
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
   return (
       <div>

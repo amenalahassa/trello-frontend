@@ -79,7 +79,7 @@ export function checkIfMemberEmailIsValide(values,members )
     if (emailExp.test(values)) {
         invalide = false
         for (const chipDatum of members) {
-            if (chipDatum.label === values)
+            if (chipDatum.email === values)
             {
                 invalide = true
                 break
@@ -108,4 +108,34 @@ export function getCategoryLabelByKey(list, key)
         }
     }
     return label
+}
+
+export function displayBaseOnNumber(count, word)
+{
+    if (count === 0) return ''
+    if (count === 1) return " | " + count + " " + word
+    if (count > 1) return " | " + count + " " + word + "s"
+}
+
+export function returnStringIfUndefined(value)
+{
+    if (value !== undefined) return value
+    return ''
+}
+
+export function returnObjectIfUndefined(value)
+{
+    if (value !== undefined) return value
+    return {}
+}
+export function returnArrayIfUndefined(value)
+{
+
+    if (value !== undefined) return value
+    return []
+}
+
+export function checkIfDataChanged (old, now)
+{
+    return old !== now ? now : false;
 }

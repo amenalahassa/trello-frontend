@@ -21,7 +21,7 @@ function TeamMemberList(props) {
                     return (
                         <li key={data.key}>
                             <Chip
-                                label={data.label}
+                                label={data.email}
                                 onDelete={handleDeleteChip(data)}
                                 className={classes.chip}
                             />
