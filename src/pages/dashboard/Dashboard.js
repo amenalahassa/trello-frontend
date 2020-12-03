@@ -13,8 +13,6 @@ import Divider from "@material-ui/core/Divider";
 import SubBoardMenu from "../../components/SmallComponent/SubBoardMenu";
 import GroupAvatars from "../../components/TiniComponents/GroupAvatars";
 import {toggleAddBoardModal, useModalDispatch} from "../../context/ModalContext";
-import CardMedia from "@material-ui/core/CardMedia";
-import boardLogo from "../../images/board.svg";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 

@@ -1,5 +1,4 @@
 import { makeStyles } from "@material-ui/styles";
-import image from "../../images/board.svg";
 
 export default makeStyles(theme => ({
   root:{
@@ -92,8 +91,6 @@ export default makeStyles(theme => ({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: '#fff',
-    backgroundImage: `url(${image})`,
-
   },
   card: {
     marginLeft: theme.spacing(1),
