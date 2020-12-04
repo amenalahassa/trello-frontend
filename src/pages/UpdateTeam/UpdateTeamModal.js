@@ -67,7 +67,7 @@ function UpdateTeamModal(props) {
             newMember: newMember,
             oldMember: getOldMember(oldMember),
         }
-        updateTeam(http,validated, onSuccess, onError)
+        updateTeam(http,validated, onSuccess, onUpdateError)
     }
 
     const getMember = () => {
@@ -178,7 +178,7 @@ function UpdateTeamModal(props) {
         cancel()
     }
 
-    function onError (error)
+    function onUpdateError (error)
     {
         catchError(error)
     }
@@ -201,7 +201,7 @@ function UpdateTeamModal(props) {
 
     function onDeleteError()
     {
-        displayNotification(MessageError.unknown)
+        displayNotification("Deletion failed. " + MessageError.unknown)
     }
 
 }

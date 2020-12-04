@@ -91,6 +91,7 @@ export function deleteTeam(http, id,  success, error, end, displayNotification)
             }, 1000)
         })
         .catch(() => {
+            end()
             error()
         })
 }

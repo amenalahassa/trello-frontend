@@ -19,7 +19,7 @@ import {
 import {useNotification} from "../../../context/GlobalContext";
 import {DisplayNotification} from "../../TiniComponents/Notifications";
 import {useAxiosState} from "../../../context/AxiosContext";
-import {URLS} from "../../../Module/http";
+import {MessageError, URLS} from "../../../Module/http";
 import {useSetTeamToUpdate} from "../../../context/TeamToUpdateContext";
 import CardMedia from "@material-ui/core/CardMedia";
 import teamLogo from "../../../images/team.svg";
@@ -58,8 +58,11 @@ function MenuTeam(props) {
                 setTeamToUpdate(response.data.team)
                 showUpdateTeamModal()
             })
-            .catch((error) => {
-                displayNotification(error.message)
+            .catch(() => {
+                displayNotification(MessageError.unknown)
+                setTimeout(() => {
+                    setTeamMenu(null)
+                }, 2000)
             })
     }
 
