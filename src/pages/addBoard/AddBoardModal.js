@@ -59,7 +59,7 @@ function AddBoardModal(props) {
         setName("")
         setSelectedImage('')
         setOwnerValue('')
-        setTeam(1)
+        setTeam("")
         setLoading(false)
     }
 
@@ -131,7 +131,7 @@ function AddBoardModal(props) {
                                   <MenuItem value=""  disabled>
                                       Choose a team
                                   </MenuItem>
-                                  {teams && teams.map((option) => (
+                                  {teams.map((option) => (
                                       <MenuItem key={option.id} value={option.id}>
                                           {option.name}
                                       </MenuItem>

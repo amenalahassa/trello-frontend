@@ -1,27 +1,41 @@
 import React, {useEffect, useState} from "react";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
-
 import useStyles from './style'
 import ListSubheader from "@material-ui/core/ListSubheader";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
+import {useAxiosState} from "../../../context/AxiosContext";
+import {URLS} from "../../../Module/http";
+import {Typography} from "@material-ui/core";
 
 
 export default function ImageGridList(props) {
     const classes = useStyles();
-    let {images, setSelectedImage} = props
-    let [grid, setGrid] = useState([])
+    let { setSelectedImage } = props
+
+    let http = useAxiosState()
+
+    const [images, setImages] = useState([])
+    const [grid, setGrid] = useState([])
 
     useEffect(() => {
-       if (images !== undefined)
-       {
-           let element = []
-           images.forEach((val) => {
-               element.push(initialise(val))
-           })
-           setGrid(element)
-       }
+        http.get(URLS.ressources.boardBackgroundImage)
+            .then((response) => {
+                setImages(response.data.images)
+            })
+    },[])
+
+    useEffect(() => {
+        if (images.length > 0)
+        {
+            let element = []
+            images.forEach((val) => {
+                element.push(initialise(val))
+            })
+            setGrid(element)
+        }
     }, [images])
+
 
     const styles = {
         selected:{
@@ -30,6 +44,11 @@ export default function ImageGridList(props) {
         notSelected:{
             padding:"2px",
         }
+    }
+
+    if (images.length === 0)
+    {
+        return (<div className={classes.errorText}><Typography color="secondary" >Check your connection and reload the page to get background images please.</Typography></div>)
     }
 
     return (

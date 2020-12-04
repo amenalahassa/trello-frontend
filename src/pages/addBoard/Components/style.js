@@ -30,6 +30,9 @@ export default makeStyles(theme => ({
     },
     notSelected:{
         padding:theme.spacing(0)
+    },
+    errorText:{
+        margin:theme.spacing(4)
     }
 
 }));

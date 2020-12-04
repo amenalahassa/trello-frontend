@@ -15,6 +15,7 @@ import {DisplayNotification} from "../../TiniComponents/Notifications";
 import Modal from "../../Modal";
 import {useNotification} from "../../../context/GlobalContext";
 import {useAxiosState} from "../../../context/AxiosContext";
+import {URLS} from "../../../Module/http";
 
 
 
@@ -129,8 +130,10 @@ function AddTeam(props) {
             </div>
         </form>
   );
+
+
     function getCategoryOnServer () {
-        http.get('/api/ressources/category')
+        http.get(URLS.ressources.category)
             .then((response) => {
                 setCategoryList(response.data)
                 // Todo find a way to update this by broadcasting when it change on server side

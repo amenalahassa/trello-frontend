@@ -101,6 +101,10 @@ export const URLS = {
     deleteTeam :  api + '/dashboard/team/delete',
     saveTeam :  api + '/dashboard/save/team',
     saveMember :  api + '/dashboard/save/member',
+    ressources: {
+        category: api + "/ressources/category",
+        boardBackgroundImage: api + '/ressources/board/backgroundImage'
+    }
 }
 
 export const MessageError = {

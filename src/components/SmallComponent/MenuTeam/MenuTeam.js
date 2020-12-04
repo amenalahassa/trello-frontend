@@ -126,7 +126,7 @@ function ShowInfo(props)
                     {getCategoryLabelByKey(categoryList, val.secteur)}
                 </Typography>
                 <Typography variant="caption" display="block" size="xm">
-                    {(val.user_count + val.invited_count) + " Members" + displayBaseOnNumber(val.boards_count, 'Board') }
+                    {(val.user_count + val.invited_count) + " Members" + displayBaseOnNumber(val.boards.length, 'Board') }
                 </Typography>
             </>
         )
