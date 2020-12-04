@@ -35,14 +35,4 @@ export default makeStyles(theme => ({
         marginTop:theme.spacing(4),
         width:320,
     },
-    toolbar: {
-        borderBottom: "1px #00000021 solid",
-        boxShadow: "0 0 2px 0 grey",
-        minHeight:48,
-        paddingLeft:16,
-        paddingRight:10,
-    },
-    title:{
-        flex:1,
-    }
 }));

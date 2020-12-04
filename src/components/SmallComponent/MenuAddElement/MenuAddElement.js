@@ -30,25 +30,27 @@ function MenuAddElement(props) {
             classes={{ paper: classes.profileMenu }}
             disableAutoFocusItem
         >
-            <MenuToolBar title="Add" onClose={() => setAddMenu(null)} type="menu" />
-            <List >
-                <ListItem button onClick={() => showAddBoardModal()}>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <DashboardIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={<Typography variant="h6" weight="medium" >A board</Typography>} secondary={ <span> <Typography variant="caption" display="block"  >A board is made up of cards ordered on lists. </Typography> <Typography variant="caption" display="block" >Use it to manage projects, track information, or organize anything.</Typography></span>} />
-                </ListItem>
-                <ListItem button onClick={() => showAddTeamModal()} >
-                    <ListItemAvatar>
-                        <Avatar>
-                            <PeopleIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={<Typography variant="h6" weight="medium" >A Team</Typography>} secondary={<span><Typography variant="caption" display="block" >A team is a group of boards and people.</Typography><Typography variant="caption" display="block" >Use it to organize your company, side hustle, family, or friends.</Typography></span>} />
-                </ListItem>
-            </List>
+            <div>
+                <MenuToolBar title="Add" onClose={() => setAddMenu(null)} type="menu" />
+                <List >
+                    <ListItem button onClick={() => showAddBoardModal()}>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <DashboardIcon />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={<Typography variant="h6" weight="medium" >A board</Typography>} secondary={ <span> <Typography variant="caption" display="block"  >A board is made up of cards ordered on lists. </Typography> <Typography variant="caption" display="block" >Use it to manage projects, track information, or organize anything.</Typography></span>} />
+                    </ListItem>
+                    <ListItem button onClick={() => showAddTeamModal()} >
+                        <ListItemAvatar>
+                            <Avatar>
+                                <PeopleIcon />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={<Typography variant="h6" weight="medium" >A Team</Typography>} secondary={<span><Typography variant="caption" display="block" >A team is a group of boards and people.</Typography><Typography variant="caption" display="block" >Use it to organize your company, side hustle, family, or friends.</Typography></span>} />
+                    </ListItem>
+                </List>
+            </div>
         </Menu>
   );
 

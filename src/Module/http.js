@@ -69,13 +69,12 @@ export function updateTeam(http, validated, success, error)
     {
         datas.members = members.map((v) => v.email)
     }
-    console.log(datas)
     http.post(URLS.updateTeam, datas)
         .then((response) => {
             success(response.data)
         })
         .catch((err) => {
-            error(err.message)
+            error(err)
         })
 }
 

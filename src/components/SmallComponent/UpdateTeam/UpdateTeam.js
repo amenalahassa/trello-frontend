@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from "react";
 
-import {Button, Typography} from '@material-ui/core'
+import {Button, Tooltip, Typography} from '@material-ui/core'
 
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -23,17 +23,9 @@ import {useDashboard} from "../../../context/DashboardContext";
 function UpdateTeam(props) {
 
     let { classes , categoryList , setMember , members, updating } = props
-    const [current, setCurrent] = useState({})
-    const [isChanged, setChanged] = useState({
-        name: false,
-        secteur: false,
-        members:false,
-    })
     const [emailValidated, validateEmail] = React.useState(true)
 
-
     useTeamToUpdateEffect(undefined, props.setName , props.setCategory, setMember)
-
 
     const handleKeyDown = (values) => {
         validateEmail(checkIfMemberEmailIsValide(values, members))
@@ -55,7 +47,6 @@ function UpdateTeam(props) {
         setMember(deleteMember(chipToDelete));
     }
 
-
     return (
         <form  noValidate autoComplete="off">
             <div>
@@ -69,7 +60,7 @@ function UpdateTeam(props) {
                         },
                     }}
                     margin="normal"
-                    helperText={!!props.error.name ? props.error.name : "Required"}
+                    helperText={!!props.error.name ? props.error.name : <Typography variant={"caption"}>{updating === true && "Required"}</Typography>}
                     placeholder="The name of your team"
                     value={returnStringIfUndefined(props.name)}
                     onChange={(event => {props.setName(event.target.value); props.setError({})})}
@@ -91,7 +82,7 @@ function UpdateTeam(props) {
                     select
                     value={returnStringIfUndefined(props.category)}
                     onChange={(event => {props.setCategory(event.target.value); props.setError({})})}
-                    helperText={!!props.error.secteur ? props.error.secteur : "Required"}
+                    helperText={!!props.error.secteur ? props.error.secteur : <Typography variant={"caption"}>{updating === true && "Required"}</Typography>}
                     fullWidth
                     required
                     disabled={!updating}
@@ -137,6 +128,7 @@ function UpdateTeam(props) {
                     <TeamUserList
                         list={members}
                         updating={updating}
+                        setMember={setMember}
                         handleDeleteChip = {handleDeleteChip}
                     />}
                     <Typography hidden={!!props.error.members} variant="caption" color="secondary" display="block">{!!props.error.members ? props.error.members : ""}</Typography>
@@ -151,7 +143,7 @@ export default UpdateTeam;
 
 function TeamUserList(props) {
     var classes = useStyles();
-    const {  handleDeleteChip , list, updating } = props
+    const {  handleDeleteChip , list, updating, setMember } = props
     let user = useDashboard().user
 
     const toKnowIfUserIsAdmin = () =>
@@ -163,13 +155,24 @@ function TeamUserList(props) {
         return admin
     }
 
+    const handleDeleteAllMembers = () =>
+    {
+        setMember(list.filter((item) => item.email === user.email))
+    }
+
     return (
         <>
             <CardHeader
                 action={ toKnowIfUserIsAdmin() && updating === true &&
-                    <IconButton aria-label="settings">
-                        <Delete />
-                    </IconButton>
+                <div>
+                    {list.length > 1 &&
+                    <Tooltip title={<Typography variant={"caption"}>Delete all members</Typography>} arrow>
+                        <IconButton aria-label="settings" onClick={() => handleDeleteAllMembers()}>
+                            <Delete />
+                        </IconButton>
+                    </Tooltip>
+                    }
+                </div>
                 }
                 title={<Typography  variant="subtitle2"> Members</Typography>}
             />
@@ -184,7 +187,7 @@ function TeamUserList(props) {
 
     function UserChip ({ data })
     {
-        if ((data.email === user.email && data.admin === true) || toKnowIfUserIsAdmin() === false)
+        if ((data.email === user.email && data.admin === true) || toKnowIfUserIsAdmin() === false || updating === false)
         {
             return (
                 <li>
@@ -210,7 +213,7 @@ function TeamUserList(props) {
 
     function InvitedChip ({ data })
     {
-        if (toKnowIfUserIsAdmin() === false)
+        if (toKnowIfUserIsAdmin() === false || updating === false)
         {
             return (
                 <li >

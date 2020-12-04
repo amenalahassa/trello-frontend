@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Modal from "../../components/Modal";
-import {Button, CircularProgress, Fade, Typography} from "@material-ui/core";
+import {Button, CircularProgress, Fade, Tooltip, Typography} from "@material-ui/core";
 
 import DialogActions from "@material-ui/core/DialogActions";
 import {toggleUpdateTeamModal, useModalDispatch} from "../../context/ModalContext";
@@ -12,12 +12,10 @@ import {DisplayNotification} from "../../components/TiniComponents/Notifications
 import {useNotification, useTeamToUpdateEffect} from "../../context/GlobalContext";
 import CardHeader from "@material-ui/core/CardHeader";
 import IconButton from "@material-ui/core/IconButton";
-import {Delete, Close as CloseIcon} from "@material-ui/icons";
+import {Delete} from "@material-ui/icons";
 import UpdateTeam from "../../components/SmallComponent/UpdateTeam";
-import { checkIfDataChanged} from "../../Module/biblio";
+import {checkIfDataChanged, log} from "../../Module/biblio";
 import {updateTeam} from "../../Module/http";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import {MenuToolBar} from "../../components/TiniComponents/MenuToolBar";
 
 
@@ -110,9 +108,11 @@ function UpdateTeamModal(props) {
                     <MenuToolBar title="Update a team" onClose={() => cancel()} />
                     <CardHeader
                         action={ toKnowIfUserIsAdmin() && updating === true &&
+                        <Tooltip title={<Typography variant={"caption"}>Delete this team</Typography>} arrow>
                             <IconButton aria-label="settings">
                                 <Delete />
                             </IconButton>
+                        </Tooltip>
                         }
                         title={<Typography  variant="h4">{current.name}</Typography>}
                         subheader={boardCount(current.boards_count)}
@@ -141,7 +141,7 @@ function UpdateTeamModal(props) {
                                ) :
                                <Fade in={!isLoading}>
                                    <Button onClick={() => updating === true ? save() : beginUpdate(true)}  color="primary" autoFocus variant="contained">
-                                       { updating === true ? "Save" : "Modify"}
+                                       { updating === true ? "Save" : "Update"}
                                    </Button>
                                </Fade>
                            }
@@ -165,11 +165,27 @@ function UpdateTeamModal(props) {
         cancel()
     }
 
-    function onError (message)
+    function onError (error)
     {
-        displayNotification(message)
-        setLoading(false)
+        catchError(error)
     }
+
+    function catchError(error)
+    {
+        if (error.response) {
+            if (error.response.data.errors !== undefined) setError(error.response.data.errors)
+            else displayNotification("Check you connection and try again please.")
+            setLoading(false)
+        } else if (error.request) {
+            displayNotification("Check you connection and try again please.")
+            setLoading(false)
+        } else {
+            log('Error', error.message);
+            displayNotification("Try to reload the page please. See more in console.")
+            setLoading(false)
+        }
+    }
+
 }
 
 export default  UpdateTeamModal;

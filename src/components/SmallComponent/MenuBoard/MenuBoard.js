@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from "react";
 
 import {Button, Menu} from '@material-ui/core'
-
-
 import {Dashboard as DashboardIcon} from "@material-ui/icons";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -13,8 +11,8 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import boardLogo from '../../../images/board.svg'
-import {useDashboard, useDashboardDispatch} from "../../../context/DashboardContext";
-import {getFromLocalStorage, log, setItemInLocalStorage} from "../../../Module/biblio";
+import {useDashboard} from "../../../context/DashboardContext";
+import {getFromLocalStorage, setItemInLocalStorage} from "../../../Module/biblio";
 import {toggleAddBoardModal, useModalDispatch} from "../../../context/ModalContext";
 import {MenuToolBar} from "../../TiniComponents/MenuToolBar";
 
@@ -100,12 +98,13 @@ function MenuBoard(props) {
             classes={{ paper: classes.profileMenu }}
             disableAutoFocusItem
         >
-            <MenuToolBar title="Boards" onClose={() => setBoardMenu(null)} type="menu" />
-            {showPlaceholder === true ?
-                <div><Placeholder classes={classes} setBoardMenu={setBoardMenu}/></div>
-                :
-                <div>
-                    {currentBoard !== null &&
+            <div>
+                <MenuToolBar title="Boards" onClose={() => setBoardMenu(null)} type="menu" />
+                {showPlaceholder === true ?
+                    <div><Placeholder classes={classes} setBoardMenu={setBoardMenu}/></div>
+                    :
+                    <div>
+                        {currentBoard !== null &&
                         <List
                             component="nav"
                             aria-labelledby="nested-list-current"
@@ -123,8 +122,8 @@ function MenuBoard(props) {
                                 <ListItemText primary={ currentBoard.name } secondary= {currentBoard.desc}  />
                             </ListItem>
                         </List>
-                    }
-                    {boards.length > 0 &&
+                        }
+                        {boards.length > 0 &&
                         <List
                             component="nav"
                             aria-labelledby="nested-list-personal"
@@ -144,8 +143,8 @@ function MenuBoard(props) {
                                 </ListItem>
                             )}
                         </List>
-                    }
-                    {boardTeams.length > 0 &&
+                        }
+                        {boardTeams.length > 0 &&
                         <List
                             component="nav"
                             aria-labelledby="nested-list-team"
@@ -165,11 +164,14 @@ function MenuBoard(props) {
                                 </ListItem>
                             )}
                         </List>
-                    }
-                </div>
-            }
+                        }
+                    </div>
+                }
+            </div>
         </Menu>
-  );
+  )
+
+
     function getBoardOfTeams(team)
     {
         let boardOfTeams  = []

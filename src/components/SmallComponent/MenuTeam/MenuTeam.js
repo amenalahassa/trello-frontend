@@ -80,17 +80,19 @@ function MenuTeam(props) {
             classes={{ paper: classes.profileMenu }}
             disableAutoFocusItem
         >
-            <MenuToolBar title="Teams" onClose={() => setTeamMenu(null)} type="menu" />
-            {returnArrayIfUndefined(teams).length === 0 ? <div><Placeholder classes={classes} setTeamMenu={setTeamMenu}/></div> :
-                <div>
-                    <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
+            <div>
+                <MenuToolBar title="Teams" onClose={() => setTeamMenu(null)} type="menu" />
+                {returnArrayIfUndefined(teams).length === 0 ? <div><Placeholder classes={classes} setTeamMenu={setTeamMenu}/></div> :
+                    <div>
+                        <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
                         <div>
-                        {teams.map((val, key) => {
-                            return <TeamItem val={val} key={key} show={showTeam}  />
-                        })}
+                            {teams.map((val, key) => {
+                                return <TeamItem val={val} key={key} show={showTeam}  />
+                            })}
                         </div>
-                </div>
-            }
+                    </div>
+                }
+            </div>
         </Menu>
   );
 

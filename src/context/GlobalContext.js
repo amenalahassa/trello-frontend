@@ -50,7 +50,6 @@ function useTeamToUpdateEffect (setCurrent = () => {}, setCurrentName = () => {}
         if (team !== null )
         {
             setCurrent(team)
-            console.log(chips)
             setCurrentName(team.name)
             setCurrentSecteur(team.secteur)
             setCurrentMember(chips)
