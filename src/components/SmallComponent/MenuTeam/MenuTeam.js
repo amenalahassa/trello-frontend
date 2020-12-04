@@ -9,7 +9,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
 
 import {useDashboard} from "../../../context/DashboardContext";
-import {displayBaseOnNumber, getCategoryLabelByKey, returnArrayIfUndefined} from "../../../Module/biblio";
+import {
+    displayBaseOnNumber,
+    getCategoryFromLocalStorage,
+    getCategoryLabelByKey,
+    returnArrayIfUndefined
+} from "../../../Module/biblio";
 import {
      toggleAddTeamModal,
     toggleUpdateTeamModal,
@@ -103,11 +108,37 @@ function MenuTeam(props) {
 export default MenuTeam;
 
 
+
 function ShowInfo(props)
 {
     let { val } = props
-    let categoryList = useDashboard().team_category
-    return <><Typography display="block" variant="caption" size="xm" >{getCategoryLabelByKey(categoryList, val.secteur)}</Typography><Typography variant="caption" display="block" size="xm">{(val.user_count + val.invited_count) + " Members" + displayBaseOnNumber(val.boards_count, 'Board') }</Typography></>
+    const [categoryList, setCategoryList] = React.useState([])
+
+    useEffect(() => {
+        setCategoryList(getCategoryFromLocalStorage(handleNotFoundCategory))
+    }, [])
+
+    if (categoryList.length > 0)
+    {
+        return (
+            <>
+                <Typography display="block" variant="caption" size="xm" >
+                    {getCategoryLabelByKey(categoryList, val.secteur)}
+                </Typography>
+                <Typography variant="caption" display="block" size="xm">
+                    {(val.user_count + val.invited_count) + " Members" + displayBaseOnNumber(val.boards_count, 'Board') }
+                </Typography>
+            </>
+        )
+    }
+
+    return (<>Reload page to load team info please</>)
+
+    function handleNotFoundCategory ()
+    {
+        setCategoryList([])
+    }
+
 }
 
 function TeamItem({val, show})
@@ -124,7 +155,6 @@ function TeamItem({val, show})
         />
     </ListItem>
 }
-
 
 function Placeholder({ classes, setTeamMenu })
 {

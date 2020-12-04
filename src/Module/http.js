@@ -1,14 +1,12 @@
 import {log} from "./biblio";
 
 const api = '/api'
-let link = null
 
 // Todo for debug, show the defaul error.message in a notif for user
 
 export function sendTeam(url, http, data, callback, displayNotification, setLoading, setError)
 {
-    link = api + url
-    http.post( link + '/team', {
+    http.post( url, {
         name: data.name,
         secteur: data.secteur,
     })
@@ -27,7 +25,7 @@ export function sendTeam(url, http, data, callback, displayNotification, setLoad
 
 export function sendMembers(http, datas, callback, displayNotification, setLoading, setError,)
 {
-    http.post( link + '/member', datas)
+    http.post(URLS.saveMember, datas)
         .then((response) => {
             callback(response.data)
         })
@@ -101,6 +99,8 @@ export const URLS = {
     updateTeam :  api + '/dashboard/team/update',
     aboutTeam :  api + '/dashboard/team/about',
     deleteTeam :  api + '/dashboard/team/delete',
+    saveTeam :  api + '/dashboard/save/team',
+    saveMember :  api + '/dashboard/save/member',
 }
 
 export const MessageError = {

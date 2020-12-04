@@ -139,3 +139,15 @@ export function checkIfDataChanged (old, now)
 {
     return old !== now ? now : false;
 }
+
+export function getCategoryFromLocalStorage(onAbscence)
+{
+    let localCategory = getFromLocalStorage("category")
+    if (localCategory !== null)
+    {
+        return localCategory
+    }
+    else {
+        onAbscence()
+    }
+}

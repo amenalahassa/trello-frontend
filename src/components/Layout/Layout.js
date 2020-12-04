@@ -54,6 +54,7 @@ function Layout(props) {
             if (isMountedRef.current)
             {
                 setDatas(response.data)
+                console.log(response.data)
                 setLoading(false)
             }
         })

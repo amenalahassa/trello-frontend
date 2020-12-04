@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Modal from "../../components/Modal";
 import {Button, CircularProgress, Fade, Typography} from "@material-ui/core";
 
@@ -12,8 +12,9 @@ import {useAxiosState} from "../../context/AxiosContext";
 import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext";
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
 import {useNotification} from "../../context/GlobalContext";
-import {sendTeam} from "../../Module/http";
+import {sendTeam, URLS} from "../../Module/http";
 import {MenuToolBar} from "../../components/TiniComponents/MenuToolBar";
+import {getCategoryFromLocalStorage, setItemInLocalStorage} from "../../Module/biblio";
 
 
 
@@ -25,7 +26,6 @@ function AddTeamModal(props) {
     let modalDispatch = useModalDispatch()
     let setDatas = useDashboardDispatch()
     const http = useAxiosState()
-    let categoryList = useDashboard().team_category
 
     const [isLoading, setLoading] = React.useState(false)
     const [members, setMember] = React.useState([])
@@ -46,7 +46,7 @@ function AddTeamModal(props) {
 
     const save = () => {
         setLoading(true)
-        sendTeam('/dashboard/save', http, {
+        sendTeam(URLS.saveTeam, http, {
             name,
             secteur : category,
             members,
@@ -67,12 +67,12 @@ function AddTeamModal(props) {
                    <DialogContent>
                     <AddTeam
                         classes={classes}
-                        categoryList={categoryList}
                         members={members} setMember={setMember}
                         name={name} setName={setName}
                         error={error} setError={setError}
                         category={category} setCategory={setCategory}
                         email={email} setEmail={setEmail}
+                        displayNotification={displayNotification}
                     />
                    </DialogContent>
                    <DialogActions className={classes.buttonModal}>

@@ -10,11 +10,11 @@ import logo from "../../images/logo.png";
 import {useAxiosState} from "../../context/AxiosContext";
 import "../../Module/notify"
 import {toggleHasTeam, useUserTeamDispatch} from "../../context/UserTeamContext";
-import {log, setItemInLocalStorage} from "../../Module/biblio";
+import {getCategoryFromLocalStorage, setItemInLocalStorage} from "../../Module/biblio";
 import AddTeam from "../../components/SmallComponent/AddTeam";
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
 import {useNotification} from "../../context/GlobalContext";
-import {sendTeam} from "../../Module/http";
+import {sendTeam, URLS} from "../../Module/http";
 
 
 // UI :
@@ -26,7 +26,6 @@ export default function CreateTeam(props) {
   let classes = useStyles();
 
   const [category, setCategory] = React.useState("")
-  const [categoryList, setCategoryList] = React.useState()
   const [members, setMember] = React.useState([])
   const [name, setName] = React.useState("")
   const [error, setError] = React.useState({})
@@ -37,19 +36,9 @@ export default function CreateTeam(props) {
   const userTeamDispatch = useUserTeamDispatch()
 
 
-  useEffect(() => {
-    http.get('/api/ressources/category')
-        .then((response) => {
-          setCategoryList(response.data)
-        })
-        .catch(() => {
-          displayNotification("danger","Check your connection and reload please." )
-        })
-  }, [])
-
   const save = () => {
     setLoading(true)
-    sendTeam('/save', http, {
+    sendTeam(URLS.saveTeam, http, {
       name,
       secteur : category,
       members,
@@ -67,6 +56,7 @@ export default function CreateTeam(props) {
   }
 
 
+
   return (
     <Grid container className={classes.container}>
       <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
@@ -80,12 +70,12 @@ export default function CreateTeam(props) {
         <div>
           <AddTeam
               classes={classes}
-              categoryList={categoryList}
               members={members} setMember={setMember}
               name={name} setName={setName}
               error={error} setError={setError}
               category={category} setCategory={setCategory}
               email={email} setEmail={setEmail}
+              displayNotification={displayNotification}
           />
           <div className={classes.saveButtonContainer}>
             {isLoading ? (

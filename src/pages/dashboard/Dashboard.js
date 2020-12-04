@@ -28,6 +28,7 @@ export default function Dashboard(props) {
 
     useEffect(() => {
         setBoard(currentBoard)
+        console.log(currentBoard)
     }, [currentBoard])
 
 

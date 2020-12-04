@@ -5,22 +5,30 @@ import {Button, Typography} from '@material-ui/core'
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import TeamMemberList from "../TeamMemberList";
-import {checkIfMemberEmailIsValide, deleteMember} from "../../../Module/biblio";
+import {
+    checkIfMemberEmailIsValide,
+    deleteMember,
+    getCategoryFromLocalStorage,
+    setItemInLocalStorage
+} from "../../../Module/biblio";
+import {DisplayNotification} from "../../TiniComponents/Notifications";
+import Modal from "../../Modal";
+import {useNotification} from "../../../context/GlobalContext";
+import {useAxiosState} from "../../../context/AxiosContext";
 
 
 
 function AddTeam(props) {
 
-    let { classes , categoryList , setMember ,members} = props
+    let { classes , setMember, displayNotification ,members} = props
 
     const [isInvalide, setIsInvalide] = React.useState(true)
+    const [categoryList, setCategoryList] = React.useState([])
+    const http = useAxiosState()
 
     useEffect(() => {
-        if (categoryList !== undefined)
-        {
-            props.setCategory(categoryList[0].key)
-        }
-    }, [categoryList])
+        setCategoryList(getCategoryFromLocalStorage(getCategoryOnServer))
+    }, [])
 
     const handleKeyDown = (values) => {
         setIsInvalide(checkIfMemberEmailIsValide(values, members))
@@ -121,7 +129,17 @@ function AddTeam(props) {
             </div>
         </form>
   );
-
+    function getCategoryOnServer () {
+        http.get('/api/ressources/category')
+            .then((response) => {
+                setCategoryList(response.data)
+                // Todo find a way to update this by broadcasting when it change on server side
+                setItemInLocalStorage("category", response.data)
+            })
+            .catch(() => {
+                displayNotification("danger","Check your connection and reload please." )
+            })
+    }
 
 }
 
