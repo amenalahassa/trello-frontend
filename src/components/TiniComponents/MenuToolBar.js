@@ -13,6 +13,7 @@ export function MenuToolBar(props) {
         <Toolbar className={clsx(classes.toolbar, {
             [classes.modalStyle]: type === "modal",
             [classes.menuStyle]: type === "menu",
+            [classes.warningTitle]: type === "warning",
         })}>
             <Typography variant={variant} align="center" className={classes.title}>
                 {title}
@@ -34,6 +35,10 @@ const style = makeStyles(theme => ({
     title:{
         flex:1,
         fontWeight:400,
+    },
+    warningTitle: {
+        backgroundColor: "#FF5C93",
+        color:"white"
     },
     menuStyle :{
         boxShadow: "0 0px 0px 0 grey !important",

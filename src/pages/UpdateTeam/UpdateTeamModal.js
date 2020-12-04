@@ -3,7 +3,7 @@ import Modal from "../../components/Modal";
 import {Button, CircularProgress, Fade, Tooltip, Typography} from "@material-ui/core";
 
 import DialogActions from "@material-ui/core/DialogActions";
-import {toggleUpdateTeamModal, useModalDispatch} from "../../context/ModalContext";
+import {toggleUpdateTeamModal, toggleWarningModal, useModalDispatch, useModalState} from "../../context/ModalContext";
 import useStyles from "../addTeam/styles";
 import DialogContent from "@material-ui/core/DialogContent";
 import {useAxiosState} from "../../context/AxiosContext";
@@ -15,8 +15,9 @@ import IconButton from "@material-ui/core/IconButton";
 import {Delete} from "@material-ui/icons";
 import UpdateTeam from "../../components/SmallComponent/UpdateTeam";
 import {checkIfDataChanged, log} from "../../Module/biblio";
-import {updateTeam} from "../../Module/http";
+import {deleteTeam, MessageError, updateTeam} from "../../Module/http";
 import {MenuToolBar} from "../../components/TiniComponents/MenuToolBar";
+import {WarningModal} from "../../components/TiniComponents/WarningModal";
 
 
 
@@ -26,6 +27,7 @@ import {MenuToolBar} from "../../components/TiniComponents/MenuToolBar";
 function UpdateTeamModal(props) {
     let classes = useStyles();
 
+    let modalState = useModalState()
     let modalDispatch = useModalDispatch()
     let setDatas = useDashboardDispatch()
     const http = useAxiosState()
@@ -42,6 +44,7 @@ function UpdateTeamModal(props) {
     const [email, setEmail] = React.useState("")
     const [updating, beginUpdate] = React.useState(false)
     const [ notification, displayNotification, resetNotification ] = useNotification()
+    const [deleteText, setText] = useState("")
 
     useTeamToUpdateEffect(setCurrent, undefined, undefined, setMemberList)
 
@@ -100,6 +103,15 @@ function UpdateTeamModal(props) {
         return admin
     }
 
+    const handleDeleteTeam = () => {
+        setText("You're deleting "+ current.name +". Cancel if not.")
+        toggleWarningModal(modalDispatch, true)
+    }
+
+    const delette = (end) => {
+        deleteTeam(http, current.id, onSuccess, onDeleteError, end, displayNotification)
+    }
+
     return (
         <div>
             <Modal {...props}>
@@ -109,7 +121,7 @@ function UpdateTeamModal(props) {
                     <CardHeader
                         action={ toKnowIfUserIsAdmin() && updating === true &&
                         <Tooltip title={<Typography variant={"caption"}>Delete this team</Typography>} arrow>
-                            <IconButton aria-label="settings">
+                            <IconButton aria-label="settings" onClick={() => {handleDeleteTeam()}}>
                                 <Delete />
                             </IconButton>
                         </Tooltip>
@@ -149,6 +161,7 @@ function UpdateTeamModal(props) {
                    </DialogActions>
                </div>
             </Modal>
+            <WarningModal open={ modalState.warning } text={deleteText} callback={delette}  />
         </div>
     )
 
@@ -184,6 +197,11 @@ function UpdateTeamModal(props) {
             displayNotification("Try to reload the page please. See more in console.")
             setLoading(false)
         }
+    }
+
+    function onDeleteError()
+    {
+        displayNotification(MessageError.unknown)
     }
 
 }

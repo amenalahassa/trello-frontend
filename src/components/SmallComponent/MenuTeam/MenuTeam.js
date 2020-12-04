@@ -38,7 +38,6 @@ function MenuTeam(props) {
     const [ notification, displayNotification, resetNotification ] = useNotification()
 
     let userData =  useDashboard().user
-    let modalState = useModalState()
     let modalDispatch = useModalDispatch()
     let setTeamToUpdate = useSetTeamToUpdate()
 

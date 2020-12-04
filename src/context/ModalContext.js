@@ -12,8 +12,10 @@ function ModalReducer(state, action) {
             return { ...state, addBoard : action.open };
         case "ADD_TEAM":
             return { ...state, addTeam : action.open };
+        case "WARNING":
+            return { ...state, warning : action.open };
         case "CLOSE_ALL":
-            return { addBoard: false , addTeam: false, updateTeam: false};
+            return { addBoard: false , addTeam: false, updateTeam: false, warning:false};
         default: {
             throw new Error(`Unhandled action type: ${action.type}`);
         }
@@ -26,6 +28,7 @@ function ModalProvider({ children }) {
         addBoard : false ,
         addTeam: false,
         updateTeam: false,
+        warning:false,
     });
 
     return (
@@ -56,7 +59,7 @@ function useModalDispatch() {
 }
 
 
-export { useModalDispatch, useModalState, ModalProvider, toggleAddBoardModal, toggleAddTeamModal, toggleUpdateTeamModal};
+export { useModalDispatch, useModalState, ModalProvider, toggleAddBoardModal, toggleAddTeamModal, toggleUpdateTeamModal, toggleWarningModal};
 
 function toggleAddBoardModal(dispatch, open) {
      dispatch({
@@ -72,5 +75,11 @@ function toggleAddTeamModal(dispatch, open) {
 function toggleUpdateTeamModal(dispatch, open) {
     dispatch({
         type: "UPDATE_TEAM", open
+    })
+}
+
+function toggleWarningModal(dispatch, open) {
+    dispatch({
+        type: "WARNING", open
     })
 }

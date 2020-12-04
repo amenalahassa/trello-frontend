@@ -63,7 +63,6 @@ function AddTeamModal(props) {
             <Modal {...props}>
                 <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
                 <div>
-                   <DialogTitle disableTypography id="responsive-dialog-title">{<Typography  variant="h4">Add a Team</Typography>}</DialogTitle>
                     <MenuToolBar title="Add a Team" onClose={() => cancel()} />
                    <DialogContent>
                     <AddTeam

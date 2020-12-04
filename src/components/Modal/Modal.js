@@ -1,7 +1,6 @@
 import React from "react";
 
 // styles
-import useStyles from "./styles";
 import {styles} from "./styles";
 import Dialog from "@material-ui/core/Dialog";
 
@@ -15,8 +14,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // Todo : Very the responsively of this component
 
 function Modal(props) {
-  var classes = useStyles();
-  let { handleClose, open , children} = props
+  let { handleClose, open , children, ...restProps} = props
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
@@ -33,6 +31,7 @@ function Modal(props) {
             aria-describedby="alert-dialog-slide-description"
             disableBackdropClick
             disableEscapeKeyDown
+            {...restProps}
         >
           {children}
         </Dialog>

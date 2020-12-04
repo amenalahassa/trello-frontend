@@ -11,6 +11,11 @@ function useNotification()
         message : ''
     })
 
+    // error
+    // warning
+    // success
+    // info
+
     const displayNotification = (message, type = "error") => {
         showNotification({
             open: true, message, type,

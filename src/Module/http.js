@@ -78,8 +78,30 @@ export function updateTeam(http, validated, success, error)
         })
 }
 
+export function deleteTeam(http, id,  success, error, end, displayNotification)
+{
+    http.post(URLS.deleteTeam, {
+        id,
+    })
+        .then((response) => {
+            displayNotification("The team was successfuly deleted", "success")
+            end()
+            setTimeout(() => {
+                success(response.data)
+            }, 1000)
+        })
+        .catch(() => {
+            error()
+        })
+}
+
 // Todo populate this constante where you make a request
 export const URLS = {
     updateTeam :  api + '/dashboard/team/update',
     aboutTeam :  api + '/dashboard/team/about',
+    deleteTeam :  api + '/dashboard/team/delete',
+}
+
+export const MessageError = {
+    unknown: "Something goes wrong. Check you connection and try again please.",
 }

@@ -29,6 +29,7 @@ import Modal from "../Modal";
 import {useIsMountedRef, useNotification} from "../../context/GlobalContext";
 import {TeamToUpdateProvider} from "../../context/TeamToUpdateContext";
 import UpdateTeamModal from "../../pages/UpdateTeam/UpdateTeamModal";
+import {WarningModal} from "../TiniComponents/WarningModal";
 
 // Todo : Back sidebar for responsive site
 
