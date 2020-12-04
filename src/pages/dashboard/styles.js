@@ -90,7 +90,7 @@ export default makeStyles(theme => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff7a',
   },
   card: {
     marginLeft: theme.spacing(1),

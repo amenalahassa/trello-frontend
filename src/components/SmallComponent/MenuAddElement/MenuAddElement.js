@@ -11,6 +11,7 @@ import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Typography} from "../../Wrappers";
 import {toggleAddBoardModal, toggleAddTeamModal, useModalDispatch} from "../../../context/ModalContext";
+import {MenuToolBar} from "../../TiniComponents/MenuToolBar";
 
 
 
@@ -29,6 +30,7 @@ function MenuAddElement(props) {
             classes={{ paper: classes.profileMenu }}
             disableAutoFocusItem
         >
+            <MenuToolBar title="Add" onClose={() => setAddMenu(null)} type="menu" />
             <List >
                 <ListItem button onClick={() => showAddBoardModal()}>
                     <ListItemAvatar>
@@ -36,7 +38,7 @@ function MenuAddElement(props) {
                             <DashboardIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a board</Typography>} secondary={ <span> <Typography variant="caption" display="block"  >A board is made up of cards ordered on lists. </Typography> <Typography variant="caption" display="block" >Use it to manage projects, track information, or organize anything.</Typography></span>} />
+                    <ListItemText primary={<Typography variant="h6" weight="medium" >A board</Typography>} secondary={ <span> <Typography variant="caption" display="block"  >A board is made up of cards ordered on lists. </Typography> <Typography variant="caption" display="block" >Use it to manage projects, track information, or organize anything.</Typography></span>} />
                 </ListItem>
                 <ListItem button onClick={() => showAddTeamModal()} >
                     <ListItemAvatar>
@@ -44,7 +46,7 @@ function MenuAddElement(props) {
                             <PeopleIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={<Typography variant="h6" weight="medium" >Add a Team</Typography>} secondary={<span><Typography variant="caption" display="block" >A team is a group of boards and people.</Typography><Typography variant="caption" display="block" >Use it to organize your company, side hustle, family, or friends.</Typography></span>} />
+                    <ListItemText primary={<Typography variant="h6" weight="medium" >A Team</Typography>} secondary={<span><Typography variant="caption" display="block" >A team is a group of boards and people.</Typography><Typography variant="caption" display="block" >Use it to organize your company, side hustle, family, or friends.</Typography></span>} />
                 </ListItem>
             </List>
         </Menu>

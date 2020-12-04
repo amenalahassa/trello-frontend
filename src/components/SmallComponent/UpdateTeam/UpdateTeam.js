@@ -16,12 +16,13 @@ import Chip from "@material-ui/core/Chip";
 import IconButton from "@material-ui/core/IconButton";
 import CardHeader from "@material-ui/core/CardHeader";
 import {Delete} from "@material-ui/icons";
+import {useDashboard} from "../../../context/DashboardContext";
 
 
 
 function UpdateTeam(props) {
 
-    let { classes , categoryList , setMember , members } = props
+    let { classes , categoryList , setMember , members, updating } = props
     const [current, setCurrent] = useState({})
     const [isChanged, setChanged] = useState({
         name: false,
@@ -73,6 +74,7 @@ function UpdateTeam(props) {
                     value={returnStringIfUndefined(props.name)}
                     onChange={(event => {props.setName(event.target.value); props.setError({})})}
                     required
+                    disabled={!updating}
                     fullWidth
                     className={classes.textfielInput}
                 />
@@ -92,6 +94,7 @@ function UpdateTeam(props) {
                     helperText={!!props.error.secteur ? props.error.secteur : "Required"}
                     fullWidth
                     required
+                    disabled={!updating}
                     className={classes.textfielInput}
                 >
                     <MenuItem value=""  disabled>
@@ -104,7 +107,7 @@ function UpdateTeam(props) {
                     ))}
                 </TextField>
                 <div>
-                    <div>
+                    { updating === true && <div>
                         <TextField
                             id="filled-helperText"
                             InputProps={{
@@ -118,6 +121,7 @@ function UpdateTeam(props) {
                             placeholder="exemple@props.email.com"
                             className={classes.InputToGetMember}
                             value={props.email}
+
                             onChange={(event => handleKeyDown(event.target.value))}
                         />
                         <Button variant="contained" color="secondary"
@@ -128,10 +132,11 @@ function UpdateTeam(props) {
                         >
                             Add
                         </Button>
-                    </div>
+                    </div>}
                     {members.length !== 0 &&
                     <TeamUserList
                         list={members}
+                        updating={updating}
                         handleDeleteChip = {handleDeleteChip}
                     />}
                     <Typography hidden={!!props.error.members} variant="caption" color="secondary" display="block">{!!props.error.members ? props.error.members : ""}</Typography>
@@ -146,12 +151,22 @@ export default UpdateTeam;
 
 function TeamUserList(props) {
     var classes = useStyles();
-    const {  handleDeleteChip , list } = props
+    const {  handleDeleteChip , list, updating } = props
+    let user = useDashboard().user
+
+    const toKnowIfUserIsAdmin = () =>
+    {
+        let admin = false
+        list.forEach((member) => {
+            if (member.email === user.email && member.admin === true) admin = true
+        })
+        return admin
+    }
 
     return (
         <>
             <CardHeader
-                action={
+                action={ toKnowIfUserIsAdmin() && updating === true &&
                     <IconButton aria-label="settings">
                         <Delete />
                     </IconButton>
@@ -169,6 +184,18 @@ function TeamUserList(props) {
 
     function UserChip ({ data })
     {
+        if ((data.email === user.email && data.admin === true) || toKnowIfUserIsAdmin() === false)
+        {
+            return (
+                <li>
+                    <Chip
+                        label={data.name}
+                        avatar={data.photo}
+                        className={classes.chip}
+                    />
+                </li>
+            )
+        }
         return (
             <li>
                 <Chip
@@ -183,6 +210,17 @@ function TeamUserList(props) {
 
     function InvitedChip ({ data })
     {
+        if (toKnowIfUserIsAdmin() === false)
+        {
+            return (
+                <li >
+                    <Chip
+                        label={data.email}
+                        className={classes.chip}
+                    />
+                </li>
+            )
+        }
         return (
             <li >
                 <Chip
@@ -193,4 +231,6 @@ function TeamUserList(props) {
             </li>
         )
     }
+
+
 }

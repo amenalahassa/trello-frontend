@@ -12,10 +12,13 @@ import {DisplayNotification} from "../../components/TiniComponents/Notifications
 import {useNotification, useTeamToUpdateEffect} from "../../context/GlobalContext";
 import CardHeader from "@material-ui/core/CardHeader";
 import IconButton from "@material-ui/core/IconButton";
-import {Delete} from "@material-ui/icons";
+import {Delete, Close as CloseIcon} from "@material-ui/icons";
 import UpdateTeam from "../../components/SmallComponent/UpdateTeam";
 import { checkIfDataChanged} from "../../Module/biblio";
 import {updateTeam} from "../../Module/http";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import {MenuToolBar} from "../../components/TiniComponents/MenuToolBar";
 
 
 
@@ -29,6 +32,7 @@ function UpdateTeamModal(props) {
     let setDatas = useDashboardDispatch()
     const http = useAxiosState()
     let categoryList = useDashboard().team_category
+    let user = useDashboard().user
 
     const [current, setCurrent] = useState({})
     const [isLoading, setLoading] = React.useState(false)
@@ -38,6 +42,7 @@ function UpdateTeamModal(props) {
     const [error, setError] = React.useState({})
     const [category, setCategory] = React.useState("")
     const [email, setEmail] = React.useState("")
+    const [updating, beginUpdate] = React.useState(false)
     const [ notification, displayNotification, resetNotification ] = useNotification()
 
     useTeamToUpdateEffect(setCurrent, undefined, undefined, setMemberList)
@@ -47,6 +52,7 @@ function UpdateTeamModal(props) {
         setName("")
         setMember([])
         setLoading(false)
+        beginUpdate(false)
         toggleUpdateTeamModal(modalDispatch, false)
     }
 
@@ -87,14 +93,23 @@ function UpdateTeamModal(props) {
         return oldMember
     }
 
+    const toKnowIfUserIsAdmin = () =>
+    {
+        let admin = false
+        members.forEach((member) => {
+            if (member.email === user.email && member.admin === true) admin = true
+        })
+        return admin
+    }
 
     return (
         <div>
             <Modal {...props}>
                 <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
                 <div>
+                    <MenuToolBar title="Update a team" onClose={() => cancel()} />
                     <CardHeader
-                        action={
+                        action={ toKnowIfUserIsAdmin() && updating === true &&
                             <IconButton aria-label="settings">
                                 <Delete />
                             </IconButton>
@@ -105,6 +120,7 @@ function UpdateTeamModal(props) {
                    <DialogContent>
                     <UpdateTeam
                         classes={classes}
+                        updating={updating}
                         categoryList={categoryList}
                         members={members} setMember={setMember}
                         name={name} setName={setName}
@@ -124,8 +140,8 @@ function UpdateTeamModal(props) {
                                    </Fade>
                                ) :
                                <Fade in={!isLoading}>
-                                   <Button onClick={() => save()}  color="primary" autoFocus variant="contained">
-                                       Save
+                                   <Button onClick={() => updating === true ? save() : beginUpdate(true)}  color="primary" autoFocus variant="contained">
+                                       { updating === true ? "Save" : "Modify"}
                                    </Button>
                                </Fade>
                            }

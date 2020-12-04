@@ -50,6 +50,7 @@ function useTeamToUpdateEffect (setCurrent = () => {}, setCurrentName = () => {}
         if (team !== null )
         {
             setCurrent(team)
+            console.log(chips)
             setCurrentName(team.name)
             setCurrentSecteur(team.secteur)
             setCurrentMember(chips)
@@ -66,6 +67,7 @@ function useTeamToUpdateEffect (setCurrent = () => {}, setCurrentName = () => {}
                 type: "user",
                 email: el.email,
                 name: el.name,
+                admin: Boolean(el.pivot.admin),
                 photo : <Avatar>{el.name[0]}</Avatar>,
             })
         })

@@ -18,6 +18,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
+import {MenuToolBar} from "../../components/TiniComponents/MenuToolBar";
 
 //Own components
 
@@ -82,7 +83,7 @@ function AddBoardModal(props) {
       <div>
           <Modal {...props}>
               <div>
-                  <DialogTitle disableTypography id="responsive-dialog-title">{<Typography  variant="h4">Add a board</Typography>}</DialogTitle>
+                  <MenuToolBar title="Add a Board" onClose={() => cancel()} />
                   <DialogContent>
                       <TextField
                           id="filled-helperText"

@@ -18,6 +18,9 @@ export default makeStyles(theme => ({
     },
     textfielInput : {
         marginTop:theme.spacing(4),
+        "&.Mui-disabled" : {
+            color:"none"
+        }
     },
     textFieldUnderline: {
         "&:before": {
@@ -29,6 +32,7 @@ export default makeStyles(theme => ({
         "&:hover:before": {
             borderBottomColor: `${theme.palette.primary.light} !important`,
         },
+
     },
     textField: {
         borderBottomColor: theme.palette.background.light,

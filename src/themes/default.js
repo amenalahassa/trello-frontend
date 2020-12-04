@@ -129,6 +129,13 @@ export default {
         height: 56,
       },
     },
+    MuiInputBase: {
+      root : {
+        "&.Mui-disabled" : {
+          color:"unset"
+        }
+      }
+    },
     MuiTableCell: {
       root: {
         borderBottom: "1px solid rgba(224, 224, 224, .5)",

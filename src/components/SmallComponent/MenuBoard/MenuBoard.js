@@ -16,6 +16,7 @@ import boardLogo from '../../../images/board.svg'
 import {useDashboard, useDashboardDispatch} from "../../../context/DashboardContext";
 import {getFromLocalStorage, log, setItemInLocalStorage} from "../../../Module/biblio";
 import {toggleAddBoardModal, useModalDispatch} from "../../../context/ModalContext";
+import {MenuToolBar} from "../../TiniComponents/MenuToolBar";
 
 
 // Todo set on start up, the current default board to the first
@@ -29,6 +30,7 @@ function MenuBoard(props) {
     let  [boards, setBoards] = useState([])
     let  [currentBoard, setCurrentBoard] = useState(null)
 
+    // Todo Use anywhere user to this value
     let  userData =  useDashboard().user
 
 
@@ -98,6 +100,7 @@ function MenuBoard(props) {
             classes={{ paper: classes.profileMenu }}
             disableAutoFocusItem
         >
+            <MenuToolBar title="Boards" onClose={() => setBoardMenu(null)} type="menu" />
             {showPlaceholder === true ?
                 <div><Placeholder classes={classes} setBoardMenu={setBoardMenu}/></div>
                 :

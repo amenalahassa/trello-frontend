@@ -24,6 +24,7 @@ import {useSetTeamToUpdate} from "../../../context/TeamToUpdateContext";
 import CardMedia from "@material-ui/core/CardMedia";
 import teamLogo from "../../../images/team.svg";
 import CardContent from "@material-ui/core/CardContent";
+import {MenuToolBar} from "../../TiniComponents/MenuToolBar";
 
 
 // Todo : Show the correct value of a category, not his key
@@ -79,6 +80,7 @@ function MenuTeam(props) {
             classes={{ paper: classes.profileMenu }}
             disableAutoFocusItem
         >
+            <MenuToolBar title="Teams" onClose={() => setTeamMenu(null)} type="menu" />
             {returnArrayIfUndefined(teams).length === 0 ? <div><Placeholder classes={classes} setTeamMenu={setTeamMenu}/></div> :
                 <div>
                     <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />

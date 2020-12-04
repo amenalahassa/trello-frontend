@@ -13,6 +13,7 @@ import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
 import {useNotification} from "../../context/GlobalContext";
 import {sendTeam} from "../../Module/http";
+import {MenuToolBar} from "../../components/TiniComponents/MenuToolBar";
 
 
 
@@ -63,6 +64,7 @@ function AddTeamModal(props) {
                 <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
                 <div>
                    <DialogTitle disableTypography id="responsive-dialog-title">{<Typography  variant="h4">Add a Team</Typography>}</DialogTitle>
+                    <MenuToolBar title="Add a Team" onClose={() => cancel()} />
                    <DialogContent>
                     <AddTeam
                         classes={classes}
