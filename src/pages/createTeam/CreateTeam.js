@@ -13,8 +13,9 @@ import {toggleHasTeam, useUserTeamDispatch} from "../../context/UserTeamContext"
 import {setItemInLocalStorage} from "../../Module/biblio";
 import AddTeam from "../../components/SmallComponent/AddTeam";
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
-import {useNotification} from "../../context/GlobalContext";
+import {useNotification} from "../../context/GlobalHooks";
 import {sendTeam, URLS} from "../../Module/http";
+import {useNotificationDispatch} from "../../context/NotificationContext";
 
 
 // UI :
@@ -31,9 +32,9 @@ export default function CreateTeam(props) {
   const [error, setError] = React.useState({})
   const [email, setEmail] = React.useState("")
   const [isLoading, setLoading ] = React.useState(false)
-  const [ notification, displayNotification, resetNotification ] = useNotification()
   const http = useAxiosState()
   const userTeamDispatch = useUserTeamDispatch()
+  const displayNotification = useNotificationDispatch()
 
 
   const save = () => {
@@ -59,7 +60,6 @@ export default function CreateTeam(props) {
 
   return (
     <Grid container className={classes.container}>
-      <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
       <Paper className={classes.root} elevation={3}>
         <div className={classes.logotype}>
           <img className={classes.logotypeIcon} src={logo} alt="logo" />

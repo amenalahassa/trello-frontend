@@ -9,7 +9,7 @@ import {
     deleteMember,
  returnStringIfUndefined,
 } from "../../../Module/biblio";
-import {useTeamToUpdateEffect} from "../../../context/GlobalContext";
+import {useTeamToUpdateEffect} from "../../../context/GlobalHooks";
 import useStyles from "./style";
 import Paper from "@material-ui/core/Paper";
 import Chip from "@material-ui/core/Chip";

@@ -13,7 +13,7 @@ import {
 } from "../../../Module/biblio";
 import {DisplayNotification} from "../../TiniComponents/Notifications";
 import Modal from "../../Modal";
-import {useNotification} from "../../../context/GlobalContext";
+import {useNotification} from "../../../context/GlobalHooks";
 import {useAxiosState} from "../../../context/AxiosContext";
 import {URLS} from "../../../Module/http";
 

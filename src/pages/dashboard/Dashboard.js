@@ -21,7 +21,7 @@ import {useAxiosState} from "../../context/AxiosContext";
 import {URLS} from "../../Module/http";
 import {useDashboardDispatch} from "../../context/DashboardContext";
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
-import {useNotification} from "../../context/GlobalContext";
+import {useNotification} from "../../context/GlobalHooks";
 import Skeleton from "@material-ui/lab/Skeleton";
 
 

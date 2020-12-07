@@ -9,6 +9,7 @@ import { Transition } from './Components/Components'
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import useTheme from "@material-ui/core/styles/useTheme";
 import withStyles from "@material-ui/core/styles/withStyles";
+import {NotificationProvider} from "../../context/NotificationContext";
 
 
 // Todo : Very the responsively of this component
@@ -33,7 +34,9 @@ function Modal(props) {
             disableEscapeKeyDown
             {...restProps}
         >
-          {children}
+          <NotificationProvider>
+              {children}
+          </NotificationProvider>
         </Dialog>
       </div>
   )

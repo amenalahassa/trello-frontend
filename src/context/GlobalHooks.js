@@ -32,7 +32,6 @@ function useNotification()
     return [ notification, displayNotification, resetNotification ]
 }
 
-
 function useIsMountedRef(){
     const isMountedRef = useRef(null);
     useEffect(() => {
@@ -86,7 +85,5 @@ function useTeamToUpdateEffect (setCurrent = () => {}, setCurrentName = () => {}
         return users
     }
 }
-
-
 
 export { useNotification, useIsMountedRef, useTeamToUpdateEffect };

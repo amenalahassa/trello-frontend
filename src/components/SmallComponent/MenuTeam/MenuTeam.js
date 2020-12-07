@@ -21,7 +21,7 @@ import {
     useModalDispatch,
     useModalState
 } from "../../../context/ModalContext";
-import {useNotification} from "../../../context/GlobalContext";
+import {useNotification} from "../../../context/GlobalHooks";
 import {DisplayNotification} from "../../TiniComponents/Notifications";
 import {useAxiosState} from "../../../context/AxiosContext";
 import {MessageError, URLS} from "../../../Module/http";

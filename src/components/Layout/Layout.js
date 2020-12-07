@@ -26,7 +26,7 @@ import AddTeamModal from "../../pages/addTeam/AddTeamModal";
 import AddBoardModal from "../../pages/addBoard/AddBoardModal";
 import {DisplayNotification} from "../TiniComponents/Notifications";
 import Modal from "../Modal";
-import {useIsMountedRef, useNotification} from "../../context/GlobalContext";
+import {useIsMountedRef, useNotification} from "../../context/GlobalHooks";
 import {TeamToUpdateProvider} from "../../context/TeamToUpdateContext";
 import UpdateTeamModal from "../../pages/UpdateTeam/UpdateTeamModal";
 import {WarningModal} from "../TiniComponents/WarningModal";

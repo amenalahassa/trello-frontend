@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { HashRouter, Route, Switch, Redirect, useRouteMatch, BrowserRouter } from "react-router-dom";
+import React from "react";
+import { Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
 
 // components
 import Layout from "./Layout";
@@ -14,24 +14,28 @@ import CreateTeam from "../pages/createTeam";
 import { useUserTeamState} from "../context/UserTeamContext";
 import {ModalProvider} from "../context/ModalContext";
 import {DashboardProvider} from "../context/DashboardContext";
+import {NotificationProvider} from "../context/NotificationContext";
 
 export default function App() {
   // global
   var { isAuthenticated } = useUserState();
   var { ifHasTeam } = useUserTeamState();
-  // Todo : Modifier la page d'erreur
+
+    // Todo : Modifier la page d'erreur
   return (
       <DashboardProvider>
           <ModalProvider>
-            <BrowserRouter>
-              <Switch>
-                <Route exact path="/" render={() => <Redirect to="/app" />} />
-                <AuthMiddleware path="/app" component={Layout} />
-                <TeamMiddleware path="/welcome" component={CreateTeam}/>
-                <GuestMiddleware path="/login" component={Login} />
-                <Route component={Error} />
-              </Switch>
-            </BrowserRouter>
+                <NotificationProvider>
+                    <BrowserRouter>
+                        <Switch>
+                            <Route exact path="/" render={() => <Redirect to="/authentication" />} />
+                            <AuthMiddleware path="/authentication" component={Layout} />
+                            <TeamMiddleware path="/welcome" component={CreateTeam}/>
+                            <GuestMiddleware path="/login" component={Login} />
+                            <Route component={Error} />
+                        </Switch>
+                    </BrowserRouter>
+                </NotificationProvider>
           </ModalProvider>
       </DashboardProvider>
   );

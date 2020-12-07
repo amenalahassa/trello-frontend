@@ -9,7 +9,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import {useAxiosState} from "../../context/AxiosContext";
 import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext";
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
-import {useNotification, useTeamToUpdateEffect} from "../../context/GlobalContext";
+import {useNotification, useTeamToUpdateEffect} from "../../context/GlobalHooks";
 import CardHeader from "@material-ui/core/CardHeader";
 import IconButton from "@material-ui/core/IconButton";
 import {Delete} from "@material-ui/icons";

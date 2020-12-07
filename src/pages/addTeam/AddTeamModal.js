@@ -11,7 +11,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import {useAxiosState} from "../../context/AxiosContext";
 import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext";
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
-import {useNotification} from "../../context/GlobalContext";
+import {useNotification} from "../../context/GlobalHooks";
 import {sendTeam, URLS} from "../../Module/http";
 import {MenuToolBar} from "../../components/TiniComponents/MenuToolBar";
 import {getCategoryFromLocalStorage, setItemInLocalStorage} from "../../Module/biblio";
