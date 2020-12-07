@@ -36,7 +36,7 @@ export default function App() {
             <PublicRoute path="/login" component={Login} />
             <Route component={Error} />
           </Switch>
-        </HashRouter>
+            </HashRouter>
           </ModalProvider>
       </DashboardProvider>
   );

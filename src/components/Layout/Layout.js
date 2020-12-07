@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {
   Route,
   Switch,
-  withRouter,
+  withRouter, useLocation, useHistory, useRouteMatch
 } from "react-router-dom";
 import classnames from "classnames";
 
@@ -41,11 +41,15 @@ function Layout(props) {
 
     const classes = useStyles( { backgroundImage : getResizeBackgroundImage(currentBoard)});
 
+    let location = useLocation()
+    let history = useHistory()
+    let match = useRouteMatch()
 
     const modalState = useModalState()
     const setDatas = useDashboardDispatch()
     const http = useAxiosState()
     const isMountedRef = useIsMountedRef();
+
 
 
   useEffect(() => {
@@ -55,6 +59,9 @@ function Layout(props) {
             {
                 setDatas(response.data)
                 console.log(response.data)
+                console.log(location)
+                console.log(history)
+                console.log(match)
                 setLoading(false)
             }
         })

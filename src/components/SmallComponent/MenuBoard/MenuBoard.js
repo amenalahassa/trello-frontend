@@ -81,7 +81,7 @@ function MenuBoard(props) {
         else
         {
             next = {
-                desc: current.team_name + " board",
+                desc: current.team + " board",
                 ...current
             }
         }
@@ -160,7 +160,7 @@ function MenuBoard(props) {
                                     <ListItemIcon>
                                         <DashboardIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={val.name} secondary={val.team_name + ' board'} />
+                                    <ListItemText primary={val.name} secondary={val.team + ' board'} />
                                 </ListItem>
                             )}
                         </List>
@@ -171,13 +171,12 @@ function MenuBoard(props) {
         </Menu>
   )
 
-
     function getBoardOfTeams(team)
     {
         let boardOfTeams  = []
         team.forEach((el) => {
             el.boards.forEach((ele) => {
-                let board = {...ele, team_name: el.name}
+                let board = {...ele, team: el.name}
                 boardOfTeams.push(board)
             })
         })
@@ -193,25 +192,28 @@ function MenuBoard(props) {
         }
         else
         {
-            if (findCurrentBoard(currentSavedBoard, personalBoard) === true || findCurrentBoard(currentSavedBoard, teamBoard) === true)
-            {
-                return currentSavedBoard
-            }
-            return null
+            let allboards = [...personalBoard, ...teamBoard]
+            return updateCurrentSavedBoardIfFound(allboards, currentSavedBoard)
         }
     }
 
-    function findCurrentBoard(currentSavedBoard, board)
+    function updateCurrentSavedBoardIfFound (allBoards, current)
     {
         let finded  = false
-        for (const el of board) {
-            if (el.id === currentSavedBoard.id)
+        let currentUpdated = {}
+        for (const el of allBoards) {
+            if (el.id === current.id)
             {
                 finded = true
+                currentUpdated = el
                 break
             }
         }
-        return finded
+        if (finded)
+        {
+            return currentUpdated
+        }
+        return null
     }
 }
 

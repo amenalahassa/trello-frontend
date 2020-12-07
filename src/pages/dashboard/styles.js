@@ -33,7 +33,6 @@ export default makeStyles(theme => ({
   },
   toolbar:{
     minHeight:48,
-    marginTop:theme.spacing(1)
   },
   divider: {
     marginLeft: theme.spacing(2),
@@ -50,12 +49,19 @@ export default makeStyles(theme => ({
       backgroundColor: "#ffffff61",
     }
   },
+  buttonTeamNameBoard: {
+    color: "white",
+    '&:hover': {
+      backgroundColor: "rgba(253,251,251,0.5)",
+    }
+  },
   team:{
     flexGrow:1,
     display: "flex"
   },
   teamAvatar:{
-    marginRight:theme.spacing(2)
+    marginRight:theme.spacing(2),
+    marginLeft:theme.spacing(2),
   },
   headerMenu: {
     marginTop: theme.spacing(10),
