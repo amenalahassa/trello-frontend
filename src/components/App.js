@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
+import { HashRouter, Route, Switch, Redirect, useRouteMatch, BrowserRouter } from "react-router-dom";
 
 // components
 import Layout from "./Layout";
@@ -19,41 +19,36 @@ export default function App() {
   // global
   var { isAuthenticated } = useUserState();
   var { ifHasTeam } = useUserTeamState();
-
   // Todo : Modifier la page d'erreur
   return (
       <DashboardProvider>
           <ModalProvider>
-            <HashRouter>
-          <Switch>
-            <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
-            <Route
-              exact
-              path="/app"
-              render={() => <Redirect to="/app/dashboard" />}
-            />
-            <PrivateRoute path="/app" component={Layout} />
-            <PublicRoute path="/login" component={Login} />
-            <Route component={Error} />
-          </Switch>
-            </HashRouter>
+            <BrowserRouter>
+              <Switch>
+                <Route exact path="/" render={() => <Redirect to="/app" />} />
+                <AuthMiddleware path="/app" component={Layout} />
+                <TeamMiddleware path="/welcome" component={CreateTeam}/>
+                <GuestMiddleware path="/login" component={Login} />
+                <Route component={Error} />
+              </Switch>
+            </BrowserRouter>
           </ModalProvider>
       </DashboardProvider>
   );
 
   // #######################################################################
 
-    function PrivateRoute({component, ...rest }) {
-        if (ifHasTeam === false)
-        {
-            component = CreateTeam
-        }
+    function AuthMiddleware({component, ...rest }) {
         return (
             <Route
                 {...rest}
                 render={props =>
                     isAuthenticated ? (
-                            React.createElement(component, props)
+                        <Redirect
+                            to={{
+                                pathname: "/welcome/firstTeam",
+                            }}
+                        />
                         ) : (
                         <Redirect
                             to={{
@@ -68,7 +63,7 @@ export default function App() {
             />
         );
     }
-    function PublicRoute({ component, ...rest }) {
+    function GuestMiddleware({ component, ...rest }) {
         return (
             <Route
                 {...rest}
@@ -86,5 +81,30 @@ export default function App() {
             />
         );
     }
+    function TeamMiddleware({ component, path, ...rest }) {
+        return (
+            <>
+                <Route exact path={path + "/firstTeam"}>
+                    {
+                        ifHasTeam !== false ? (
+                            <Redirect
+                                push
+                                to={{
+                                    pathname: "/welcome/",
+                                }}
+                            />
+                        ) : (
+                            React.createElement(component, {...rest} )
+                        )
+                    }
+                </Route>
+                <Route
+                    exact path={path} component={Layout}
+                />
+            </>
+        );
+    }
+
+
 
 }

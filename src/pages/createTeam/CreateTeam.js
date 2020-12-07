@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {Grid, Paper, Typography, Button, CircularProgress, Fade} from "@material-ui/core";
 
 // styles
@@ -10,7 +10,7 @@ import logo from "../../images/logo.png";
 import {useAxiosState} from "../../context/AxiosContext";
 import "../../Module/notify"
 import {toggleHasTeam, useUserTeamDispatch} from "../../context/UserTeamContext";
-import {getCategoryFromLocalStorage, setItemInLocalStorage} from "../../Module/biblio";
+import {setItemInLocalStorage} from "../../Module/biblio";
 import AddTeam from "../../components/SmallComponent/AddTeam";
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
 import {useNotification} from "../../context/GlobalContext";

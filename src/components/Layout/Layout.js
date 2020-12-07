@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {
   Route,
   Switch,
-  withRouter, useLocation, useHistory, useRouteMatch
+  withRouter, useLocation, useHistory, useRouteMatch, HashRouter
 } from "react-router-dom";
 import classnames from "classnames";
 
@@ -80,9 +80,11 @@ function Layout(props) {
                 <div
                     className={classnames(classes.content)}
                 >
-                    <Switch>
-                        <Route path="/app/dashboard"  render={() => <Dashboard isLoading={isLoading} currentBoard={currentBoard} />} />
-                    </Switch>
+                    <HashRouter>
+                        <Switch>
+                            <Route path="/box"  render={() => <Dashboard isLoading={isLoading} currentBoard={currentBoard} />} />
+                        </Switch>
+                    </HashRouter>
                 </div>
                 <div>
                     <AddBoardModal  open={ modalState.addBoard } />
