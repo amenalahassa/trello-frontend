@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import * as axios from "axios";
 
-var AxiosContext = React.createContext();
+let AxiosContext = React.createContext();
 
 const instance = axios.create({
   baseURL: 'http://localhost:3030',
@@ -9,7 +9,7 @@ const instance = axios.create({
 });
 
 function AxiosProvider({ children }) {
-  var [state, setstate] = useState({query : instance})
+  var [state, setstate] = useState({requester : instance})
 
   return (
     <AxiosContext.Provider value={state}>
@@ -22,8 +22,8 @@ function useAxiosState() {
     if (context === undefined) {
         throw new Error("useAxiosState must be used within a AxiosProvider");
     }
-    return context.query;
+    return context.requester;
 }
 
-export { AxiosProvider, useAxiosState };
+export { AxiosProvider, useAxiosState  };
 

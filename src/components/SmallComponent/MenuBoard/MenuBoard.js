@@ -13,8 +13,9 @@ import Typography from "@material-ui/core/Typography";
 import boardLogo from '../../../images/board.svg'
 import {useDashboard} from "../../../context/DashboardContext";
 import {getFromLocalStorage, setItemInLocalStorage} from "../../../Module/biblio";
-import {toggleAddBoardModal, useModalDispatch} from "../../../context/ModalContext";
+import {useModalDispatch} from "../../../context/ModalContext";
 import {MenuToolBar} from "../../TiniComponents/MenuToolBar";
+import {useHistory, useRouteMatch, withRouter} from "react-router-dom";
 
 
 // Todo set on start up, the current default board to the first
@@ -30,7 +31,8 @@ function MenuBoard(props) {
 
     // Todo Use anywhere user to this value
     let  userData =  useDashboard().user
-
+    let history = useHistory()
+    let { url } = useRouteMatch()
 
     useEffect(() => {
         if (userData !== undefined)
@@ -46,18 +48,24 @@ function MenuBoard(props) {
                 if ( mineBoard.length > 0) next = createCurrentBoard(mineBoard[0], "personal")
                 else  next = createCurrentBoard(boardOfTeams[0], "team")
                 setItemInLocalStorage('currentBoard', next)
-                setCurrentBoard(next)
-                setDashboardBoard(next)
-            }
-            else {
-                setCurrentBoard(currentBoard)
-                setDashboardBoard(currentBoard)
+                currentBoard = next
             }
 
             setBoardTeams(boardOfTeams)
             setBoards(mineBoard)
+            setCurrentBoard(currentBoard)
+            setDashboardBoard(currentBoard)
             setPlaceholder(toShowPlaceholder);
 
+            // Todo verify the current url before
+            if (toShowPlaceholder === true)
+            {
+                history.push(url + 'startBoard')
+            }
+            else
+            {
+                displayBoard(currentBoard.id)
+            }
         }
     }, [userData])
 
@@ -66,6 +74,7 @@ function MenuBoard(props) {
         setItemInLocalStorage('currentBoard', next)
         setCurrentBoard(next)
         setDashboardBoard(next)
+        displayBoard(next.id)
         setBoardMenu(null)
     }
 
@@ -86,6 +95,10 @@ function MenuBoard(props) {
             }
         }
         return next
+    }
+
+    const displayBoard = (nextBoardId) => {
+        history.push(url + 'board/' + nextBoardId)
     }
 
     return (
@@ -217,7 +230,7 @@ function MenuBoard(props) {
     }
 }
 
-export default MenuBoard;
+export default withRouter(MenuBoard);
 
 function Placeholder({ classes, setBoardMenu })
 {
@@ -252,7 +265,7 @@ function Placeholder({ classes, setBoardMenu })
     function showModal()
     {
         setBoardMenu(null)
-        toggleAddBoardModal(modalDispatch, true)
+        modalDispatch("ADD_BOARD", true)
     }
 
 }

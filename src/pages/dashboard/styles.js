@@ -90,7 +90,13 @@ export default makeStyles(theme => ({
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
-  placeholderRoot:{
+  media: {
+    height: 250,
+    width: 250,
+    margin: "auto",
+    padding:theme.spacing(2)
+  },
+  showErrorRoot :{
     height: "100%",
     width: "100%",
     display: "flex",
@@ -103,10 +109,7 @@ export default makeStyles(theme => ({
     marginRight: theme.spacing(1),
     backgroundColor: '#fff',
     textAlign: "center",
-  },
-  media: {
-    height: 190,
-    marginRight: 45,
+    borderRadius:10,
   },
   buttonAddBoard: {
     marginTop: theme.spacing(2),
@@ -116,5 +119,5 @@ export default makeStyles(theme => ({
   },
   cardContent:{
     maxWidth: 400,
-  }
+  },
 }));

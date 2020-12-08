@@ -1,7 +1,12 @@
 import React from "react";
+import AddBoardModal from "../pages/addBoard/AddBoardModal";
+import AddTeamModal from "../pages/addTeam/AddTeamModal";
+import UpdateTeamModal from "../pages/updateTeam/UpdateTeamModal";
+import {WarningModal} from "../components/TiniComponents/WarningModal";
 
-var ModalStateContext = React.createContext();
-var ModalDispatchContext = React.createContext();
+let ModalDispatchContext = React.createContext();
+let ModalStateContext = React.createContext();
+
 
 
 function ModalReducer(state, action) {
@@ -33,20 +38,49 @@ function ModalProvider({ children }) {
 
     return (
         <ModalStateContext.Provider value={state}>
-            <ModalDispatchContext.Provider value={dispatch}>
+            <ModalDispatchContext.Provider value={toggleModal}>
                 {children}
+                <div>
+                    <AddBoardModal  open={ state.addBoard } />
+                    <AddTeamModal  open={ state.addTeam } />
+                    <UpdateTeamModal open={ state.updateTeam } />
+                </div>
             </ModalDispatchContext.Provider>
         </ModalStateContext.Provider>
+
     );
-}
 
+    function toggleModal(state, open) {
 
-function useModalState() {
-    var context = React.useContext(ModalStateContext);
-    if (context === undefined) {
-        throw new Error("useModalState must be used within a ModalProvider");
+        switch (state) {
+            case "ADD_BOARD" :
+                dispatch({
+                    type: "ADD_BOARD", open
+                })
+                break
+            case "ADD_TEAM" :
+                dispatch({
+                    type: "ADD_TEAM", open
+                })
+                break
+            case "UPDATE_TEAM" :
+                dispatch({
+                    type: "UPDATE_TEAM", open
+                })
+                break
+            case "WARNING" :
+                dispatch({
+                    type: "WARNING", open
+                })
+                break
+            default :
+                dispatch({
+                    type: "CLOSE_ALL"
+                })
+        }
+
     }
-    return context;
+
 }
 
 
@@ -58,28 +92,12 @@ function useModalDispatch() {
     return context;
 }
 
-
-export { useModalDispatch, useModalState, ModalProvider, toggleAddBoardModal, toggleAddTeamModal, toggleUpdateTeamModal, toggleWarningModal};
-
-function toggleAddBoardModal(dispatch, open) {
-     dispatch({
-        type: "ADD_BOARD", open
-      })
-}
-function toggleAddTeamModal(dispatch, open) {
-    dispatch({
-        type: "ADD_TEAM", open
-    })
+function useModalState() {
+    var context = React.useContext(ModalStateContext);
+    if (context === undefined) {
+        throw new Error("useModalState must be used within a ModalProvider");
+    }
+    return context;
 }
 
-function toggleUpdateTeamModal(dispatch, open) {
-    dispatch({
-        type: "UPDATE_TEAM", open
-    })
-}
-
-function toggleWarningModal(dispatch, open) {
-    dispatch({
-        type: "WARNING", open
-    })
-}
+export { useModalDispatch, ModalProvider, useModalState};

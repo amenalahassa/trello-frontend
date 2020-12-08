@@ -2,19 +2,16 @@ import React, {useEffect} from "react";
 import Modal from "../../components/Modal";
 import {Button, CircularProgress, Fade, Typography} from "@material-ui/core";
 
-import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
-import {toggleAddTeamModal, useModalDispatch} from "../../context/ModalContext";
+import { useModalDispatch} from "../../context/ModalContext";
 import useStyles from "../addTeam/styles";
 import AddTeam from "../../components/SmallComponent/AddTeam";
 import DialogContent from "@material-ui/core/DialogContent";
 import {useAxiosState} from "../../context/AxiosContext";
-import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext";
-import {DisplayNotification} from "../../components/TiniComponents/Notifications";
-import {useNotification} from "../../context/GlobalHooks";
+import {useDashboardDispatch} from "../../context/DashboardContext";
 import {sendTeam, URLS} from "../../Module/http";
 import {MenuToolBar} from "../../components/TiniComponents/MenuToolBar";
-import {getCategoryFromLocalStorage, setItemInLocalStorage} from "../../Module/biblio";
+import {useNotificationDispatch} from "../../context/NotificationContext";
 
 
 
@@ -33,7 +30,7 @@ function AddTeamModal(props) {
     const [error, setError] = React.useState({})
     const [category, setCategory] = React.useState("")
     const [email, setEmail] = React.useState("")
-    const [ notification, displayNotification, resetNotification ] = useNotification()
+    const displayNotification = useNotificationDispatch()
 
 
     const cancel = () => {
@@ -41,7 +38,7 @@ function AddTeamModal(props) {
         setName("")
         setMember([])
         setLoading(false)
-        toggleAddTeamModal(modalDispatch, false)
+        modalDispatch("ADD_TEAM", false)
     }
 
     const save = () => {
@@ -61,7 +58,6 @@ function AddTeamModal(props) {
     return (
         <div>
             <Modal {...props}>
-                <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
                 <div>
                     <MenuToolBar title="Add a Team" onClose={() => cancel()} />
                    <DialogContent>

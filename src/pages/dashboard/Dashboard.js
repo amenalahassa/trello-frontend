@@ -1,83 +1,144 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
+import {
+    useHistory,
+    useParams
+} from "react-router-dom";
+
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import classNames from "classnames";
-
-
 import Grid from "@material-ui/core/Grid";
 import useStyles from "./styles";
 import { MoreVert as MenuIcon} from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
 import SubBoardMenu from "../../components/SmallComponent/SubBoardMenu";
 import GroupAvatars from "../../components/TiniComponents/GroupAvatars";
-import {toggleAddBoardModal, useModalDispatch} from "../../context/ModalContext";
-import CardContent from "@material-ui/core/CardContent";
-import CardHeader from "@material-ui/core/CardHeader";
 import FormControl from "@material-ui/core/FormControl";
 import { ResizableInput} from "./components/Components";
 import {useAxiosState} from "../../context/AxiosContext";
 import {URLS} from "../../Module/http";
 import {useDashboardDispatch} from "../../context/DashboardContext";
-import {DisplayNotification} from "../../components/TiniComponents/Notifications";
-import {useNotification} from "../../context/GlobalHooks";
 import Skeleton from "@material-ui/lab/Skeleton";
+import {useNotificationDispatch} from "../../context/NotificationContext";
+import Loader from "../../components/Loader";
+import {signOut, useUserDispatch} from "../../context/UserAuthContext";
+import CardContent from "@material-ui/core/CardContent";
+import notFoundLogo from "../../images/notfound.svg";
+import warningLogo from "../../images/warning.svg";
+import CardMedia from "@material-ui/core/CardMedia";
 
 
 // Todo: Use an sidebar for show menu board
 
-export default function Dashboard(props) {
+export default function Dashboard() {
+
     let classes = useStyles()
     let http = useAxiosState()
+    const setDatas = useDashboardDispatch()
+    // Todo use this name anywhere in the project
+    const authDispatch = useUserDispatch()
+    let { id } = useParams()
+    let history = useHistory()
+
     const [aboutMenu, setAboutMenu] = useState(null)
-    const [board, setBoard] = useState(undefined)
+    const [board, setBoard] = useState({})
     const [loading, setLoading] = useState(false)
     const [OnUpdateName, handleUpdateName] = useState(false)
-    const [ notification, displayNotification, resetNotification ] = useNotification()
-
-
+    const displayNotification = useNotificationDispatch()
     const [name, setName] = useState("")
-    const  setDatas = useDashboardDispatch()
+    const [errors, setErrors] = useState({
+        error: false,
+        message:"",
+        image:notFoundLogo,
+        action:"",
+        callback: () => {}
+    })
 
-    let { currentBoard, isLoading  } = props
 
-    useEffect(() => {
-        // setLoading(true)
-        if (currentBoard !== null) setName(currentBoard.name)
-        setBoard(currentBoard)
-        console.log(currentBoard)
-    }, [currentBoard])
+
+    useEffect(() =>{
+        setLoading(true)
+        loadBoard()
+    }, [id])
 
     const updateName = () => {
         handleUpdateName(false)
-        if (name.length <= 0 || name === currentBoard.name)
+        if (name.length <= 0 || name === board.name)
         {
-            setName(currentBoard.name)
+            setName(board.name)
         }
         else
         {
             http.post(URLS.updateBoardName, {
-                id: currentBoard.id,
+                id: board.id,
                 name,
             })
                 .then((response) => {
                     setDatas(response.data)
+                    loadBoard()
                 })
                 .catch((err) => {
-                    setName(currentBoard.name)
+                    setName(board.name)
                     displayNotification("Board name change failed. Check your connection and try again.", 'warning')
                 })
         }
     }
 
+    const loadBoard = () => {
+        http.post(URLS.aboutBoard, {
+            id,
+        })
+            .then(({ data : { data }}) => {
+                if (data === null)
+                {
+                    setErrors({
+                        ...errors,
+                        error: true,
+                        message: "This board don't exist no more. Try to open another please.",
+                        action: null,
+                    })
+                }
+                else
+                {
+                    setBoard(data)
+                    setName(data.name)
+                    setErrors({
+                        ...errors,
+                        error: false
+                    })
+                }
+                setLoading(false)
+            })
+            .catch((error) => {
+                if (error.response) {
+                    if (error.response.status === 401)
+                    {
+                        signOut(http, authDispatch, history)
+                        setLoading(false)
+                    }
+                    if (error.response.status === 422)
+                    {
+                        setErrors({
+                            ...errors,
+                            error: true,
+                            image: warningLogo,
+                            message: "Something goes wrong. This board may not exist. if this error persist, try to open another please",
+                            action: null,
+                        })
+                        setLoading(false)
+                    }
+                }
+
+            })
+    }
 
     return (
       <>
-          <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
-          { isLoading ? "" :
+          { loading ? <Loader/> :
               <>
-                  {board === null ? <div className={classes.placeholderRoot}><Placeholder classes={classes}/></div> :
+                  {errors.error ? <div className={classes.showErrorRoot} ><ShowError info={errors}/></div> :
                       <Grid
                           container
                           className={classes.gridParent}
@@ -154,43 +215,36 @@ export default function Dashboard(props) {
               </>
           }
       </>
-
     );
-
 
 }
 
-function Placeholder({ classes })
+function ShowError(props)
 {
-
-    let modalDispatch = useModalDispatch()
-
+    let classes = useStyles()
+    let { info } = props
 
     return  (
         <div className={classes.card}>
-            <CardHeader
-                title="To start, you need a board."
+            <CardMedia
+                className={classes.media}
+                image={info.image}
+                title="Error image "
+                component="img"
             />
             <CardContent className={classes.cardContent}>
-                <Typography variant="body2" color="textSecondary" component="p" className={classes.cardText}>
-                    {
-                        "A board is made up of cards ordered on lists. Use it to manage projects, track information, or organize anything."
-                    }
+                <Typography variant="body2" color="secondary" component="p" className={classNames({[classes.cardText] : info.action !== null})}>
+                    {info.message}
                 </Typography>
-                <Button variant="contained"
-                        color="primary"
-                        size="large"
-                        fullWidth
-                        className={classes.buttonAddBoard}
-                        onClick={() => showModal()}
-                >Add a board</Button>
+                { info.action !== null && <Button variant="contained"
+                         color="primary"
+                         size="large"
+                         fullWidth
+                         className={classes.buttonAddBoard}
+                         onClick={() => info.callback()}
+                >{info.action}</Button>}
             </CardContent>
         </div>
     )
-
-    function showModal()
-    {
-        toggleAddBoardModal(modalDispatch, true)
-    }
 
 }

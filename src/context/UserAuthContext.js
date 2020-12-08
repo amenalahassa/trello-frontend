@@ -110,7 +110,7 @@ function login (http, email, password,  dispatchAuth, dispatchHasTeam , history,
                     toogleHasTeamDispatch(dispatchHasTeam, response.data.ifHasTeam)
                     dispatchAuth({ type: 'LOGIN_SUCCESS' })
                     // Todo redirect where the user where gone, change history in redirect function
-                    history.push('/dashboard')
+                    history.push('/')
                 })
                 .catch(function (error) {
                     catchError(error, setErrorMsg, setError, setIsLoading)
@@ -137,7 +137,7 @@ function register (http, name, email, password, password_confirmation, dispatchA
                     localStorage.setItem('ifHasTeam',  response.data.ifHasTeam)
                     toogleHasTeamDispatch(dispatchHasTeam, response.data.ifHasTeam)
                     dispatchAuth({ type: 'REGISTER_SUCCESS' })
-                    history.push('/dashboard')
+                    history.push('/')
                 })
                 .catch(function (error) {
                     catchError(error, setErrorMsg, setError, setIsLoading)

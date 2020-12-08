@@ -10,7 +10,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Typography} from "../../Wrappers";
-import {toggleAddBoardModal, toggleAddTeamModal, useModalDispatch} from "../../../context/ModalContext";
+import { useModalDispatch} from "../../../context/ModalContext";
 import {MenuToolBar} from "../../TiniComponents/MenuToolBar";
 
 
@@ -57,13 +57,13 @@ function MenuAddElement(props) {
     function showAddBoardModal()
     {
         setAddMenu(null)
-        toggleAddBoardModal(modalDispatch, true)
+        modalDispatch("ADD_BOARD", true)
     }
 
     function showAddTeamModal()
     {
         setAddMenu(null)
-        toggleAddTeamModal(modalDispatch, true)
+        modalDispatch("ADD_TEAM", true)
     }
 }
 

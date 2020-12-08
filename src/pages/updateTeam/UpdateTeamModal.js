@@ -1,23 +1,23 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Modal from "../../components/Modal";
 import {Button, CircularProgress, Fade, Tooltip, Typography} from "@material-ui/core";
 
 import DialogActions from "@material-ui/core/DialogActions";
-import {toggleUpdateTeamModal, toggleWarningModal, useModalDispatch, useModalState} from "../../context/ModalContext";
+import {useModalDispatch, useModalState} from "../../context/ModalContext";
 import useStyles from "../addTeam/styles";
 import DialogContent from "@material-ui/core/DialogContent";
 import {useAxiosState} from "../../context/AxiosContext";
 import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext";
-import {DisplayNotification} from "../../components/TiniComponents/Notifications";
-import {useNotification, useTeamToUpdateEffect} from "../../context/GlobalHooks";
+import { useTeamToUpdateEffect} from "../../context/GlobalHooks";
 import CardHeader from "@material-ui/core/CardHeader";
 import IconButton from "@material-ui/core/IconButton";
 import {Delete} from "@material-ui/icons";
 import UpdateTeam from "../../components/SmallComponent/UpdateTeam";
-import {checkIfDataChanged, log} from "../../Module/biblio";
-import {deleteTeam, MessageError, updateTeam} from "../../Module/http";
+import {checkIfDataChanged, getCategoryFromLocalStorage, log, setItemInLocalStorage} from "../../Module/biblio";
+import {deleteTeam, MessageError, updateTeam, URLS} from "../../Module/http";
 import {MenuToolBar} from "../../components/TiniComponents/MenuToolBar";
 import {WarningModal} from "../../components/TiniComponents/WarningModal";
+import {useNotificationDispatch} from "../../context/NotificationContext";
 
 
 
@@ -31,7 +31,6 @@ function UpdateTeamModal(props) {
     let modalDispatch = useModalDispatch()
     let setDatas = useDashboardDispatch()
     const http = useAxiosState()
-    let categoryList = useDashboard().team_category
     let user = useDashboard().user
 
     const [current, setCurrent] = useState({})
@@ -43,7 +42,7 @@ function UpdateTeamModal(props) {
     const [category, setCategory] = React.useState("")
     const [email, setEmail] = React.useState("")
     const [updating, beginUpdate] = React.useState(false)
-    const [ notification, displayNotification, resetNotification ] = useNotification()
+    const displayNotification = useNotificationDispatch()
     const [deleteText, setText] = useState("")
 
     useTeamToUpdateEffect(setCurrent, undefined, undefined, setMemberList)
@@ -54,7 +53,7 @@ function UpdateTeamModal(props) {
         setMember([])
         setLoading(false)
         beginUpdate(false)
-        toggleUpdateTeamModal(modalDispatch, false)
+        modalDispatch("UPDATE_TEAM", false)
     }
 
     const save = () => {
@@ -105,17 +104,16 @@ function UpdateTeamModal(props) {
 
     const handleDeleteTeam = () => {
         setText("You're deleting "+ current.name +". Cancel if not.")
-        toggleWarningModal(modalDispatch, true)
+        modalDispatch("WARNING", true)
     }
 
-    const delette = (end) => {
+    const deletes = (end) => {
         deleteTeam(http, current.id, onSuccess, onDeleteError, end, displayNotification)
     }
 
     return (
         <div>
             <Modal {...props}>
-                <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
                 <div>
                     <MenuToolBar title="Update a team" onClose={() => cancel()} />
                     <CardHeader
@@ -133,7 +131,6 @@ function UpdateTeamModal(props) {
                     <UpdateTeam
                         classes={classes}
                         updating={updating}
-                        categoryList={categoryList}
                         members={members} setMember={setMember}
                         name={name} setName={setName}
                         error={error} setError={setError}
@@ -161,7 +158,7 @@ function UpdateTeamModal(props) {
                    </DialogActions>
                </div>
             </Modal>
-            <WarningModal open={ modalState.warning } text={deleteText} callback={delette}  />
+            <WarningModal open={ modalState.warning } text={deleteText} callback={deletes}  />
         </div>
     )
 
@@ -203,7 +200,6 @@ function UpdateTeamModal(props) {
     {
         displayNotification("Deletion failed. " + MessageError.unknown)
     }
-
 }
 
 export default  UpdateTeamModal;

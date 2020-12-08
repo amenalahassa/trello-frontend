@@ -16,10 +16,7 @@ import {
     returnArrayIfUndefined
 } from "../../../Module/biblio";
 import {
-     toggleAddTeamModal,
-    toggleUpdateTeamModal,
     useModalDispatch,
-    useModalState
 } from "../../../context/ModalContext";
 import {useNotification} from "../../../context/GlobalHooks";
 import {DisplayNotification} from "../../TiniComponents/Notifications";
@@ -74,7 +71,7 @@ function MenuTeam(props) {
     const showUpdateTeamModal = () =>
     {
         setTeamMenu(null)
-        toggleUpdateTeamModal(modalDispatch, true)
+        modalDispatch("UPDATE_TEAM", true)
     }
     return (
         <Menu
@@ -189,7 +186,7 @@ function Placeholder({ classes, setTeamMenu })
     function showModal()
     {
         setTeamMenu(null)
-        toggleAddTeamModal(modalDispatch, true)
+        modalDispatch("ADD_TEAM", true)
     }
 
 }

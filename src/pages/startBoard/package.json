@@ -1,0 +1,6 @@
+{
+  "name": "Maps",
+  "version": "0.0.0",
+  "main": "startBoard.js",
+  "private": true
+}

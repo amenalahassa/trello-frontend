@@ -9,5 +9,6 @@ export default makeStyles(theme => ({
     overflowY: "hidden",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor:"#fff"
   },
 }));

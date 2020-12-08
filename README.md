@@ -39,7 +39,7 @@ We have implemented some basic pages, so you can see our template in action.
 - Notifications
 - Charts
 - Icons
-- Maps
+- StartBoard
 - Login
 - CreateTeam
 

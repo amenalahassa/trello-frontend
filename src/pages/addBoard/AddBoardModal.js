@@ -3,7 +3,6 @@ import React from "react";
 // styles
 import useStyles from "./styles";
 import Modal from "../../components/Modal";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
@@ -11,7 +10,7 @@ import TextField from "@material-ui/core/TextField";
 import ImageGridList from "./Components/Components";
 import {CircularProgress, Fade, Typography} from "@material-ui/core";
 import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext";
-import {toggleAddBoardModal, useModalDispatch} from "../../context/ModalContext";
+import {useModalDispatch} from "../../context/ModalContext";
 import {useAxiosState} from "../../context/AxiosContext";
 import {log, showNotification} from "../../Module/biblio";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -52,7 +51,7 @@ function AddBoardModal(props) {
 
     const cancel = () => {
         reset()
-        toggleAddBoardModal(modalDispatch, false)
+        modalDispatch("ADD_BOARD", false)
     }
 
     const reset = () => {

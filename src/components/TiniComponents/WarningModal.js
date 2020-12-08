@@ -1,12 +1,12 @@
 import Modal from "../Modal";
 import React from "react";
 import {MenuToolBar} from "./MenuToolBar";
-import {CircularProgress, Fade, Typography} from "@material-ui/core";
+import { Typography} from "@material-ui/core";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import {makeStyles} from "@material-ui/styles";
-import {toggleWarningModal, useModalDispatch} from "../../context/ModalContext";
+import {useModalDispatch} from "../../context/ModalContext";
 
 export function WarningModal(props)
 {
@@ -15,7 +15,7 @@ export function WarningModal(props)
     let {text = "this is a warning", callback, classes = style(), ...restProps } = props
 
     const cancel = () => {
-        toggleWarningModal(modalDispatch, false)
+        modalDispatch("WARNING", false)
     }
     const next = () => {
         callback(cancel)

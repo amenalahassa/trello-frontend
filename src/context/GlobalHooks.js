@@ -2,6 +2,7 @@ import React, {useEffect, useMemo, useRef, useState} from "react";
 import {useTeamToUpdateState} from "./TeamToUpdateContext";
 import {returnArrayIfUndefined} from "../Module/biblio";
 import Avatar from "@material-ui/core/Avatar";
+import {useModalDispatch} from "./ModalContext";
 
 function useNotification()
 {
@@ -40,7 +41,6 @@ function useIsMountedRef(){
     });
     return isMountedRef;
 }
-
 
 function useTeamToUpdateEffect (setCurrent = () => {}, setCurrentName = () => {}, setCurrentSecteur = () => {}, setCurrentMember)
 {

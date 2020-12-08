@@ -11,9 +11,6 @@ import {
     getCategoryFromLocalStorage,
     setItemInLocalStorage
 } from "../../../Module/biblio";
-import {DisplayNotification} from "../../TiniComponents/Notifications";
-import Modal from "../../Modal";
-import {useNotification} from "../../../context/GlobalHooks";
 import {useAxiosState} from "../../../context/AxiosContext";
 import {URLS} from "../../../Module/http";
 
@@ -130,7 +127,6 @@ function AddTeam(props) {
             </div>
         </form>
   );
-
 
     function getCategoryOnServer () {
         http.get(URLS.ressources.category)

@@ -6,8 +6,8 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import {
     checkIfMemberEmailIsValide,
-    deleteMember,
- returnStringIfUndefined,
+    deleteMember, getCategoryFromLocalStorage,
+    returnStringIfUndefined, setItemInLocalStorage,
 } from "../../../Module/biblio";
 import {useTeamToUpdateEffect} from "../../../context/GlobalHooks";
 import useStyles from "./style";
@@ -17,13 +17,24 @@ import IconButton from "@material-ui/core/IconButton";
 import CardHeader from "@material-ui/core/CardHeader";
 import {Delete} from "@material-ui/icons";
 import {useDashboard} from "../../../context/DashboardContext";
+import {URLS} from "../../../Module/http";
+import {useNotificationDispatch} from "../../../context/NotificationContext";
+import {useAxiosState} from "../../../context/AxiosContext";
 
 
 
 function UpdateTeam(props) {
 
-    let { classes , categoryList , setMember , members, updating } = props
+    let { classes , setMember , members, updating } = props
     const [emailValidated, validateEmail] = React.useState(true)
+    const [categoryList, setCategoryList] = React.useState([])
+    const displayNotification = useNotificationDispatch()
+    const http = useAxiosState()
+
+
+    useEffect(() => {
+        setCategoryList(getCategoryFromLocalStorage(getCategoryOnServer))
+    }, [])
 
     useTeamToUpdateEffect(undefined, props.setName , props.setCategory, setMember)
 
@@ -137,6 +148,17 @@ function UpdateTeam(props) {
         </form>
   );
 
+    function getCategoryOnServer () {
+        http.get(URLS.ressources.category)
+            .then((response) => {
+                setCategoryList(response.data)
+                // Todo find a way to update this by broadcasting when it change on server side
+                setItemInLocalStorage("category", response.data)
+            })
+            .catch(() => {
+                displayNotification("danger","Check your connection and reload please." )
+            })
+    }
 }
 
 export default UpdateTeam;

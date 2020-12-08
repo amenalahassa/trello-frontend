@@ -13,23 +13,19 @@ import useStyles from "./styles";
 
 
 // pages
-import Dashboard from "../../pages/dashboard/Dashboard";
+import Dashboard, {Placeholder} from "../../pages/dashboard/Dashboard";
 
 // context
 
 import Header from "../Header/Header";
-import {log, showNotification, viewportSize} from "../../Module/biblio";
+import {viewportSize} from "../../Module/biblio";
 import {useDashboardDispatch} from "../../context/DashboardContext";
-import {useModalState} from "../../context/ModalContext";
 import {useAxiosState} from "../../context/AxiosContext";
-import AddTeamModal from "../../pages/addTeam/AddTeamModal";
-import AddBoardModal from "../../pages/addBoard/AddBoardModal";
-import {DisplayNotification} from "../TiniComponents/Notifications";
-import Modal from "../Modal";
-import {useIsMountedRef, useNotification} from "../../context/GlobalHooks";
-import {TeamToUpdateProvider} from "../../context/TeamToUpdateContext";
-import UpdateTeamModal from "../../pages/UpdateTeam/UpdateTeamModal";
-import {WarningModal} from "../TiniComponents/WarningModal";
+import {useIsMountedRef} from "../../context/GlobalHooks";
+import Loader from "../Loader";
+import {signOut, useUserDispatch} from "../../context/UserAuthContext";
+import {useNotificationDispatch} from "../../context/NotificationContext";
+import StartBoard from "../../pages/startBoard";
 
 // Todo : Back sidebar for responsive site
 
@@ -37,18 +33,17 @@ function Layout(props) {
 
     const [isLoading, setLoading] = useState(true);
     let  [currentBoard, setCurrentBoard] = useState(null)
-    const [ notification, displayNotification, resetNotification ] = useNotification()
-
+    const displayNotification = useNotificationDispatch()
     const classes = useStyles( { backgroundImage : getResizeBackgroundImage(currentBoard)});
 
     let location = useLocation()
     let history = useHistory()
     let match = useRouteMatch()
 
-    const modalState = useModalState()
     const setDatas = useDashboardDispatch()
     const http = useAxiosState()
     const isMountedRef = useIsMountedRef();
+    const userDispatch = useUserDispatch();
 
 
 
@@ -66,32 +61,34 @@ function Layout(props) {
             }
         })
         .catch((error) => {
-            log('Error', error.message);
+            if (error.response) {
+                if (error.response.status === 401)
+                {
+                    signOut(http, userDispatch, history)
+                }
+            }
+            console.log('Error', error.message);
+            // Todo when the user is not yet authenticated, disconnect it
             displayNotification("Check you connection and reload the page please.")
         })
   }, [])
 
+
   return (
     <div className={classes.root}>
         <>
-            <DisplayNotification display = {notification.open} type = {notification.type}  message={notification.message} setDisplay={resetNotification} />
-            <TeamToUpdateProvider>
+            <HashRouter >
                 <Header history={props.history} isLoading={isLoading} setCurrentBoard={setCurrentBoard} />
                 <div
                     className={classnames(classes.content)}
                 >
-                    <HashRouter>
-                        <Switch>
-                            <Route path="/box"  render={() => <Dashboard isLoading={isLoading} currentBoard={currentBoard} />} />
-                        </Switch>
-                    </HashRouter>
+                    <Switch>
+                        {/*<Route   exact path="/"  component={Loader} />*/}
+                        <Route   path="/board/:id"  component={Dashboard} />} />
+                        <Route   path="/startBoard"  component={StartBoard} />
+                    </Switch>
                 </div>
-                <div>
-                    <AddBoardModal  open={ modalState.addBoard } />
-                    <AddTeamModal  open={ modalState.addTeam } />
-                    <UpdateTeamModal open={ modalState.updateTeam } />
-                </div>
-            </TeamToUpdateProvider>
+            </HashRouter>
         </>
     </div>
   );

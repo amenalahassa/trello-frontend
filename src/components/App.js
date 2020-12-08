@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
+import {Route, Switch, Redirect, BrowserRouter, HashRouter} from "react-router-dom";
 
 // components
 import Layout from "./Layout";
@@ -15,6 +15,7 @@ import { useUserTeamState} from "../context/UserTeamContext";
 import {ModalProvider} from "../context/ModalContext";
 import {DashboardProvider} from "../context/DashboardContext";
 import {NotificationProvider} from "../context/NotificationContext";
+import {TeamToUpdateProvider} from "../context/TeamToUpdateContext";
 
 export default function App() {
   // global
@@ -24,8 +25,9 @@ export default function App() {
     // Todo : Modifier la page d'erreur
   return (
       <DashboardProvider>
-          <ModalProvider>
-                <NotificationProvider>
+        <NotificationProvider>
+            <TeamToUpdateProvider>
+                <ModalProvider>
                     <BrowserRouter>
                         <Switch>
                             <Route exact path="/" render={() => <Redirect to="/authentication" />} />
@@ -35,8 +37,9 @@ export default function App() {
                             <Route component={Error} />
                         </Switch>
                     </BrowserRouter>
-                </NotificationProvider>
-          </ModalProvider>
+                </ModalProvider>
+            </TeamToUpdateProvider>
+        </NotificationProvider>
       </DashboardProvider>
   );
 
