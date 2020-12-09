@@ -16,28 +16,31 @@ import {ModalProvider} from "../context/ModalContext";
 import {DashboardProvider} from "../context/DashboardContext";
 import {NotificationProvider} from "../context/NotificationContext";
 import {TeamToUpdateProvider} from "../context/TeamToUpdateContext";
+import {initializeIntendedUrl} from "../Module/biblio";
 
 export default function App() {
   // global
   var { isAuthenticated } = useUserState();
   var { ifHasTeam } = useUserTeamState();
+  const location = window.location.pathname + window.location.hash
+    initializeIntendedUrl(location)
 
     // Todo : Modifier la page d'erreur
   return (
       <DashboardProvider>
         <NotificationProvider>
             <TeamToUpdateProvider>
-                <ModalProvider>
                     <BrowserRouter>
-                        <Switch>
-                            <Route exact path="/" render={() => <Redirect to="/authentication" />} />
-                            <AuthMiddleware path="/authentication" component={Layout} />
-                            <TeamMiddleware path="/welcome" component={CreateTeam}/>
-                            <GuestMiddleware path="/login" component={Login} />
-                            <Route component={Error} />
-                        </Switch>
+                        <ModalProvider>
+                            <Switch>
+                                <Route exact path="/" render={() => <Redirect from="/" push to="/authentication" />} />
+                                <AuthMiddleware path="/authentication" component={Layout} />
+                                <TeamMiddleware path="/welcome" component={CreateTeam}/>
+                                <GuestMiddleware path="/login" component={Login} />
+                                <Route component={Error} />
+                            </Switch>
+                        </ModalProvider>
                     </BrowserRouter>
-                </ModalProvider>
             </TeamToUpdateProvider>
         </NotificationProvider>
       </DashboardProvider>
@@ -45,11 +48,11 @@ export default function App() {
 
   // #######################################################################
 
-    function AuthMiddleware({component, ...rest }) {
-        console.log(rest)
+    function AuthMiddleware({component,path, ...rest }) {
         return (
             <Route
-                {...rest}
+                exact
+                path="/authentication"
                 render={props =>
                     isAuthenticated ? (
                         <Redirect
@@ -71,9 +74,11 @@ export default function App() {
             />
         );
     }
-    function GuestMiddleware({ component, ...rest }) {
+    function GuestMiddleware({ component, path, ...rest }) {
         return (
             <Route
+                exact
+                path={"/login"}
                 {...rest}
                 render={props =>
                     isAuthenticated ? (

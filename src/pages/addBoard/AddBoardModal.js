@@ -28,8 +28,6 @@ import {MenuToolBar} from "../../components/TiniComponents/MenuToolBar";
 function AddBoardModal(props) {
     let classes = useStyles();
 
-    let boardsImages = useDashboard().board_background
-
     let modalDispatch = useModalDispatch()
     let http = useAxiosState()
     let setDatas = useDashboardDispatch()
@@ -140,7 +138,7 @@ function AddBoardModal(props) {
                       </div>
                       <div>
                           <Typography > Choose your board background (optional) </Typography>
-                          <ImageGridList images = {boardsImages} setSelectedImage={setSelectedImage} />
+                          <ImageGridList setSelectedImage={setSelectedImage} />
                           <Typography hidden={!!error.backgroundImage} variant="caption" color="secondary" display="block">{!!error.backgroundImage ? error.backgroundImage : ""}</Typography>
                       </div>
                   </DialogContent>
@@ -177,6 +175,7 @@ function AddBoardModal(props) {
             setLoading(false)
         } else {
             cancel()
+            // Todo remove this
             log('Error', error.message);
             showNotification("danger","Try to reload the page please. See more in console." )
             setLoading(false)

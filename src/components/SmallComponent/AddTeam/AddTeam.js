@@ -13,6 +13,9 @@ import {
 } from "../../../Module/biblio";
 import {useAxiosState} from "../../../context/AxiosContext";
 import {URLS} from "../../../Module/http";
+import {useUserState} from "../../../context/UserAuthContext";
+import {useMatchWithRedirect} from "../../../context/GlobalHooks";
+import {useHistory} from "react-router-dom";
 
 
 
@@ -22,7 +25,11 @@ function AddTeam(props) {
 
     const [isInvalide, setIsInvalide] = React.useState(true)
     const [categoryList, setCategoryList] = React.useState([])
+
     const http = useAxiosState()
+    let { isAuthenticated } = useUserState();
+    const matchWithRedirect = useMatchWithRedirect()
+    let history = useHistory()
 
     useEffect(() => {
         setCategoryList(getCategoryFromLocalStorage(getCategoryOnServer))
@@ -129,15 +136,22 @@ function AddTeam(props) {
   );
 
     function getCategoryOnServer () {
-        http.get(URLS.ressources.category)
-            .then((response) => {
-                setCategoryList(response.data)
-                // Todo find a way to update this by broadcasting when it change on server side
-                setItemInLocalStorage("category", response.data)
-            })
-            .catch(() => {
-                displayNotification("danger","Check your connection and reload please." )
-            })
+        if (isAuthenticated === false && matchWithRedirect === null)
+        {
+            history.push('/login')
+        }
+        if (isAuthenticated === true)
+        {
+            http.get(URLS.ressources.category)
+                .then((response) => {
+                    setCategoryList(response.data)
+                    // Todo find a way to update this by broadcasting when it change on server side
+                    setItemInLocalStorage("category", response.data)
+                })
+                .catch(() => {
+                    displayNotification("Check your connection and reload please." )
+                })
+        }
     }
 
 }

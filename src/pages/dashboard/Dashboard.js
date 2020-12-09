@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {
-    useHistory,
-    useParams
+    useHistory, useLocation,
+    useParams, useRouteMatch
 } from "react-router-dom";
 
 import Toolbar from "@material-ui/core/Toolbar";
@@ -23,11 +23,13 @@ import {useDashboardDispatch} from "../../context/DashboardContext";
 import Skeleton from "@material-ui/lab/Skeleton";
 import {useNotificationDispatch} from "../../context/NotificationContext";
 import Loader from "../../components/Loader";
-import {signOut, useUserDispatch} from "../../context/UserAuthContext";
+import {signOut, useUserDispatch, useUserState} from "../../context/UserAuthContext";
 import CardContent from "@material-ui/core/CardContent";
 import notFoundLogo from "../../images/notfound.svg";
 import warningLogo from "../../images/warning.svg";
 import CardMedia from "@material-ui/core/CardMedia";
+import {useMatchWithRedirect} from "../../context/GlobalHooks";
+import {resetAllLocalAndContextOnLogout, setItemInLocalStorage} from "../../Module/biblio";
 
 
 // Todo: Use an sidebar for show menu board
@@ -38,9 +40,12 @@ export default function Dashboard() {
     let http = useAxiosState()
     const setDatas = useDashboardDispatch()
     // Todo use this name anywhere in the project
-    const authDispatch = useUserDispatch()
+    // const authDispatch = useUserDispatch()
     let { id } = useParams()
     let history = useHistory()
+    let location = useLocation()
+    let { isAuthenticated } = useUserState();
+    const matchWithRedirect = useMatchWithRedirect()
 
     const [aboutMenu, setAboutMenu] = useState(null)
     const [board, setBoard] = useState({})
@@ -59,8 +64,14 @@ export default function Dashboard() {
     // Todo use route match to check if user is in correct url, if not, send it to not found page
 
     useEffect(() =>{
-        setLoading(true)
-        loadBoard()
+        if (isAuthenticated === false && matchWithRedirect === null)
+        {
+            history.push('/login')
+        }
+        if (isAuthenticated === true) {
+            setLoading(true)
+            loadBoard()
+        }
     }, [id])
 
     const updateName = () => {
@@ -112,40 +123,59 @@ export default function Dashboard() {
                         error: false
                     })
                 }
-                if (response.status === 403)
-                {
-                    // When the user try to access a board that he doent have access or  dont exist
-                    setErrors({
-                        ...errors,
-                        error: true,
-                        image: warningLogo,
-                        message: "Something goes wrong. This board may not exist or you may don't have access to this board. if this error persist, try to open another please",
-                        action: null,
-                    })
-                    setLoading(false)
-                }
                 setLoading(false)
             })
             .catch((error) => {
                 if (error.response) {
-                    if (error.response.status === 401)
-                    {
-                        // When the user is not auth...
-                        signOut(http, authDispatch, history)
-                        setLoading(false)
+                    switch (error.response.status) {
+                        case 401:
+                            // Todo do like this anywhere
+                            // When the user is not auth... but is logged in front
+                            setItemInLocalStorage('intented-route', window.location.href)
+                            resetAllLocalAndContextOnLogout(useUserDispatch, location)
+                            break
+                        case 403:
+                            // When the user try to access a board that he doesn't have access to
+                            setErrors({
+                                ...errors,
+                                error: true,
+                                image: warningLogo,
+                                message: "Wait... You may don't have access to this board. Try to open another board please.",
+                                action: null,
+                            })
+                            break
+                        case 404:
+                            // When the user try to access a board that dont exist
+                            setErrors({
+                                ...errors,
+                                error: true,
+                                image: warningLogo,
+                                message: "Something goes wrong. This board don't exist. Try to open another board please.",
+                                action: null,
+                            })
+                            break
+                        case 422:
+                            // When the user send bad id like papa89
+                            setErrors({
+                                ...errors,
+                                error: true,
+                                image: warningLogo,
+                                message: "Something goes wrong. This board may not exist. if this error persist, try to open another please",
+                                action: null,
+                            })
+                            break
+                        default :
+                            // By default
+                            setErrors({
+                                ...errors,
+                                error: true,
+                                image: warningLogo,
+                                message: "Something goes wrong. Try to open another please",
+                                action: null,
+                            })
+                            break
                     }
-                    if (error.response.status === 422)
-                    {
-                        // When the user send bad id like papa89
-                        setErrors({
-                            ...errors,
-                            error: true,
-                            image: warningLogo,
-                            message: "Something goes wrong. This board may not exist. if this error persist, try to open another please",
-                            action: null,
-                        })
-                        setLoading(false)
-                    }
+                    setLoading(false)
                 }
 
             })

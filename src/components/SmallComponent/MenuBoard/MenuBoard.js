@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import { pathToRegexp } from "path-to-regexp"
 
 import {Button, Menu} from '@material-ui/core'
 import {Dashboard as DashboardIcon} from "@material-ui/icons";
@@ -12,10 +13,10 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import boardLogo from '../../../images/board.svg'
 import {useDashboard} from "../../../context/DashboardContext";
-import {getFromLocalStorage, setItemInLocalStorage} from "../../../Module/biblio";
+import {checkCurrentBoardUrl, getFromLocalStorage, setItemInLocalStorage} from "../../../Module/biblio";
 import {useModalDispatch} from "../../../context/ModalContext";
 import {MenuToolBar} from "../../TiniComponents/MenuToolBar";
-import {useHistory, useRouteMatch, withRouter} from "react-router-dom";
+import {useHistory, useLocation, useRouteMatch, withRouter} from "react-router-dom";
 
 
 // Todo set on start up, the current default board to the first
@@ -33,6 +34,10 @@ function MenuBoard(props) {
     let  userData =  useDashboard().user
     let history = useHistory()
     let { url } = useRouteMatch()
+    let matchWithRedirect = pathToRegexp("/board/:foo(\\d+)")
+
+    let location = useLocation()
+
 
     useEffect(() => {
         if (userData !== undefined)
@@ -64,7 +69,11 @@ function MenuBoard(props) {
             }
             else
             {
-                displayBoard(currentBoard.id)
+                let checkCurrentUrl = checkCurrentBoardUrl(location.pathname)
+                if (checkCurrentUrl === null)
+                {
+                    displayBoard(currentBoard.id)
+                }
             }
         }
     }, [userData])
@@ -74,7 +83,8 @@ function MenuBoard(props) {
         setItemInLocalStorage('currentBoard', next)
         setCurrentBoard(next)
         setDashboardBoard(next)
-        displayBoard(next.id)
+        let checkCurrentUrl = checkCurrentBoardUrl(location.pathname)
+        if (checkCurrentUrl[1] !== next.id.toString()) displayBoard(next.id)
         setBoardMenu(null)
     }
 

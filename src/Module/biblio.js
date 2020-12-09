@@ -1,4 +1,5 @@
 import $ from "jquery";
+import {pathToRegexp} from "path-to-regexp";
 
 window.jQuery = $;
 window.$ = $;
@@ -70,6 +71,11 @@ export function getFromLocalStorage(key)
 export function setItemInLocalStorage(key, val)
 {
    localStorage.setItem(key, JSON.stringify(val))
+}
+
+export function removeFromLocalStorage(key)
+{
+    localStorage.removeItem(key)
 }
 
 export function checkIfMemberEmailIsValide(values,members )
@@ -150,4 +156,40 @@ export function getCategoryFromLocalStorage(onAbscence)
     else {
         onAbscence()
     }
+}
+
+
+export function initializeIntendedUrl(url)
+{
+   if (getIntentedUrl() === null) setItemInLocalStorage("intented-route", url)
+}
+
+export function getIntentedUrl()
+{
+    return getFromLocalStorage('intented-route')
+}
+
+export function resetIntentedUrl()
+{
+    removeFromLocalStorage('intented-route')
+}
+
+export function resetAllLocalAndContextOnLogout(dispatch, history)
+{
+    localStorage.removeItem("id_token")
+    localStorage.removeItem('expire_date')
+    localStorage.removeItem('ifHasTeam')
+    delete_cookie('XSRF-TOKEN')
+    dispatch({ type: "SIGN_OUT_SUCCESS" });
+    resetIntentedUrl()
+    history.push("/login");
+}
+
+export function checkCurrentBoardUrl(path)
+{
+    let regexMatcher = pathToRegexp("/board/:foo(\\d+)", undefined, {
+        sensitive:true,
+        strict:true,
+    })
+     return regexMatcher.exec(path)
 }

@@ -9,7 +9,7 @@ import {
     deleteMember, getCategoryFromLocalStorage,
     returnStringIfUndefined, setItemInLocalStorage,
 } from "../../../Module/biblio";
-import {useTeamToUpdateEffect} from "../../../context/GlobalHooks";
+import {useMatchWithRedirect, useTeamToUpdateEffect} from "../../../context/GlobalHooks";
 import useStyles from "./style";
 import Paper from "@material-ui/core/Paper";
 import Chip from "@material-ui/core/Chip";
@@ -20,6 +20,8 @@ import {useDashboard} from "../../../context/DashboardContext";
 import {URLS} from "../../../Module/http";
 import {useNotificationDispatch} from "../../../context/NotificationContext";
 import {useAxiosState} from "../../../context/AxiosContext";
+import {useUserState} from "../../../context/UserAuthContext";
+import {useHistory} from "react-router-dom";
 
 
 
@@ -30,6 +32,9 @@ function UpdateTeam(props) {
     const [categoryList, setCategoryList] = React.useState([])
     const displayNotification = useNotificationDispatch()
     const http = useAxiosState()
+    let { isAuthenticated } = useUserState();
+    const matchWithRedirect = useMatchWithRedirect()
+    let history = useHistory()
 
 
     useEffect(() => {
@@ -149,15 +154,22 @@ function UpdateTeam(props) {
   );
 
     function getCategoryOnServer () {
-        http.get(URLS.ressources.category)
-            .then((response) => {
-                setCategoryList(response.data)
-                // Todo find a way to update this by broadcasting when it change on server side
-                setItemInLocalStorage("category", response.data)
-            })
-            .catch(() => {
-                displayNotification("danger","Check your connection and reload please." )
-            })
+        if (isAuthenticated === false && matchWithRedirect === null)
+        {
+            history.push('/login')
+        }
+        if (isAuthenticated === true)
+        {
+            http.get(URLS.ressources.category)
+                .then((response) => {
+                    setCategoryList(response.data)
+                    // Todo find a way to update this by broadcasting when it change on server side
+                    setItemInLocalStorage("category", response.data)
+                })
+                .catch(() => {
+                    displayNotification("Check your connection and reload please." )
+                })
+        }
     }
 }
 

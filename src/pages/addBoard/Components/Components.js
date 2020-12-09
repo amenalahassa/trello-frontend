@@ -7,6 +7,9 @@ import GridListTileBar from "@material-ui/core/GridListTileBar";
 import {useAxiosState} from "../../../context/AxiosContext";
 import {URLS} from "../../../Module/http";
 import {Typography} from "@material-ui/core";
+import {useUserState} from "../../../context/UserAuthContext";
+import {useMatchWithRedirect} from "../../../context/GlobalHooks";
+import {useHistory} from "react-router-dom";
 
 
 export default function ImageGridList(props) {
@@ -14,15 +17,25 @@ export default function ImageGridList(props) {
     let { setSelectedImage } = props
 
     let http = useAxiosState()
+    let { isAuthenticated } = useUserState();
+    const matchWithRedirect = useMatchWithRedirect()
+    let history = useHistory()
 
     const [images, setImages] = useState([])
     const [grid, setGrid] = useState([])
 
     useEffect(() => {
-        http.get(URLS.ressources.boardBackgroundImage)
-            .then((response) => {
-                setImages(response.data.images)
-            })
+        if (isAuthenticated === false && matchWithRedirect === null)
+        {
+            history.push('/login')
+        }
+        if (isAuthenticated === true)
+        {
+            http.get(URLS.ressources.boardBackgroundImage)
+                .then((response) => {
+                    setImages(response.data.images)
+                })
+        }
     },[])
 
     useEffect(() => {

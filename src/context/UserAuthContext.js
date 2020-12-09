@@ -1,5 +1,11 @@
 import React from "react";
-import {delete_cookie, getFromLocalStorage, isOutdated, log} from "../Module/biblio";
+import {
+    getFromLocalStorage,
+    getIntentedUrl,
+    isOutdated,
+    log,
+    resetAllLocalAndContextOnLogout,
+} from "../Module/biblio";
 
 var UserStateContext = React.createContext();
 var UserDispatchContext = React.createContext();
@@ -109,8 +115,7 @@ function login (http, email, password,  dispatchAuth, dispatchHasTeam , history,
                     localStorage.setItem('ifHasTeam',  response.data.ifHasTeam)
                     toogleHasTeamDispatch(dispatchHasTeam, response.data.ifHasTeam)
                     dispatchAuth({ type: 'LOGIN_SUCCESS' })
-                    // Todo redirect where the user where gone, change history in redirect function
-                    history.push('/')
+                    history.push(getIntentedUrl())
                 })
                 .catch(function (error) {
                     catchError(error, setErrorMsg, setError, setIsLoading)
@@ -137,7 +142,7 @@ function register (http, name, email, password, password_confirmation, dispatchA
                     localStorage.setItem('ifHasTeam',  response.data.ifHasTeam)
                     toogleHasTeamDispatch(dispatchHasTeam, response.data.ifHasTeam)
                     dispatchAuth({ type: 'REGISTER_SUCCESS' })
-                    history.push('/')
+                    history.push(getIntentedUrl())
                 })
                 .catch(function (error) {
                     catchError(error, setErrorMsg, setError, setIsLoading)
@@ -152,12 +157,7 @@ function logout(http, dispatch, history)
 {
   http.get('/api/logout')
       .then(function (){
-          localStorage.removeItem("id_token")
-          localStorage.removeItem('expire_date')
-          localStorage.removeItem('ifHasTeam')
-          delete_cookie('XSRF-TOKEN')
-          dispatch({ type: "SIGN_OUT_SUCCESS" });
-          history.push("/login");
+          resetAllLocalAndContextOnLogout(dispatch, history)
       })
       .catch(function (error) {
         log(error)
@@ -191,6 +191,7 @@ function catchError(error, setErrorMsg, setError, setIsLoading)
         // Something happened in setting up the request that triggered an CreateTeam
         let msg = "Try to reload the page please. See more in console."
         setErrorMsg(msg)
+        // Todo remove this
         log('Error', error.message);
         setError(true)
         setIsLoading(false)

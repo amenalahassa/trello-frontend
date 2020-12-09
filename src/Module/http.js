@@ -44,6 +44,7 @@ function catchError(error, setLoading, setError, displayNotification)
         displayNotification("Check you connection and try again please.")
         setLoading(false)
     } else {
+        // Todo remove this
         log('Error', error.message);
         displayNotification("Try to reload the page please. See more in console.")
         setLoading(false)

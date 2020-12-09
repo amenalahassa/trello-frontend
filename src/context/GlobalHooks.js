@@ -3,6 +3,8 @@ import {useTeamToUpdateState} from "./TeamToUpdateContext";
 import {returnArrayIfUndefined} from "../Module/biblio";
 import Avatar from "@material-ui/core/Avatar";
 import {useModalDispatch} from "./ModalContext";
+import {useRouteMatch} from "react-router-dom";
+import {useUserState} from "./UserAuthContext";
 
 function useNotification()
 {
@@ -86,4 +88,13 @@ function useTeamToUpdateEffect (setCurrent = () => {}, setCurrentName = () => {}
     }
 }
 
-export { useNotification, useIsMountedRef, useTeamToUpdateEffect };
+function useMatchWithRedirect()
+{
+    return useRouteMatch({
+        path: "/login",
+        strict: true,
+        sensitive: true
+    });
+}
+
+export { useNotification, useIsMountedRef, useTeamToUpdateEffect, useMatchWithRedirect};

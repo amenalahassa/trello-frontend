@@ -10,7 +10,7 @@ import logo from "../../images/logo.png";
 import {useAxiosState} from "../../context/AxiosContext";
 import "../../Module/notify"
 import {toggleHasTeam, useUserTeamDispatch} from "../../context/UserTeamContext";
-import {setItemInLocalStorage} from "../../Module/biblio";
+import {getIntentedUrl, setItemInLocalStorage} from "../../Module/biblio";
 import AddTeam from "../../components/SmallComponent/AddTeam";
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
 import {useNotification} from "../../context/GlobalHooks";
@@ -53,7 +53,7 @@ export default function CreateTeam(props) {
     setLoading(false)
     setItemInLocalStorage('ifHasTeam', true)
     toggleHasTeam(userTeamDispatch)
-    props.history.push('/')
+    props.history.push(getIntentedUrl())
   }
 
 
