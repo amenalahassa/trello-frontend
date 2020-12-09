@@ -56,7 +56,7 @@ export default function Dashboard() {
         callback: () => {}
     })
 
-
+    // Todo use route match to check if user is in correct url, if not, send it to not found page
 
     useEffect(() =>{
         setLoading(true)
@@ -87,11 +87,14 @@ export default function Dashboard() {
     }
 
     const loadBoard = () => {
-        http.post(URLS.aboutBoard, {
-            id,
+        http.get(URLS.aboutBoard + id, {
+            params: {
+                id,
+            }
         })
-            .then(({ data : { data }}) => {
-                if (data === null)
+            .then((response) => {
+                let { data : { board }} = response
+                if (board === null)
                 {
                     setErrors({
                         ...errors,
@@ -102,12 +105,24 @@ export default function Dashboard() {
                 }
                 else
                 {
-                    setBoard(data)
-                    setName(data.name)
+                    setBoard(board)
+                    setName(board.name)
                     setErrors({
                         ...errors,
                         error: false
                     })
+                }
+                if (response.status === 403)
+                {
+                    // When the user try to access a board that he doent have access or  dont exist
+                    setErrors({
+                        ...errors,
+                        error: true,
+                        image: warningLogo,
+                        message: "Something goes wrong. This board may not exist or you may don't have access to this board. if this error persist, try to open another please",
+                        action: null,
+                    })
+                    setLoading(false)
                 }
                 setLoading(false)
             })
@@ -115,11 +130,13 @@ export default function Dashboard() {
                 if (error.response) {
                     if (error.response.status === 401)
                     {
+                        // When the user is not auth...
                         signOut(http, authDispatch, history)
                         setLoading(false)
                     }
                     if (error.response.status === 422)
                     {
+                        // When the user send bad id like papa89
                         setErrors({
                             ...errors,
                             error: true,

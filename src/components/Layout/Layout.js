@@ -54,9 +54,9 @@ function Layout(props) {
             {
                 setDatas(response.data)
                 console.log(response.data)
-                console.log(location)
-                console.log(history)
-                console.log(match)
+                // console.log(location)
+                // console.log(history)
+                // console.log(match)
                 setLoading(false)
             }
         })

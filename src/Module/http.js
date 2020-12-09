@@ -101,7 +101,7 @@ export const URLS = {
     deleteTeam :  api + '/dashboard/team/delete',
     saveTeam :  api + '/dashboard/save/team',
     saveMember :  api + '/dashboard/save/member',
-    aboutBoard :  api + '/dashboard/board/about',
+    aboutBoard :  api + '/dashboard/board/about/',
     updateBoardName: api + "/dashboard/board/update/name",
     ressources: {
         category: api + "/ressources/category",

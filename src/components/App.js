@@ -1,5 +1,5 @@
 import React from "react";
-import {Route, Switch, Redirect, BrowserRouter, HashRouter} from "react-router-dom";
+import {Route, Switch, Redirect, BrowserRouter, HashRouter, useLocation} from "react-router-dom";
 
 // components
 import Layout from "./Layout";
@@ -46,6 +46,7 @@ export default function App() {
   // #######################################################################
 
     function AuthMiddleware({component, ...rest }) {
+        console.log(rest)
         return (
             <Route
                 {...rest}
