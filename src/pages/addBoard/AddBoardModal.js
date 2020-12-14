@@ -106,34 +106,39 @@ function AddBoardModal(props) {
                               <FormControlLabel value="personal" control={<Radio />} label="Your personal board" />
                               <FormControlLabel value="team" control={<Radio />} label="A team board" />
                           </RadioGroup>
-                          {ownerValue !== "team" ? '' :
-                              <TextField
-                                  id="filled-select-sector"
-                                  error={!!error.owner}
-                                  InputProps={{
-                                      classes: {
-                                          underline: classes.textFieldUnderline,
-                                          input: classes.textField,
-                                      },
-                                  }}
-                                  margin="normal"
-                                  select
-                                  value={team}
-                                  onChange={(event => {setTeam(event.target.value); setError({})})}
-                                  helperText={!!error.owner ? "The provided value are incorrect" : "Required"}
-                                  fullWidth
-                                  required
-                                  className={classes.textfielInput}
-                              >
-                                  <MenuItem value=""  disabled>
-                                      Choose a team
-                                  </MenuItem>
-                                  {teams.map((option) => (
-                                      <MenuItem key={option.id} value={option.id}>
-                                          {option.name}
+                          {ownerValue === "team" &&
+                              <div>
+                                  { teams.length <= 0 ? <Typography className={classes.whenIsNoTeam} >You don't have a team. Create one before. </Typography>  : <TextField
+                                      id="filled-select-sector"
+                                      error={!!error.owner}
+                                      InputProps={{
+                                          classes: {
+                                              underline: classes.textFieldUnderline,
+                                              input: classes.textField,
+                                          },
+                                      }}
+                                      margin="normal"
+                                      select
+                                      value={team}
+                                      onChange={(event => {
+                                          setTeam(event.target.value);
+                                          setError({})
+                                      })}
+                                      helperText={!!error.owner ? "The provided value are incorrect" : "Required"}
+                                      fullWidth
+                                      required
+                                      className={classes.textfielInput}
+                                  >
+                                      <MenuItem value="" disabled>
+                                          Choose a team
                                       </MenuItem>
-                                  ))}
-                              </TextField>
+                                      {teams.map((option) => (
+                                          <MenuItem key={option.id} value={option.id}>
+                                              {option.name}
+                                          </MenuItem>
+                                      ))}
+                                  </TextField>}
+                              </div>
                           }
                       </div>
                       <div>
@@ -176,7 +181,7 @@ function AddBoardModal(props) {
         } else {
             cancel()
             // Todo remove this
-            log('Error', error.message);
+            console.log('Error', error.message);
             showNotification("danger","Try to reload the page please. See more in console." )
             setLoading(false)
         }

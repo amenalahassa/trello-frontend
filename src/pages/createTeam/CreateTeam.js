@@ -13,16 +13,17 @@ import {toggleHasTeam, useUserTeamDispatch} from "../../context/UserTeamContext"
 import {getIntentedUrl, setItemInLocalStorage} from "../../Module/biblio";
 import AddTeam from "../../components/SmallComponent/AddTeam";
 import {DisplayNotification} from "../../components/TiniComponents/Notifications";
-import {useNotification} from "../../context/GlobalHooks";
+import {useIsMountedRef, useNotification} from "../../context/GlobalHooks";
 import {sendTeam, URLS} from "../../Module/http";
 import {useNotificationDispatch} from "../../context/NotificationContext";
+import {useHistory} from "react-router-dom";
 
 
 // UI :
 // Todo : change the background, chose an image, and an undraw image for icon.
 
 
-export default function CreateTeam(props) {
+export default function CreateTeam() {
 
   let classes = useStyles();
 
@@ -35,25 +36,33 @@ export default function CreateTeam(props) {
   const http = useAxiosState()
   const userTeamDispatch = useUserTeamDispatch()
   const displayNotification = useNotificationDispatch()
+  const isMountedRef = useIsMountedRef();
+  const history = useHistory()
+
 
 
   const save = () => {
-    setLoading(true)
-    sendTeam(URLS.saveTeam, http, {
-      name,
-      secteur : category,
-      members,
-    }, next, displayNotification, setLoading, setError)
+    if(isMountedRef.current)
+    {
+      setLoading(true)
+      sendTeam(URLS.saveTeam, http, {
+        name,
+        secteur : category,
+        members,
+      }, next, displayNotification, setLoading, setError)
+    }
   }
 
   const next = () => {
-    setEmail("")
-    setName("")
-    setMember([])
-    setLoading(false)
-    setItemInLocalStorage('ifHasTeam', true)
-    toggleHasTeam(userTeamDispatch)
-    props.history.push(getIntentedUrl())
+    if (isMountedRef.current)
+    {
+      setEmail("")
+      setName("")
+      setMember([])
+      setLoading(false)
+      setItemInLocalStorage('ifHasTeam', true)
+      toggleHasTeam(userTeamDispatch)
+    }
   }
 
 

@@ -45,7 +45,7 @@ function catchError(error, setLoading, setError, displayNotification)
         setLoading(false)
     } else {
         // Todo remove this
-        log('Error', error.message);
+        console.log('Error', error.message);
         displayNotification("Try to reload the page please. See more in console.")
         setLoading(false)
     }

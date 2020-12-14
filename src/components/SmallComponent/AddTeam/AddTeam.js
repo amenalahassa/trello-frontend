@@ -14,7 +14,7 @@ import {
 import {useAxiosState} from "../../../context/AxiosContext";
 import {URLS} from "../../../Module/http";
 import {useUserState} from "../../../context/UserAuthContext";
-import {useMatchWithRedirect} from "../../../context/GlobalHooks";
+import {useIsMountedRef, useMatchWithRedirect} from "../../../context/GlobalHooks";
 import {useHistory} from "react-router-dom";
 
 
@@ -29,7 +29,9 @@ function AddTeam(props) {
     const http = useAxiosState()
     let { isAuthenticated } = useUserState();
     const matchWithRedirect = useMatchWithRedirect()
+    const isMountedRef = useIsMountedRef()
     let history = useHistory()
+
 
     useEffect(() => {
         setCategoryList(getCategoryFromLocalStorage(getCategoryOnServer))
@@ -96,7 +98,7 @@ function AddTeam(props) {
                     <MenuItem value=""  disabled>
                         Your field of activity
                     </MenuItem>
-                    {categoryList && categoryList.map((option) => (
+                    {categoryList.map((option) => (
                         <MenuItem key={option.key} value={option.key}>
                             {option.label}
                         </MenuItem>
@@ -144,9 +146,12 @@ function AddTeam(props) {
         {
             http.get(URLS.ressources.category)
                 .then((response) => {
-                    setCategoryList(response.data)
-                    // Todo find a way to update this by broadcasting when it change on server side
-                    setItemInLocalStorage("category", response.data)
+                    if (isMountedRef.current)
+                    {
+                        setCategoryList(response.data)
+                        // Todo find a way to update this by broadcasting when it change on server side
+                        setItemInLocalStorage("category", response.data)
+                    }
                 })
                 .catch(() => {
                     displayNotification("Check your connection and reload please." )

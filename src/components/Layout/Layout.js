@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {
   Route,
   Switch,
-  withRouter, useLocation, useHistory, useRouteMatch, HashRouter
+  withRouter,  useHistory,  HashRouter
 } from "react-router-dom";
 import classnames from "classnames";
 
@@ -13,7 +13,7 @@ import useStyles from "./styles";
 
 
 // pages
-import Dashboard, {Placeholder} from "../../pages/dashboard/Dashboard";
+import Dashboard from "../../pages/dashboard/Dashboard";
 
 // context
 
@@ -22,8 +22,7 @@ import {viewportSize} from "../../Module/biblio";
 import {useDashboardDispatch} from "../../context/DashboardContext";
 import {useAxiosState} from "../../context/AxiosContext";
 import {useIsMountedRef, useMatchWithRedirect} from "../../context/GlobalHooks";
-import Loader from "../Loader";
-import {signOut, useUserDispatch, useUserState} from "../../context/UserAuthContext";
+import { useUserDispatch, useUserState} from "../../context/UserAuthContext";
 import {useNotificationDispatch} from "../../context/NotificationContext";
 import StartBoard from "../../pages/startBoard";
 
@@ -33,9 +32,9 @@ function Layout(props) {
 
     let { isAuthenticated } = useUserState();
     const matchWithRedirect = useMatchWithRedirect()
-    let history = useHistory()
+    const history = useHistory()
     const [isLoading, setLoading] = useState(true);
-    let  [currentBoard, setCurrentBoard] = useState(null)
+    const  [currentBoard, setCurrentBoard] = useState(null)
     const displayNotification = useNotificationDispatch()
     const classes = useStyles( { backgroundImage : getResizeBackgroundImage(currentBoard)});
 
@@ -59,19 +58,10 @@ function Layout(props) {
                   {
                       setDatas(response.data)
                       console.log(response.data)
-                      // console.log(location)
-                      // console.log(history)
-                      // console.log(match)
                       setLoading(false)
                   }
               })
               .catch((error) => {
-                  // if (error.response) {
-                  //     if (error.response.status === 401)
-                  //     {
-                  //         signOut(http, userDispatch, history)
-                  //     }
-                  // }
                   // Todo remove this
                   console.log('Error', error.message);
                   // Todo when the user is not yet authenticated, disconnect it

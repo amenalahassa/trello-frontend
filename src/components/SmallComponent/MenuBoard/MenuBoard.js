@@ -31,11 +31,9 @@ function MenuBoard(props) {
     let  [currentBoard, setCurrentBoard] = useState(null)
 
     // Todo Use anywhere user to this value
-    let  userData =  useDashboard().user
+    let userData =  useDashboard().user
     let history = useHistory()
     let { url } = useRouteMatch()
-    let matchWithRedirect = pathToRegexp("/board/:foo(\\d+)")
-
     let location = useLocation()
 
 
@@ -65,7 +63,7 @@ function MenuBoard(props) {
             // Todo verify the current url before
             if (toShowPlaceholder === true)
             {
-                history.push(url + 'startBoard')
+                if(location.pathname !== '/startBoard') history.push(url + 'startBoard')
             }
             else
             {

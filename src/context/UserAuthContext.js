@@ -192,7 +192,7 @@ function catchError(error, setErrorMsg, setError, setIsLoading)
         let msg = "Try to reload the page please. See more in console."
         setErrorMsg(msg)
         // Todo remove this
-        log('Error', error.message);
+        console.log('Error', error.message);
         setError(true)
         setIsLoading(false)
     }
