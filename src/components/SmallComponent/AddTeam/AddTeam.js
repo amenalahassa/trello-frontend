@@ -98,7 +98,7 @@ function AddTeam(props) {
                     <MenuItem value=""  disabled>
                         Your field of activity
                     </MenuItem>
-                    {categoryList.map((option) => (
+                    {categoryList && categoryList.map((option) => (
                         <MenuItem key={option.key} value={option.key}>
                             {option.label}
                         </MenuItem>

@@ -16,17 +16,16 @@ import {ModalProvider} from "../context/ModalContext";
 import {DashboardProvider} from "../context/DashboardContext";
 import {NotificationProvider} from "../context/NotificationContext";
 import {TeamToUpdateProvider} from "../context/TeamToUpdateContext";
-import {initializeIntendedUrl} from "../Module/biblio";
+import {getCurrentLocationOnCurrentWindow, initializeIntendedUrl} from "../Module/biblio";
 
 export default function App() {
   // global
-  var { isAuthenticated } = useUserState();
-  var { ifHasTeam } = useUserTeamState();
-  const location = window.location.pathname + window.location.hash
-    initializeIntendedUrl(location)
+    const { isAuthenticated } = useUserState();
+    const { ifHasTeam } = useUserTeamState();
+    initializeIntendedUrl(getCurrentLocationOnCurrentWindow())
 
     // Todo : Modifier la page d'erreur
-  return (
+    return (
       <DashboardProvider>
         <NotificationProvider>
             <TeamToUpdateProvider>

@@ -28,8 +28,12 @@ import CardContent from "@material-ui/core/CardContent";
 import notFoundLogo from "../../images/notfound.svg";
 import warningLogo from "../../images/warning.svg";
 import CardMedia from "@material-ui/core/CardMedia";
-import {useMatchWithRedirect} from "../../context/GlobalHooks";
-import {resetAllLocalAndContextOnLogout, setItemInLocalStorage} from "../../Module/biblio";
+import {useIsMountedRef, useMatchWithRedirect} from "../../context/GlobalHooks";
+import {
+    getCurrentLocationOnCurrentWindow,
+    resetAllLocalAndContextOnLogout,
+    setItemInLocalStorage
+} from "../../Module/biblio";
 
 
 // Todo: Use an sidebar for show menu board
@@ -40,12 +44,13 @@ export default function Dashboard() {
     let http = useAxiosState()
     const setDatas = useDashboardDispatch()
     // Todo use this name anywhere in the project
-    // const authDispatch = useUserDispatch()
+    const authDispatch = useUserDispatch()
     let { id } = useParams()
     let history = useHistory()
     let location = useLocation()
     let { isAuthenticated } = useUserState();
     const matchWithRedirect = useMatchWithRedirect()
+    const isMountedRef = useIsMountedRef();
 
     const [aboutMenu, setAboutMenu] = useState(null)
     const [board, setBoard] = useState({})
@@ -69,8 +74,11 @@ export default function Dashboard() {
             history.push('/login')
         }
         if (isAuthenticated === true) {
-            setLoading(true)
-            loadBoard()
+           if (isMountedRef.current)
+           {
+               setLoading(true)
+               loadBoard()
+           }
         }
     }, [id])
 
@@ -131,8 +139,9 @@ export default function Dashboard() {
                         case 401:
                             // Todo do like this anywhere
                             // When the user is not auth... but is logged in front
-                            setItemInLocalStorage('intented-route', window.location.href)
-                            resetAllLocalAndContextOnLogout(useUserDispatch, location)
+                            displayNotification("You logged in a while ago. Please re-authenticate you.")
+                            setItemInLocalStorage('intented-route', getCurrentLocationOnCurrentWindow())
+                            resetAllLocalAndContextOnLogout(authDispatch, history)
                             break
                         case 403:
                             // When the user try to access a board that he doesn't have access to

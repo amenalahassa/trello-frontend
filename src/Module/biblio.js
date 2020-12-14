@@ -193,3 +193,8 @@ export function checkCurrentBoardUrl(path)
     })
      return regexMatcher.exec(path)
 }
+
+export function getCurrentLocationOnCurrentWindow()
+{
+    return window.location.pathname + window.location.hash
+}

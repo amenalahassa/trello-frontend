@@ -18,7 +18,12 @@ import Dashboard from "../../pages/dashboard/Dashboard";
 // context
 
 import Header from "../Header/Header";
-import {viewportSize} from "../../Module/biblio";
+import {
+    getCurrentLocationOnCurrentWindow,
+    resetAllLocalAndContextOnLogout,
+    setItemInLocalStorage,
+    viewportSize
+} from "../../Module/biblio";
 import {useDashboardDispatch} from "../../context/DashboardContext";
 import {useAxiosState} from "../../context/AxiosContext";
 import {useIsMountedRef, useMatchWithRedirect} from "../../context/GlobalHooks";
@@ -40,12 +45,13 @@ function Layout(props) {
 
     const setDatas = useDashboardDispatch()
     const http = useAxiosState()
-    const isMountedRef = useIsMountedRef();
-    const userDispatch = useUserDispatch();
+    const isMountedRef = useIsMountedRef()
+    const authDispatch = useUserDispatch()
 
 
 
-  useEffect(() => {
+
+    useEffect(() => {
       if (isAuthenticated === false && matchWithRedirect === null)
       {
           history.push('/login')
@@ -57,15 +63,19 @@ function Layout(props) {
                   if (isMountedRef.current)
                   {
                       setDatas(response.data)
-                      console.log(response.data)
                       setLoading(false)
                   }
               })
               .catch((error) => {
-                  // Todo remove this
-                  console.log('Error', error.message);
-                  // Todo when the user is not yet authenticated, disconnect it
-                  displayNotification("Check you connection and reload the page please.")
+                  if (error.response) {
+                      switch (error.response.status) {
+                          case 401:
+                              displayNotification("You logged in a while ago. Please re-authenticate you.")
+                              setItemInLocalStorage('intented-route', getCurrentLocationOnCurrentWindow())
+                              resetAllLocalAndContextOnLogout(authDispatch, history)
+                              break
+                      }
+                  }
               })
       }
   }, [])

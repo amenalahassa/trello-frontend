@@ -7,9 +7,15 @@ import GridListTileBar from "@material-ui/core/GridListTileBar";
 import {useAxiosState} from "../../../context/AxiosContext";
 import {URLS} from "../../../Module/http";
 import {Typography} from "@material-ui/core";
-import {useUserState} from "../../../context/UserAuthContext";
+import {useUserDispatch, useUserState} from "../../../context/UserAuthContext";
 import {useMatchWithRedirect} from "../../../context/GlobalHooks";
 import {useHistory} from "react-router-dom";
+import {
+    getCurrentLocationOnCurrentWindow,
+    resetAllLocalAndContextOnLogout,
+    setItemInLocalStorage
+} from "../../../Module/biblio";
+import {useNotificationDispatch} from "../../../context/NotificationContext";
 
 
 export default function ImageGridList(props) {
@@ -20,6 +26,9 @@ export default function ImageGridList(props) {
     let { isAuthenticated } = useUserState();
     const matchWithRedirect = useMatchWithRedirect()
     let history = useHistory()
+    const displayNotification = useNotificationDispatch()
+    const authDispatch = useUserDispatch()
+
 
     const [images, setImages] = useState([])
     const [grid, setGrid] = useState([])
@@ -34,7 +43,17 @@ export default function ImageGridList(props) {
             http.get(URLS.ressources.boardBackgroundImage)
                 .then((response) => {
                     setImages(response.data.images)
-                })
+                }).catch((error) => {
+                if (error.response) {
+                    switch (error.response.status) {
+                        case 401:
+                            displayNotification("You logged in a while ago. Please re-authenticate you.")
+                            setItemInLocalStorage('intented-route', getCurrentLocationOnCurrentWindow())
+                            resetAllLocalAndContextOnLogout(authDispatch, history)
+                            break
+                    }
+                }
+            })
         }
     },[])
 
