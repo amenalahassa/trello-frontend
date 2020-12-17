@@ -123,7 +123,7 @@ export default makeStyles(theme => ({
     borderRadius:10,
   },
   buttonAddBoard: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
   },
   cardText:{
     marginBottom: theme.spacing(2.3),
@@ -134,5 +134,49 @@ export default makeStyles(theme => ({
   textPrivateTeam:{
     marginTop:theme.spacing(1),
     marginRight:theme.spacing(2)
-  }
+  },
+  buttonBoardMenu:{
+    marginTop: theme.spacing(10),
+    width: 300,
+    ['& .MuiList-padding']:{
+      paddingTop:0,
+    }
+  },
+  buttonBoardMenuToolBar:{
+    display: "flex",
+    flexDirection:"row",
+    padding:"0 10px !important",
+    minHeight:24,
+    borderBottom: "1px #00000021 solid",
+    boxShadow: "0 0px 0px 0 grey !important",
+    ['& .MuiSvgIcon-root']:{
+      fontSize:"1.2rem",
+    }
+
+  },
+  buttonBoardMenuHeaderMenuIcon:{
+    flexGrow:1,
+    display: "flex",
+    flexDirection:"row",
+  },
+  buttonBoardMenuHeaderMenuIconTitle:{
+    flex:1,
+    fontWeight:400,
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
+  },
+  buttonBoardMenuItem:{
+    display: "flex",
+    flexDirection:"column",
+    maxWidth: 300,
+    whiteSpace:"normal",
+    paddingBottom:0,
+    paddingLeft:theme.spacing(1),
+    paddingRight:theme.spacing(1),
+  },
+  buttonBoardMenuItemSelect:{
+    width:"100%",
+    padding:theme.spacing(1)
+  },
 }));

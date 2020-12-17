@@ -11,7 +11,7 @@ import AppBar from "@material-ui/core/AppBar";
 import classNames from "classnames";
 import Grid from "@material-ui/core/Grid";
 import useStyles from "./styles";
-import { MoreVert as MenuIcon} from "@material-ui/icons";
+import {Close as CloseIcon, MoreVert as MenuIcon, ArrowLeft as ArrowLeftIcon} from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
 import SubBoardMenu from "../../components/SmallComponent/SubBoardMenu";
 import GroupAvatars from "../../components/TiniComponents/GroupAvatars";
@@ -19,11 +19,11 @@ import FormControl from "@material-ui/core/FormControl";
 import { ResizableInput} from "./components/Components";
 import {useAxiosState} from "../../context/AxiosContext";
 import {URLS} from "../../Module/http";
-import {useDashboardDispatch} from "../../context/DashboardContext";
+import {useDashboard, useDashboardDispatch} from "../../context/DashboardContext";
 import Skeleton from "@material-ui/lab/Skeleton";
 import {useNotificationDispatch} from "../../context/NotificationContext";
 import Loader from "../../components/Loader";
-import {signOut, useUserDispatch, useUserState} from "../../context/UserAuthContext";
+import {useUserDispatch, useUserState} from "../../context/UserAuthContext";
 import CardContent from "@material-ui/core/CardContent";
 import notFoundLogo from "../../images/notfound.svg";
 import warningLogo from "../../images/warning.svg";
@@ -36,6 +36,9 @@ import {
 } from "../../Module/biblio";
 import {Menu} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
+import IconButton from "@material-ui/core/IconButton";
+import Select from "@material-ui/core/Select";
+import {ReloaderContext} from "../../context/GlobalContext";
 
 
 // Todo: Use an sidebar for show menu board
@@ -53,6 +56,7 @@ export default function Dashboard() {
     let { isAuthenticated } = useUserState();
     const matchWithRedirect = useMatchWithRedirect()
     const isMountedRef = useIsMountedRef();
+
 
     const [aboutMenu, setAboutMenu] = useState(null)
     const [board, setBoard] = useState({})
@@ -195,63 +199,66 @@ export default function Dashboard() {
 
     return (
       <>
-          { loading ? <Loader/> :
-              <>
-                  {errors.error ? <div className={classes.showErrorRoot} ><ShowError info={errors}/></div> :
-                      <Grid
-                          container
-                          className={classes.gridParent}
-                      >
-                          <Grid item className={classes.gridBar} >
-                              <AppBar position="static" elevation={0} className={classes.hearderRoot}>
-                                  <Toolbar className={classes.toolbar}>
-                                      <div>
-                                          {
-                                              OnUpdateName  ?
-                                                  <FormControl className={classes.margin} >
-                                                      <ResizableInput
-                                                          autoFocus={true}
-                                                          size={name.length}
-                                                          id="modify-board-name-input"
-                                                          value={name}
-                                                          onChange={(event => setName(event.target.value))}
-                                                          onBlur={() => updateName()} />
-                                                  </FormControl>
-                                                  :
-                                                  <Typography variant="h4" className={classes.boardName} onClick={() => handleUpdateName(true)} >
-                                                      {board.name}
-                                                  </Typography>
-                                          }
-                                      </div>
-                                      <Divider orientation="vertical" flexItem className={classes.divider} />
-                                      { loading ?
-                                          <div className={classNames(classes.team)}><Skeleton variant="rect" width={210} height={38} animation={"wave"}/></div> :
-                                          <div className={classNames(classes.team)}><DashBoardOwner  type={board.type} datas={board.owner} /></div>
-                                        }
-                                      <Button
-                                          variant="contained"
-                                          color="primary"
-                                          size="medium"
-                                          disableElevation
-                                          endIcon={<MenuIcon className={classes.buttonBoardIcon}/>}
-                                          className={classes.buttonAboutBoard}
-                                          aria-controls="about-sub-board-menu"
-                                          onClick={(e) => setAboutMenu(e.currentTarget)}
-                                          disabled={loading}
-                                      >
-                                          About this board
-                                      </Button>
-                                      <SubBoardMenu aboutMenu={aboutMenu} setAboutMenu={setAboutMenu} classes={classes} />
-                                  </Toolbar>
-                              </AppBar>
+          <ReloaderContext.Provider value={loadBoard}>
+
+              { loading ? <Loader/> :
+                  <>
+                      {errors.error ? <div className={classes.showErrorRoot} ><ShowError info={errors}/></div> :
+                          <Grid
+                              container
+                              className={classes.gridParent}
+                          >
+                              <Grid item className={classes.gridBar} >
+                                  <AppBar position="static" elevation={0} className={classes.hearderRoot}>
+                                      <Toolbar className={classes.toolbar}>
+                                          <div>
+                                              {
+                                                  OnUpdateName  ?
+                                                      <FormControl className={classes.margin} >
+                                                          <ResizableInput
+                                                              autoFocus={true}
+                                                              size={name.length}
+                                                              id="modify-board-name-input"
+                                                              value={name}
+                                                              onChange={(event => setName(event.target.value))}
+                                                              onBlur={() => updateName()} />
+                                                      </FormControl>
+                                                      :
+                                                      <Typography variant="h4" className={classes.boardName} onClick={() => handleUpdateName(true)} >
+                                                          {board.name}
+                                                      </Typography>
+                                              }
+                                          </div>
+                                          <Divider orientation="vertical" flexItem className={classes.divider} />
+                                          { loading ?
+                                              <div className={classNames(classes.team)}><Skeleton variant="rect" width={210} height={38} animation={"wave"}/></div> :
+                                              <div className={classNames(classes.team)}><DashBoardOwner  type={board.type} owner={board.owner} id={board.id} /></div>
+                                            }
+                                          <Button
+                                              variant="contained"
+                                              color="primary"
+                                              size="medium"
+                                              disableElevation
+                                              endIcon={<MenuIcon className={classes.buttonBoardIcon}/>}
+                                              className={classes.buttonAboutBoard}
+                                              aria-controls="about-sub-board-menu"
+                                              onClick={(e) => setAboutMenu(e.currentTarget)}
+                                              disabled={loading}
+                                          >
+                                              About this board
+                                          </Button>
+                                          <SubBoardMenu aboutMenu={aboutMenu} setAboutMenu={setAboutMenu} classes={classes} />
+                                      </Toolbar>
+                                  </AppBar>
+                              </Grid>
+                              <Grid item className={classes.gridContainer} >
+                                  <div>Hello !</div>
+                              </Grid>
                           </Grid>
-                          <Grid item className={classes.gridContainer} >
-                              <div>Hello !</div>
-                          </Grid>
-                      </Grid>
-                  }
-              </>
-          }
+                      }
+                  </>
+              }
+          </ReloaderContext.Provider>
       </>
     );
 
@@ -288,27 +295,26 @@ function ShowError(props)
 }
 
 
-function DashBoardOwner({ type, datas = {}})
+function DashBoardOwner({ type, owner = {}, id})
 {
     let classes = useStyles()
     const [name, setName] = useState("")
     const [openPersonal, setPersonal] = useState(null)
     const [openTeam, setTeam] = useState(null)
     useEffect(() => {
-        setName(datas.name || "")
-    }, [datas])
+        setName(owner.name || "")
+    }, [owner])
 
     return (
         <div className={classes.ownerRoot} >
             {type === "User" ? <PersonalOwner toggle={setPersonal}/> : <TeamOwner name={name} toggle={setTeam} /> }
-            <PersonalOwnerMenu open={openPersonal} toggle={setPersonal}/>
+            <PersonalOwnerMenu board_id={id} open={openPersonal} toggle={setPersonal}/>
             <TeamOwnerMenu open={openTeam} toggle={setTeam}/>
         </div>
     )
 
     function PersonalOwner({ toggle })
     {
-
         return (
             <div className={classes.ownerRoot}>
                 <Button
@@ -317,18 +323,9 @@ function DashBoardOwner({ type, datas = {}})
                     size="medium"
                     disableElevation
                     className={classes.buttonBoard}
-                    onClick={(e) => toggle(e.currentTarget) }
+                    onClick={e => toggle(e.currentTarget) }
                 >
                     Private Board
-                </Button>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="medium"
-                    disableElevation
-                    className={classes.buttonBoard}
-                >
-                    Invite
                 </Button>
             </div>
         )
@@ -364,20 +361,95 @@ function DashBoardOwner({ type, datas = {}})
         )
     }
 
-    function PersonalOwnerMenu({ open, toggle })
+    function PersonalOwnerMenu({ open, toggle, board_id })
     {
+        let classes = useStyles()
+        let http = useAxiosState()
+        const setDatas = useDashboardDispatch()
+        const reloader = React.useContext(ReloaderContext);
+        const displayNotification = useNotificationDispatch()
+        const [edit, editing] = useState(false)
+        const [team, setTeam] = useState("")
+        const userData =  useDashboard().user
+        const teams = userData ? userData.teams : []
+
+        const handleChoosing = () => {
+            editing(true)
+        }
+
+        const updateOwner = () => {
+            http.post(URLS.updateBoardOwner, {
+                id : board_id,
+                owner: team,
+            })
+                .then((response) => {
+                    toggle(null)
+                    setDatas(response.data)
+                    reloader()
+                })
+                .catch((err) => {
+                    toggle(null)
+                    displayNotification("Board type change failed. Check your connection and try again.", 'warning')
+                })
+        }
+
         return (
             <Menu
                 id="profile-menu"
                 open={Boolean(open)}
                 anchorEl={open}
                 onClose={() => toggle(null)}
-                className={classes.headerMenu}
+                className={classes.buttonBoardMenu}
                 classes={{ paper: classes.profileMenu }}
                 disableAutoFocusItem
             >
-                <MenuItem>
-                    Add to a Team
+                <Toolbar className={classes.buttonBoardMenuToolBar}>
+                    {edit === true && <IconButton fontSize="small" edge="start" color="inherit" onClick={() => editing(false)}>
+                        <ArrowLeftIcon/>
+                    </IconButton>}
+                    <div className={classes.buttonBoardMenuHeaderMenuIcon}>
+                        <Typography  className={classes.buttonBoardMenuHeaderMenuIconTitle}>Add to a team</Typography>
+                        <IconButton  fontSize="small" edge="start" color="inherit"  onClick={() => toggle(null)} >
+                            <CloseIcon />
+                        </IconButton>
+                    </div>
+                </Toolbar>
+                <MenuItem className={classes.buttonBoardMenuItem}>
+                    {edit === false ? <Typography variant="body2" color="textSecondary">
+                        {
+                            "A team is a group of boards and people. Use it to organize your company, side hustle, family, or friends."
+                        }
+                    </Typography> :
+                        <div className={classes.buttonBoardMenuItemSelect}>
+                            { teams.length <= 0 ? <Typography variant="body2" color="textSecondary" >You don't have a team. Create one before. </Typography>  :
+                                <Select
+                                    displayEmpty
+                                    value={team}
+                                    onChange={(event => {
+                                        setTeam(event.target.value);
+                                    })}
+                                    fullWidth
+                                    required
+                                    className={classes.buttonBoardMenuItemSelectInput}
+                                >
+                                    <MenuItem value="" disabled>
+                                        Choose a team
+                                    </MenuItem>
+                                    {teams.map((option) => (
+                                        <MenuItem key={option.id} value={option.id}>
+                                            {option.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>}
+                        </div>}
+                    <Button variant="contained"
+                            color="primary"
+                            size="large"
+                            fullWidth
+                            className={classes.buttonAddBoard}
+                            disabled={edit === true && team === ""}
+                            onClick={() => edit === true ? updateOwner() : handleChoosing()}
+                    >{edit === false ? "Switch to a team  board" : "Add to this team"}</Button>
                 </MenuItem>
             </Menu>
         )

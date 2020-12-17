@@ -8,10 +8,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import boardLogo from '../../../images/board.svg'
 import {useDashboard} from "../../../context/DashboardContext";
 import {checkCurrentBoardUrl, getFromLocalStorage, setItemInLocalStorage} from "../../../Module/biblio";
 import {useModalDispatch} from "../../../context/ModalContext";

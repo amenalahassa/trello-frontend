@@ -104,6 +104,7 @@ export const URLS = {
     saveMember :  api + '/dashboard/save/member',
     aboutBoard :  api + '/dashboard/board/about/',
     updateBoardName: api + "/dashboard/board/update/name",
+    updateBoardOwner: api + "/dashboard/board/update/owner",
     ressources: {
         category: api + "/ressources/category",
         boardBackgroundImage: api + '/ressources/board/backgroundImage'
