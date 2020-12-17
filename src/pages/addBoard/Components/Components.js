@@ -55,7 +55,7 @@ export default function ImageGridList(props) {
                 }
             })
         }
-    },[])
+    },[isAuthenticated])
 
     useEffect(() => {
         if (images.length > 0)

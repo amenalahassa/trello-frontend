@@ -47,7 +47,15 @@ export default makeStyles(theme => ({
     backgroundColor: "#ffffff6b",
     '&:hover': {
       backgroundColor: "#ffffff61",
-    }
+    },
+    marginRight:theme.spacing(2),
+  },
+  buttonAboutBoard:{
+    color: "white",
+    backgroundColor: "#ffffff6b",
+    '&:hover': {
+      backgroundColor: "#ffffff61",
+    },
   },
   buttonTeamNameBoard: {
     color: "white",
@@ -59,9 +67,12 @@ export default makeStyles(theme => ({
     flexGrow:1,
     display: "flex"
   },
+  ownerRoot:{
+    flexGrow:1,
+    display: "flex"
+  },
   teamAvatar:{
-    marginRight:theme.spacing(2),
-    marginLeft:theme.spacing(2),
+
   },
   headerMenu: {
     marginTop: theme.spacing(10),
@@ -120,4 +131,8 @@ export default makeStyles(theme => ({
   cardContent:{
     maxWidth: 400,
   },
+  textPrivateTeam:{
+    marginTop:theme.spacing(1),
+    marginRight:theme.spacing(2)
+  }
 }));

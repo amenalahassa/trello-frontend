@@ -160,13 +160,7 @@ function Placeholder({ classes, setTeamMenu })
 
     return  (
         <div className={classes.card}>
-            <CardMedia
-                className={classes.media}
-                image={teamLogo}
-                title="A team"
-                component="img"
-            />
-            <CardContent>
+            <CardContent className={classes.cardContent}>
                 <Typography variant="body2" color="textSecondary" component="p">
                     {
                         "A team is a group of boards and people. Use it to organize your company, side hustle, family, or friends."

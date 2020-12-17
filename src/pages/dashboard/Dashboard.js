@@ -34,6 +34,8 @@ import {
     resetAllLocalAndContextOnLogout,
     setItemInLocalStorage
 } from "../../Module/biblio";
+import {Menu} from "@material-ui/core";
+import MenuItem from "@material-ui/core/MenuItem";
 
 
 // Todo: Use an sidebar for show menu board
@@ -125,6 +127,7 @@ export default function Dashboard() {
                 else
                 {
                     setBoard(board)
+                    console.log(board)
                     setName(board.name)
                     setErrors({
                         ...errors,
@@ -221,38 +224,17 @@ export default function Dashboard() {
                                           }
                                       </div>
                                       <Divider orientation="vertical" flexItem className={classes.divider} />
-                                      { loading ? <div className={classNames(classes.team)}><Skeleton variant="rect" width={210} height={38} animation={"wave"}/></div> :
-                                          <div className={classNames(classes.team)}>
-                                              <Button
-                                                  variant="contained"
-                                                  color="primary"
-                                                  size="medium"
-                                                  disableElevation
-                                                  className={classes.buttonBoard}
-                                                  aria-controls="about-sub-board-menu"
-                                                  onClick={(e) => setAboutMenu(e.currentTarget)}
-                                                  disabled={loading}
-                                              >
-                                                  {board.team === undefined ? "Personal" : board.team}
-                                              </Button>
-                                              <GroupAvatars classes={classes.teamAvatar}/>
-                                              <Button
-                                                  variant="contained"
-                                                  color="primary"
-                                                  size="medium"
-                                                  disableElevation
-                                                  className={classes.buttonBoard}
-                                              >
-                                                  Invite
-                                              </Button>
-                                          </div>}
+                                      { loading ?
+                                          <div className={classNames(classes.team)}><Skeleton variant="rect" width={210} height={38} animation={"wave"}/></div> :
+                                          <div className={classNames(classes.team)}><DashBoardOwner  type={board.type} datas={board.owner} /></div>
+                                        }
                                       <Button
                                           variant="contained"
                                           color="primary"
                                           size="medium"
                                           disableElevation
                                           endIcon={<MenuIcon className={classes.buttonBoardIcon}/>}
-                                          className={classes.buttonBoard}
+                                          className={classes.buttonAboutBoard}
                                           aria-controls="about-sub-board-menu"
                                           onClick={(e) => setAboutMenu(e.currentTarget)}
                                           disabled={loading}
@@ -302,5 +284,124 @@ function ShowError(props)
             </CardContent>
         </div>
     )
+
+}
+
+
+function DashBoardOwner({ type, datas = {}})
+{
+    let classes = useStyles()
+    const [name, setName] = useState("")
+    const [openPersonal, setPersonal] = useState(null)
+    const [openTeam, setTeam] = useState(null)
+    useEffect(() => {
+        setName(datas.name || "")
+    }, [datas])
+
+    return (
+        <div className={classes.ownerRoot} >
+            {type === "User" ? <PersonalOwner toggle={setPersonal}/> : <TeamOwner name={name} toggle={setTeam} /> }
+            <PersonalOwnerMenu open={openPersonal} toggle={setPersonal}/>
+            <TeamOwnerMenu open={openTeam} toggle={setTeam}/>
+        </div>
+    )
+
+    function PersonalOwner({ toggle })
+    {
+
+        return (
+            <div className={classes.ownerRoot}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    disableElevation
+                    className={classes.buttonBoard}
+                    onClick={(e) => toggle(e.currentTarget) }
+                >
+                    Private Board
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    disableElevation
+                    className={classes.buttonBoard}
+                >
+                    Invite
+                </Button>
+            </div>
+        )
+    }
+
+    function TeamOwner({ toggle, name })
+    {
+
+        return (
+            <div className={classes.ownerRoot}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    disableElevation
+                    className={classes.buttonBoard}
+                    aria-controls="about-sub-board-menu"
+                    onClick={(e) => toggle(e.currentTarget) }
+                >
+                    {name}
+                </Button>
+                <GroupAvatars classes={classes.teamAvatar}/>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    disableElevation
+                    className={classes.buttonBoard}
+                >
+                    Invite
+                </Button>
+            </div>
+        )
+    }
+
+    function PersonalOwnerMenu({ open, toggle })
+    {
+        return (
+            <Menu
+                id="profile-menu"
+                open={Boolean(open)}
+                anchorEl={open}
+                onClose={() => toggle(null)}
+                className={classes.headerMenu}
+                classes={{ paper: classes.profileMenu }}
+                disableAutoFocusItem
+            >
+                <MenuItem>
+                    Add to a Team
+                </MenuItem>
+            </Menu>
+        )
+    }
+
+    function TeamOwnerMenu({ open, toggle })
+    {
+        return (
+            <Menu
+                id="profile-menu"
+                open={Boolean(open)}
+                anchorEl={open}
+                onClose={() => toggle(null)}
+                className={classes.headerMenu}
+                classes={{ paper: classes.profileMenu }}
+                disableAutoFocusItem
+            >
+                <MenuItem>
+                    Change the team
+                </MenuItem>
+            </Menu>
+        )
+    }
+
+
 
 }

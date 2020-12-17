@@ -209,9 +209,11 @@ export default makeStyles(theme => ({
     fontSize:12,
   },
   card: {
-    maxWidth: 230,
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
+    maxWidth: 400,
+  },
+  cardContent:{
+    padding:theme.spacing(1.2),
+    paddingBottom:"9.5px !important",
   },
   media: {
     height: 190,

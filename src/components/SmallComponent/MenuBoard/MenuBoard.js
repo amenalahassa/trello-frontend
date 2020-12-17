@@ -247,13 +247,7 @@ function Placeholder({ classes, setBoardMenu })
 
     return  (
         <div className={classes.card}>
-            <CardMedia
-                className={classes.media}
-                image={boardLogo}
-                title="A board"
-                component="img"
-            />
-            <CardContent>
+            <CardContent className={classes.cardContent}>
                 <Typography variant="body2" color="textSecondary" component="p">
                     {
                         "A board is made up of cards ordered on lists. Use it to manage projects, track information, or organize anything."
