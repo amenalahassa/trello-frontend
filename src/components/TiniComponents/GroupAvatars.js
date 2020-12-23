@@ -6,23 +6,20 @@ import Badge from "@material-ui/core/Badge";
 import classNames from "classnames";
 
 export default function GroupAvatars(props) {
-    const link = "https://source.unsplash.com/32x32/?nature"
+    // const link = "https://source.unsplash.com/32x32/?nature"
+    const users = [...props.users || [], ...props.invited || []]
     return (
        <div className={classNames(props.classes)}>
             <AvatarGroup max={4}>
-               <UserAvartarWithBadge children={ <Avatar alt="Remy Sharp" src={link} />}/>
-               <Avatar alt="Remy Sharp" src={link} />
-               <Avatar alt="Remy Sharp" src={link} />
-               <UserAvartarWithBadge children={ <Avatar alt="Remy Sharp" src={link} />}/>
-               <UserAvartarWithBadge children={ <Avatar alt="Remy Sharp" src={link} />}/>
-               <UserAvartarWithBadge children={ <Avatar alt="Remy Sharp" src={link} />}/>
-               <UserAvartarWithBadge children={ <Avatar alt="Remy Sharp" src={link} />}/>
+                { users && users.map((val, id) => {
+                    return <UserAvartarWithBadge key={id} children={ <Avatar alt={val.name} src={val.photo || val.name || undefined} />}/>
+                })}
             </AvatarGroup>
        </div>
     );
 }
 
- function UserAvartarWithBadge({children, ...props})
+ function UserAvartarWithBadge({children})
  {
      return(
          <StyledBadge

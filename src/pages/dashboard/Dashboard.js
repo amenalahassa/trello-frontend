@@ -295,19 +295,15 @@ function ShowError(props)
 }
 
 
-function DashBoardOwner({ type, owner = {}, id})
+function DashBoardOwner({ type, owner, id})
 {
     let classes = useStyles()
-    const [name, setName] = useState("")
     const [openPersonal, setPersonal] = useState(null)
     const [openTeam, setTeam] = useState(null)
-    useEffect(() => {
-        setName(owner.name || "")
-    }, [owner])
 
     return (
         <div className={classes.ownerRoot} >
-            {type === "User" ? <PersonalOwner toggle={setPersonal}/> : <TeamOwner name={name} toggle={setTeam} /> }
+            {type === "User" ? <PersonalOwner toggle={setPersonal}/> : <TeamOwner team={owner} toggle={setTeam} /> }
             <PersonalOwnerMenu board_id={id} open={openPersonal} toggle={setPersonal}/>
             <TeamOwnerMenu open={openTeam} toggle={setTeam}/>
         </div>
@@ -331,27 +327,21 @@ function DashBoardOwner({ type, owner = {}, id})
         )
     }
 
-    function TeamOwner({ toggle, name })
+    function TeamOwner({ toggle, team = {} })
     {
 
         return (
             <div className={classes.ownerRoot}>
                 <Button
-                    variant="contained"
-                    color="primary"
-                    size="medium"
-                    disableElevation
-                    className={classes.buttonBoard}
-                    aria-controls="about-sub-board-menu"
+                    variant="text"
+                    className={classes.buttonBoardText}
                     onClick={(e) => toggle(e.currentTarget) }
                 >
-                    {name}
+                    {team.name}
                 </Button>
-                <GroupAvatars classes={classes.teamAvatar}/>
+                <GroupAvatars classes={classes.teamAvatar} users={team.user} invited={team.invited}/>
                 <Button
                     variant="contained"
-                    color="primary"
-                    size="medium"
                     disableElevation
                     className={classes.buttonBoard}
                 >

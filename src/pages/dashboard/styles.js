@@ -50,6 +50,11 @@ export default makeStyles(theme => ({
     },
     marginRight:theme.spacing(2),
   },
+  buttonBoardText:{
+    color: "white",
+    marginRight:theme.spacing(2),
+
+  },
   buttonAboutBoard:{
     color: "white",
     backgroundColor: "#ffffff6b",
@@ -72,7 +77,7 @@ export default makeStyles(theme => ({
     display: "flex"
   },
   teamAvatar:{
-
+    marginRight: theme.spacing(2),
   },
   headerMenu: {
     marginTop: theme.spacing(10),
