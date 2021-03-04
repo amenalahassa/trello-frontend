@@ -9,10 +9,10 @@ const instance = axios.create({
 });
 
 function AxiosProvider({ children }) {
-  var [state, setstate] = useState({requester : instance})
+  var requester = useState({requester : instance})
 
   return (
-    <AxiosContext.Provider value={state}>
+    <AxiosContext.Provider value={requester[0]}>
         {children}
     </AxiosContext.Provider>
   );

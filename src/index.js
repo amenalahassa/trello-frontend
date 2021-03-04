@@ -10,6 +10,7 @@ import { LayoutProvider } from "./context/LayoutContext";
 import { UserProvider } from "./context/UserAuthContext";
 import { UserTeamProvider } from "./context/UserTeamContext";
 import { AxiosProvider } from "./context/AxiosContext";
+import {EchoProvider} from "./context/EchoContext";
 
 // Todo: Switch to prod at end
 // Todo : For Unsplash
@@ -18,12 +19,14 @@ ReactDOM.render(
     <AxiosProvider>
         <LayoutProvider>
               <UserProvider>
-                  <UserTeamProvider>
-                      <ThemeProvider theme={Themes.default}>
-                        <CssBaseline />
-                        <App />
-                      </ThemeProvider>
-                  </UserTeamProvider>
+                  <EchoProvider>
+                      <UserTeamProvider>
+                          <ThemeProvider theme={Themes.default}>
+                            <CssBaseline />
+                            <App />
+                          </ThemeProvider>
+                      </UserTeamProvider>
+                  </EchoProvider>
               </UserProvider>
         </LayoutProvider>
     </AxiosProvider>,

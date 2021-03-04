@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNotification} from "./GlobalHooks";
 import {DisplayNotification} from "../components/TiniComponents/Notifications";
 import {ModalProvider} from "./ModalContext";
@@ -9,10 +9,18 @@ var NotificationDispatchContext = React.createContext();
 
 function NotificationProvider({ children }) {
   const [ notification, displayNotification, resetNotification] = useNotification()
-  let [state] = useState({
+  let [state, setState] = useState({
     open: notification.open,
     displayNotification
   })
+
+  useEffect(() => {
+    console.log(notification)
+    setState({
+      open: notification.open,
+      displayNotification
+    })
+  }, [notification])
 
   return (
     <NotificationStateContext.Provider value={state.open}>

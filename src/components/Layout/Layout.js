@@ -9,8 +9,7 @@ import classnames from "classnames";
 // styles
 import useStyles from "./styles";
 
-// components
-
+// import `${window.location.protocol + "//" + window.location.hostname + ":6001/socket.io/socket.io.js"}`;
 
 // pages
 import Dashboard from "../../pages/dashboard/Dashboard";
@@ -19,7 +18,7 @@ import Dashboard from "../../pages/dashboard/Dashboard";
 
 import Header from "../Header/Header";
 import {
-    getCurrentLocationOnCurrentWindow,
+    getCurrentLocationOnCurrentWindow, log,
     resetAllLocalAndContextOnLogout,
     setItemInLocalStorage,
     viewportSize
@@ -30,7 +29,10 @@ import {useIsMountedRef, useMatchWithRedirect} from "../../context/GlobalHooks";
 import { useUserDispatch, useUserState} from "../../context/UserAuthContext";
 import {useNotificationDispatch} from "../../context/NotificationContext";
 import StartBoard from "../../pages/startBoard";
-
+import {useEchoState} from "../../context/EchoContext";
+import {Button} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import Cookies from 'js-cookie';
 // Todo : Back sidebar for responsive site
 
 function Layout(props) {
@@ -48,8 +50,14 @@ function Layout(props) {
     const isMountedRef = useIsMountedRef()
     const authDispatch = useUserDispatch()
 
+    const echo = useEchoState()
 
 
+    useEffect(() => {
+        // echo.channel('private-chan-demo')
+        //     .listen('.test', e => console.log(e))
+        // console.log('echo', echo)
+    }, [])
 
     useEffect(() => {
       if (isAuthenticated === false && matchWithRedirect === null)
@@ -63,6 +71,7 @@ function Layout(props) {
                   if (isMountedRef.current)
                   {
                       setDatas(response.data)
+                      connectToChannel(response.data.user.id)
                       setLoading(false)
                   }
               })
@@ -74,11 +83,39 @@ function Layout(props) {
                               setItemInLocalStorage('intented-route', getCurrentLocationOnCurrentWindow())
                               resetAllLocalAndContextOnLogout(authDispatch, history)
                               break
+                          default :
+                              displayNotification("Check your connection and reload please.")
+                              break
                       }
+                  }
+                  else
+                  {
+                      displayNotification("Check your connection and reload please.")
                   }
               })
       }
   }, [])
+
+    const connectToChannel = (id) =>
+    {
+        // console.log('0', echo)
+        console.log('0',  Cookies.get('XSRF-TOKEN'))
+        echo.private('App.Models.User.' + id)
+            .notification((notification) => {
+                let message = <div>
+                    <Typography variant="body2" color="textSecondary" component="p">{notification.content}</Typography>
+                    <div className={classes.notificationBottom}>
+                        <Button size="small" className={classes.notificationBottomButton}  color="secondary" variant="contained">
+                            Refuse
+                        </Button>
+                        <Button onClick={() =>  displayNotification(message, 'info', true) }  size="small" color="primary"  variant="contained">
+                            ok
+                        </Button>
+                    </div>
+                </div>
+                displayNotification(message, 'info', undefined)
+            })
+    }
 
 
   return (

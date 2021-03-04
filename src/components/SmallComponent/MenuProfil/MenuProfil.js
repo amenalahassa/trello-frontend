@@ -8,6 +8,8 @@ import {Person as AccountIcon} from "@material-ui/icons";
 import {signOut, useUserDispatch} from "../../../context/UserAuthContext";
 import {useAxiosState} from "../../../context/AxiosContext";
 import {useDashboard} from "../../../context/DashboardContext";
+import {log, resetAllLocalAndContextOnLogout} from "../../../Module/biblio";
+import {useEchoState} from "../../../context/EchoContext";
 
 
 
@@ -17,7 +19,20 @@ function MenuProfil(props) {
     var userDispatch = useUserDispatch();
     let axiosInstance = useAxiosState()
     let user =  useDashboard().user
+    const echo = useEchoState()
 
+    const logout = () =>
+    {
+        axiosInstance.get('/api/logout')
+            .then(function (){
+                echo.leave('App.Models.User.' + user.id)
+                resetAllLocalAndContextOnLogout(userDispatch, history)
+            })
+            .catch(function (error) {
+                // Todo Display the cause of echec to user
+                log(error)
+            });
+    }
 
     return (
       <Menu
@@ -60,7 +75,7 @@ function MenuProfil(props) {
               <Typography
                   className={classes.profileMenuLink}
                   color="primary"
-                  onClick={() => signOut(axiosInstance, userDispatch, history)}
+                  onClick={() => logout()}
               >
                   Sign Out
               </Typography>

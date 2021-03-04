@@ -28,6 +28,9 @@ import MenuAddElement from "../SmallComponent/MenuAddElement";
 import MenuBoard from "../SmallComponent/MenuBoard";
 import MenuTeam from "../SmallComponent/MenuTeam/MenuTeam";
 import Skeleton from "@material-ui/lab/Skeleton";
+import Badge from "@material-ui/core/Badge";
+import {NotificationsNone as NotificationsIcon} from "@material-ui/icons";
+
 
 
 //Todo : Set a placeholder when the data is loading
@@ -41,6 +44,7 @@ export default function Header(props) {
     const [addMenu, setAddMenu] = useState(null);
     const [boardMenu, setBoardMenu] = useState(null);
     const [profileMenu, setProfileMenu] = useState(null);
+    const [messagesMenu, setMessagesMenu] = useState([]);
 
   const { isLoading, setCurrentBoard } = props
 
@@ -85,14 +89,28 @@ export default function Header(props) {
                     aria-haspopup="true"
                     color="inherit"
                     className={classes.headerMenuAddButton}
-                    aria-controls="add-menu"
                     disabled={isLoading}
                     onClick={e => setAddMenu(e.currentTarget)}
                 >
                     <Add className={classes.headerMenuAddButtonIcon } />
                 </IconButton>
+                <IconButton
+                    color="inherit"
+                    aria-haspopup="true"
+                    onClick={e => {
+                        setMessagesMenu(e.currentTarget);
+                    }}
+                    className={classes.headerMenuButton}
+                >
+                    <Badge
+                        badgeContent={messagesMenu.length}
+                        color="secondary"
+                    >
+                        <NotificationsIcon classes={{ root: classes.headerIcon }} />
+                    </Badge>
+                </IconButton>
                 {isLoading ?
-                    <Skeleton variant="circle" className={classes.avatarSquelon}><Avatar></Avatar></Skeleton>
+                    <Skeleton variant="circle" className={classes.avatarSquelon}><Avatar/></Skeleton>
                     :
                     <IconButton
                         aria-haspopup="true"

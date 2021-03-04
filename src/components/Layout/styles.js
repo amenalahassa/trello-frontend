@@ -25,5 +25,16 @@ export default makeStyles((theme) => ({
     '&:not(:first-child)': {
       paddingLeft: 15
     }
+  },
+  notificationBottom:{
+    marginTop:theme.spacing(1),
+    display: "flex",
+    flexDirection:"row",
+    justifyContent:"flex-end",
+  },
+  notificationBottomButton:{
+    marginRight: theme.spacing(1.5)
   }
+
+
 }));

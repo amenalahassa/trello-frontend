@@ -64,7 +64,7 @@ function useUserDispatch() {
   return context;
 }
 
-export { UserProvider, useUserState, useUserDispatch, loginUser, signOut , registerUser };
+export { UserProvider, useUserState, useUserDispatch, loginUser , registerUser };
 
 // ###########################################################
 
@@ -97,9 +97,6 @@ function registerUser(axios,dispatchAuth, dispatchHasTeam , namevalue, email, pa
   }
 }
 
-function signOut(axios, dispatch, history) {
-  logout(axios, dispatch, history)
-}
 
 function login (http, email, password,  dispatchAuth, dispatchHasTeam , history, setIsLoading, setError, setErrorMsg) {
     http.get('/sanctum/csrf-cookie').then(response => {
@@ -153,16 +150,7 @@ function register (http, name, email, password, password_confirmation, dispatchA
         });
 }
 
-function logout(http, dispatch, history)
-{
-  http.get('/api/logout')
-      .then(function (){
-          resetAllLocalAndContextOnLogout(dispatch, history)
-      })
-      .catch(function (error) {
-        log(error)
-      });
-}
+
 
 function catchError(error, setErrorMsg, setError, setIsLoading)
 {

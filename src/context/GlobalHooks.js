@@ -19,9 +19,9 @@ function useNotification()
     // success
     // info
 
-    const displayNotification = (message, type = "error") => {
+    const displayNotification = (message, type = "error", open = true) => {
         showNotification({
-            open: true, message, type,
+            open: open, message, type,
         })
     }
 
